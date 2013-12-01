@@ -16,13 +16,16 @@ class MainController < ApplicationController
 		redirect_to 'http://www.google.com'
 	end
 
-	case params[:team]
-	when 'Friends'
+	case (params[:team] || "").downcase
+	when 'friends'
 		@team = 1
-	when 'Work'
+	when 'work'
 		@team = 2
-	else
+	when ''
 		@team = 0
+	else
+		render :file => "#{Rails.root}/public/404", :layout => false, :status => :not_found
+		return
 	end
 	
 	percentages = {}
