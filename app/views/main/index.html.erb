@@ -1,0 +1,158 @@
+<script type="text/javascript">
+function sortMoney(cell)
+{
+	var base = parseFloat(cell) || 0;
+	if (cell.indexOf("b") > 0)
+		return base * 1000000000;
+	if (cell.indexOf("m") > 0)
+		return base * 1000000;
+	if (cell.indexOf("k") > 0)
+		return base * 1000;
+		
+	return base;
+}
+
+function linkCells()
+{
+	var cells = $("#list tr>td[aria-describedby='list_movie']");
+	for (var i = 0; i < cells.length; i++)
+	{
+		var movie = cells.eq(i).parent().children().eq(0).html();
+		var v = cells.eq(i).html();
+		if (v != "")
+		{
+			v = "<a href=\"#\" onclick=\"popupDetails(&quot;details.php?movie=" + movie + "&quot;);return false;\">" + v + "</a>";
+			cells.eq(i).html(v);
+		}
+	}
+}
+
+$(function(){ 
+  $("#list").jqGrid({
+    datatype: 'local',
+    colNames:['Movie', 'Rel.', 'Total', <%= $col_headers %> 'Value'],
+    colModel :[ 
+	  {name:'movie', index:'movie', width:150},
+	  {name:'releasedate', index:'releasedate', width:60},
+      {name:'total', align:'right', classes:'tbl_bold', index:'total', sorttype:sortMoney, width:50}, 
+	  <%= $col_models %>
+	  {name:'value', align:'right', classes:'tbl_bold', index:'value', sorttype:sortMoney, width:50},
+    ],
+    rowNum:100,
+	data: <%= $output %>,
+    sortname: 'releasedate',
+    sortorder: 'asc',
+    viewrecords: true,
+    gridview: true,
+	footerrow : true,
+	userData : <%= $output_sums %>,
+	userDataOnFooter : true,	
+    caption: 'Scoreboard',
+	height:'auto',
+	gridComplete: linkCells,
+	shrinkToFit: false,
+	width:800
+  }); 
+  
+    $("#tblStandings").jqGrid({
+    datatype: 'local',
+    colNames:['Rank', 'Player', '% Used', 'Revenue'],
+    colModel :[ 
+	  {name:'rank', index:'rank', sorttype:'int', width:50},
+	  {name:'player', index:'player', width:280},
+	  {name:'pct_in_use', align:'right', index:'pct_in_use', width:60},
+      {name:'revenue', align:'right', classes:'tbl_bold', index:'revenue', width:120}
+    ],	
+    rowNum:100,
+	data: <%= $output_rankings %>,
+    sortname: 'rank',
+    sortorder: 'asc',
+	height:'auto',
+    viewrecords: true,
+    gridview: true,
+    caption: 'Standings'
+  });
+  
+}); 
+
+function popupDetails(url)
+{
+	$("#iframeDialog").attr("src", "about:blank");
+	$("#iframeDialog").attr("src", url);
+	$("#dialog-modal").dialog("open");
+	return false;
+}
+</script>
+
+<div id="nav">
+	<ul>
+		<li><a href="index.php">All</a></li>
+		<li><a href="index.php?team=Friends">Friends</a></li>
+		<li><a href="index.php?team=Work">Work</a></li>
+		<li><a href="shares.php">Shares</a></li>
+		<li class="page_title">2013 Winter Movie Contest</li>
+	</ul>
+</div>
+
+<br/><br/>
+<center>
+
+<table id="main">
+<tr>
+<td id="main_left">
+
+<table id="tblStandings"><tr><td/></tr></table>
+
+<h3 style="text-align:center;">
+	<% 	if @team > 0 then %>
+		[ <a href="#" onclick="return popupDetails('weekly.php?team=<%= @team %>');">Weekly Totals</a> ]
+		[ <a href="#" onclick="return popupDetails('weekly.php?rank&team=<%= @team %>');">Weekly Rankings</a> ]
+		<a href="#" onclick="return popupDetails('spread.php?team=<%= @team %>');">Weekly Spread</a> ]
+	<% else %>
+		[<a href="#" onclick="return popupDetails('weekly.php');">Weekly Totals</a> ]
+		[<a href="#" onclick="return popupDetails('weekly.php?rank')">Weekly Rankings</a> ]
+		[<a href="#" onclick="return popupDetails('spread.php?');">Weekly Spread</a> ]
+	<% end %>
+</h3>
+
+</td>
+<td id="main_right">
+	<table id="list"><tr><td/></tr></table>
+</td>
+</tr>
+</table>
+
+</center>
+ 	<script type="text/javascript">
+ 	    $(function () {
+ 	        $("#dialog-modal").dialog({
+ 	            height: 500,
+ 	            width: 900,
+ 	            modal: true,
+ 	            autoOpen: false,
+ 	            resizable: false,
+ 	            close: function () { $("#iframeDialog").attr("src", "about:blank"); }
+ 	        });
+ 	    });
+	</script>
+    <div id="dialog-modal" title="More Information">
+	    <iframe id="iframeDialog" src="about:blank" frameborder="0" width="860" height="420"></iframe>
+    </div>
+	<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-347103-3']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+  <p style="text-align:center;">
+	  <a href="https://github.com/snickroger/movie_draft" target="_blank">
+		<%= image_tag "github.png" %>
+	  </a>
+  </p>
