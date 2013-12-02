@@ -16,10 +16,10 @@
 
 <div id="nav">
 	<ul>
-		<li><a href="/">All</a></li>
-		<li><a href="/friends">Friends</a></li>
-		<li><a href="/work">Work</a></li>
-		<li><a href="/shares">Shares</a></li>
+		<li <%= is_active('/') %>><a href="/">All</a></li>
+		<li <%= is_active('/friends') %>><a href="/friends">Friends</a></li>
+		<li <%= is_active('/work') %>><a href="/work">Work</a></li>
+		<li <%= is_active('/shares') %>><a href="/shares">Shares</a></li>
 		<li class="page_title">2013 Winter Movie Contest</li>
 	</ul>
 </div>

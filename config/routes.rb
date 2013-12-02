@@ -1,5 +1,6 @@
 Ruby::Application.routes.draw do
   get "/shares", to: "main#shares"
+  get "/shares/:team", to: "main#shares"
   get "/:team", to: "main#index"
   
   # The priority is based upon order of creation: first created -> highest priority.
