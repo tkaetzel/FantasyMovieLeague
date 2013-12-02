@@ -1,0 +1,29 @@
+<script type="text/javascript">
+
+$(function(){ 
+ 
+    $("#shares").jqGrid({
+    datatype: 'local',
+    colNames:['Movie', 'Rel.', 'Total', <%= $col_headers %>],
+    colModel :[ 
+	  {name:'movie', index:'movie', width:150},
+	  {name:'releasedate', index:'releasedate', width:60},
+      {name:'total', classes:'tbl_bold', align:'right', index:'total', sorttype:'int', width:50},
+	  <%= $col_models %>
+    ],
+    rowNum:100,
+	data: <%= $json_data %>,
+    sortname: 'releasedate',
+    sortorder: 'asc',
+	height:'auto',
+    viewrecords: true,
+    gridview: true,
+    caption: 'Share Distribution'
+  });
+  
+}); 
+
+</script>
+
+<br/><br/><br/>
+<center><table id="shares"><tr><td/></tr></table></center>

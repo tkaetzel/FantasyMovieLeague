@@ -6,7 +6,9 @@ class MainController < ApplicationController
 	COL_MODEL = "{name:'%s', align:'right', index:'%s', width:45, sorttype:sortMoney},\r\n"
 	SHARES_COL_MODEL = "{name:'%s', align:'right', index:'%s', width:45, sorttype:'int'},\r\n"
 	FOOTER_TEMPLATE = '<a href="#" onclick="popupDetails(&quot;breakdown.php?contestant=%s&amp;data=%s&quot;);return false;">%s</a>'
-
+	COL_HEADER_SHARES = "'%s', "
+	COL_MODEL_SHARES = "{name:'%s', align:'right', index:'%s', width:35, sorttype:'int'},\r\n"
+	
   def index
 	$output = ""
 	$START_DATE = DateTime.new(2013,11,1,0,0,0,'-4')
@@ -164,6 +166,64 @@ class MainController < ApplicationController
 	
 	$output_rankings = JSON.generate(standings).html_safe
 
+  end
+  
+  def shares
+	
+	case (params[:team] || "").downcase
+	when 'friends'
+		@team = 1
+	when 'work'
+		@team = 2
+	when ''
+		@team = 0
+	else
+		render :file => "#{Rails.root}/public/404", :layout => false, :status => :not_found
+		return
+	end
+	
+	$col_headers = ""
+	$col_models = ""
+	$json_data = ""
+	
+	db = connect
+	shares = {}
+	results = db.query("CALL GetShares(#{@team})")
+	
+	results.each do |row|
+		shares[row["Movie"]] = row.except("Movie")
+	end
+	db.close
+	
+	i=1
+	names = []
+	json = []
+	shares.each do |movie,data|
+		row = { 
+			:id => i+=1,
+			:movie => movie,
+			:total => data["Total"],
+			:releasedate => data["ReleaseDate"]
+		}
+		
+		data.each do |player,share_count|
+			next if player == "Total" or player == "ReleaseDate"
+			names.push(player) if not names.include?(player)
+			
+			row[player] = share_count
+		end
+		json.push(row)
+	end
+	
+	names.sort.each do |n|
+		$col_headers += COL_HEADER_SHARES % n
+		$col_models += COL_MODEL_SHARES % [n,n]
+	end
+	
+	$col_headers = $col_headers.html_safe
+	$col_models = $col_models.html_safe
+	$json_data = JSON.generate(json).html_safe
+	
   end
     
   def connect
