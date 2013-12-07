@@ -44,3 +44,4 @@ end
 # gem 'debugger', group: [:development, :test]
 
 gem 'awesome_print'
+gem 'curl'

@@ -1,4 +1,5 @@
 Ruby::Application.routes.draw do
+  get "/revenues", to: "revenues#index"
   get "/shares", to: "main#shares"
   get "/shares/:team", to: "main#shares"
   get "/graph/:type", to: "graph#get_graph"
