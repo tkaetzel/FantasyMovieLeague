@@ -28,6 +28,7 @@ chart1 = new Highcharts.Chart({
 		title: {
 			text: "<%= $title %>",
 		},
+		<% if @graph_type == 2 then %> max: 100, <% end %>
 		min: <%= $min %>,
 		reversed: <%= $reversed %>
 	},

@@ -1,7 +1,5 @@
 class GraphController < ApplicationController
   def get_graph
-	render :layout => false
-	
 	$title = ""
 	$min = 0
 	$reversed = ""
@@ -9,9 +7,11 @@ class GraphController < ApplicationController
 	
 	case (params[:type] || "").downcase
 	when 'rank'
-		@rank = true
+		@graph_type = 1
 	when 'weekly'
-		@rank = false
+		@graph_type = 0
+	when 'spread'
+		@graph_type = 2
 	else
 		render :file => "#{Rails.root}/public/404", :layout => false, :status => :not_found
 		return		
@@ -71,9 +71,18 @@ class GraphController < ApplicationController
 		db.close
 
 		i=1
+		s_min = scores.min_by(&:last)[1]
+		spread = scores.max_by(&:last)[1] - s_min
 		Hash[(scores.sort_by &:last).reverse].each do |key,gross| 
 			table_data[key] ||= {}
-			table_data[key][start_date] = @rank ? i : gross
+			case @graph_type
+			when 0
+				table_data[key][start_date] = gross
+			when 1
+				table_data[key][start_date] = i
+			when 2
+				table_data[key][start_date] = (gross - s_min)/spread * 100
+			end
 			i+=1
 		end
 		
@@ -83,6 +92,10 @@ class GraphController < ApplicationController
 	json_data = ""
 	
 	table_data.each do |name,a|
+		
+		# wish i could just convert a hash straight to a json string...
+		# but the Date.UTC code would be in a string then...
+		
 		json_data += "," if not json_data.empty?
 		json_data += "{\"name\": \"%s\", \"data\":" % name
 		lr = ""
@@ -93,10 +106,10 @@ class GraphController < ApplicationController
 		json_data += "[%s]}" % lr
 	end
 	
-	$title = @rank ? "Ranking" : "Revenue (USD)"
-	$min = @rank ? 1 : 0
-	$reversed = @rank ? "true" : "false"
+	$title = case @graph_type when 0 then "Revenue (USD)" when 1 then "Ranking" when 2 then "Spread %" end
+	$min = @graph_type == 1 ? 1 : 0
+	$reversed = @graph_type == 1 ? "true" : "false"
 	$graph_output = json_data.html_safe
-	
+	render :layout => false
 end
 end

@@ -88,13 +88,13 @@ $(function(){
 
 <h3 style="text-align:center;">
 	<% 	if @team > 0 then %>
-		[ <a href="#" onclick="return popupDetails('weekly.php?team=<%= @team %>');">Weekly Totals</a> ]
-		[ <a href="#" onclick="return popupDetails('weekly.php?rank&team=<%= @team %>');">Weekly Rankings</a> ]
-		[ <a href="#" onclick="return popupDetails('spread.php?team=<%= @team %>');">Weekly Spread</a> ]
+		[ <a href="#" onclick="return popupDetails('/graph/weekly/<%= params[:team] %>');">Weekly Totals</a> ]
+		[ <a href="#" onclick="return popupDetails('/graph/rank/<%= params[:team] %>');">Weekly Rankings</a> ]
+		[ <a href="#" onclick="return popupDetails('/graph/spread/<%= params[:team] %>');">Weekly Spread</a> ]
 	<% else %>
-		[<a href="#" onclick="return popupDetails('weekly.php');">Weekly Totals</a> ]
-		[<a href="#" onclick="return popupDetails('weekly.php?rank')">Weekly Rankings</a> ]
-		[<a href="#" onclick="return popupDetails('spread.php?');">Weekly Spread</a> ]
+		[<a href="#" onclick="return popupDetails('/graph/weekly');">Weekly Totals</a> ]
+		[<a href="#" onclick="return popupDetails('/graph/rank')">Weekly Rankings</a> ]
+		[<a href="#" onclick="return popupDetails('/graph/spread');">Weekly Spread</a> ]
 	<% end %>
 </h3>
 
