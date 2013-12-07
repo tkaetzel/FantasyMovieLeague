@@ -36,9 +36,6 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.6.3)
-    curl (0.0.9)
-      awesome_print (>= 0.2.1)
-      unidecoder (>= 1.1.1)
     erubis (2.7.0)
     execjs (2.0.2)
     hike (1.2.3)
@@ -54,9 +51,12 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.25.1)
+    mini_portile (0.5.2)
     minitest (4.7.5)
     multi_json (1.8.2)
     mysql2 (0.3.14)
+    nokogiri (1.6.0-x86-mingw32)
+      mini_portile (~> 0.5.0)
     polyglot (0.3.3)
     rack (1.5.2)
     rack-test (0.6.2)
@@ -107,7 +107,6 @@ GEM
     uglifier (2.3.1)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
-    unidecoder (1.1.2)
 
 PLATFORMS
   x86-mingw32
@@ -115,10 +114,10 @@ PLATFORMS
 DEPENDENCIES
   awesome_print
   coffee-rails (~> 4.0.0)
-  curl
   jbuilder (~> 1.2)
   jquery-rails
   mysql2
+  nokogiri
   rails (= 4.0.1)
   sass-rails (~> 4.0.0)
   sdoc
