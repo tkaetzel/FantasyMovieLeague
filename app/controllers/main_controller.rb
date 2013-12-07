@@ -225,10 +225,6 @@ class MainController < ApplicationController
 	$json_data = JSON.generate(json).html_safe
 	
   end
-    
-  def connect
-	return Mysql2::Client.new(Rails.configuration.database_configuration["development"])
-  end
   
   def to_currency(a, figures=3)
 	ret = ""

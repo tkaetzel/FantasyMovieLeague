@@ -1,6 +1,8 @@
 Ruby::Application.routes.draw do
   get "/shares", to: "main#shares"
   get "/shares/:team", to: "main#shares"
+  get "/graph/:type", to: "graph#get_graph"
+  get "/graph/:type/:team", to: "graph#get_graph"
   get "/:team", to: "main#index"
   
   # The priority is based upon order of creation: first created -> highest priority.

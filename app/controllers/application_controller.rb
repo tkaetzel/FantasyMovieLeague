@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   helper_method :is_active
+  helper_method :connect
   
   def is_active(a)
 	if request.env['PATH_INFO'] == a
@@ -13,4 +14,8 @@ class ApplicationController < ActionController::Base
 	end
   end
 
+  def connect
+	return Mysql2::Client.new(Rails.configuration.database_configuration["development"])
+  end
+  
 end
