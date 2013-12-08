@@ -33,8 +33,7 @@ class Movie
 	end
 	
 	def open=(v)
-		ap v
-		@open = Date.parse(v)
+		@open = DateTime.strptime(v,"%m/%d/%y")
 	end
 	
 end

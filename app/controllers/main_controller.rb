@@ -228,15 +228,20 @@ class MainController < ApplicationController
   
   def to_currency(a, figures=3)
 	ret = ""
-	
+	figures -= 1
 	if a >= 1000000000 then
-		ret = (a*1.0/1000000000).round(figures - Math.log10(a*1.0/1000000000).ceil).to_s + "b"
+		fig = (figures - Math.log10(a/1000000000)).ceil
+		ret = (a/1000000000).round(fig).to_s + "b"
 	elsif a >= 1000000 then
-		ret = (a*1.0/1000000).round(figures - Math.log10(a*1.0/1000000).ceil).to_s + "m"
+		fig = (figures - Math.log10(a/1000000)).ceil
+		ret = (a/1000000).round(fig).to_s + "m"
 	elsif a >= 1000 then
-		ret = (a*1.0/1000).round(figures - Math.log10(a*1.0/1000).ceil).to_s + "k"
+		fig = (figures - Math.log10(a/1000)).ceil
+		ret = (a/1000).round(fig).to_s + "k"
 	end
 
+	ret = ret.gsub(/\.0([bmk])$/,"\\1")
+	
 	return ret
   end
   
