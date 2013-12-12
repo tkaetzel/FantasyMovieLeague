@@ -112,4 +112,71 @@ class GraphController < ApplicationController
 	$graph_output = json_data.html_safe
 	render :layout => false
 end
+
+	def details
+		db = connect
+		$movie = params[:movie] || ""
+		$movie = URI.unescape($movie)
+		if !$movie.empty? then
+			query = "SELECT m.name AS 'Movie', e.gross AS 'Gross', YEAR(e.on_date) AS 'Year', MONTH(e.on_date) AS 'Month', DAY(e.on_date) AS 'Day' FROM `earnings` e
+		INNER JOIN `movies` m ON m.id = e.movie_id
+		WHERE m.name LIKE \"#{params[:movie]}\" ORDER BY e.on_date ASC"
+		else
+			query = "SELECT m.name AS 'Movie', e.gross AS 'Gross', YEAR(e.on_date) AS 'Year', MONTH(e.on_date) AS 'Month', DAY(e.on_date) AS 'Day' FROM `earnings` e
+		INNER JOIN `movies` m ON m.id = e.movie_id
+		ORDER BY m.name, e.on_date ASC"
+		end
+	
+		result = db.query(query)
+		$movie = ""
+		data = []
+		to_add = {}
+		
+		if result.count.zero? then
+			render :file => "#{Rails.root}/public/404", :layout => false, :status => :not_found
+			return			
+		end
+		
+		result.each do |a|
+			if a["Movie"] != $movie then
+				if !to_add.empty? then
+					data.push to_add
+				end
+				to_add = {}
+				to_add["name"] = a["Movie"]
+				to_add["data"] ||= []
+				to_add["data"].push "[Date.UTC(%d,%d,%d), %d]" % [a["Year"], a["Month"]-1, a["Day"]-1, 0]
+				
+				$movie = a["Movie"]
+			end
+			
+			to_add["data"].push "[Date.UTC(%d,%d,%d), %d]" % [a["Year"], a["Month"]-1, a["Day"], a["Gross"]]
+		end
+		
+		if !to_add.empty? then
+			data.push to_add
+		end
+		
+		if (params[:movie] || "").empty? then
+			$movie = "All Movies"
+		end
+	
+		$json_data = ""
+		data.each do |ta|
+			if !$json_data.empty? then
+				$json_data += ",\r\n"
+			end
+			$json_data += "{'name':'%s', 'data':%s}" % [ta["name"].gsub(/'/,"\\\\'"), JSON.generate(ta["data"]).gsub(/"/,"")]
+		end
+		
+		$movie = $movie.html_safe
+		$json_data = $json_data.html_safe
+		render :layout => false
+	end
+end
+
+class String
+  def numeric?
+    Float(self) != nil rescue false
+  end
 end

@@ -127,7 +127,7 @@ class MainController < ApplicationController
 	$col_headers = $col_headers.html_safe
 	$col_models = $col_models.html_safe
 		
-	sums_display["movie"] = "<a href=\"#\" onclick=\"popupDetails('details.php');return false;\">Total</a>"
+	sums_display["movie"] = "<a href=\"#\" onclick=\"popupDetails('/graph/details');return false;\">Total</a>"
 	i=0
 	results_by_movie.each do |movie,data|
 		if !$output.empty? then 

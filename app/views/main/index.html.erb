@@ -21,7 +21,7 @@ function linkCells()
 		var v = cells.eq(i).html();
 		if (v != "")
 		{
-			v = "<a href=\"#\" onclick=\"popupDetails(&quot;details.php?movie=" + movie + "&quot;);return false;\">" + v + "</a>";
+			v = "<a href=\"#\" onclick=\"popupDetails(&quot;/graph/details/" + movie + "&quot;);return false;\">" + v + "</a>";
 			cells.eq(i).html(v);
 		}
 	}
