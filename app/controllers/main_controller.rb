@@ -5,7 +5,7 @@ class MainController < ApplicationController
 	COL_HEADER = "'%s', "
 	COL_MODEL = "{name:'%s', align:'right', index:'%s', width:45, sorttype:sortMoney},\r\n"
 	SHARES_COL_MODEL = "{name:'%s', align:'right', index:'%s', width:45, sorttype:'int'},\r\n"
-	FOOTER_TEMPLATE = '<a href="#" onclick="popupDetails(&quot;breakdown.php?contestant=%s&amp;data=%s&quot;);return false;">%s</a>'
+	FOOTER_TEMPLATE = '<a href="#" onclick="popupDetails(&quot;/graph/breakdown?contestant=%s&amp;data=%s&quot;);return false;">%s</a>'
 	COL_HEADER_SHARES = "'%s', "
 	COL_MODEL_SHARES = "{name:'%s', align:'right', index:'%s', width:35, sorttype:'int'},\r\n"
 	
@@ -119,7 +119,7 @@ class MainController < ApplicationController
 	sums.each do |player,total|
 		full_name = long_names[player]
 		
-		sums_display[player] = FOOTER_TEMPLATE % [full_name, Base64.encode64(JSON.generate(results[player])), to_currency(total)]
+		sums_display[player] = FOOTER_TEMPLATE % [URI.escape(full_name), URI.escape(Base64.encode64(JSON.generate(results[player]))), to_currency(total)]
 		$col_headers += COL_HEADER % player
 		$col_models += COL_MODEL % [player, player]
 	end

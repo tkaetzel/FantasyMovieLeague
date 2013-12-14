@@ -16,22 +16,14 @@ $(document).ready(function() {
       chart1 = new Highcharts.Chart({
          chart: {
             renderTo: 'container',
-            type: 'spline'
          },
          title: {
-            text: "<%= $movie %>"
+            text: "<%= $contestant %>"
          },
-         xAxis: {
-            type: 'datetime'
-         },
-         yAxis: {
-            title: {
-               text: 'Revenue (USD)',
-            },
-			min: 0
-         },
-         series: [<%= $json_data %>]
-		 
+         series: [{
+            data: <%= $json_data %>,
+			type: 'pie'
+         }]
       });
    });
 	

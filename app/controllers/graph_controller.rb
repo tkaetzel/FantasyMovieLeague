@@ -173,6 +173,27 @@ end
 		$json_data = $json_data.html_safe
 		render :layout => false
 	end
+	
+	def breakdown
+		db = connect
+		data = {}
+		tdata = []
+		begin
+			data = JSON.parse(Base64.decode64(params[:data]))
+			$contestant = URI.unescape(params[:contestant]).html_safe
+			
+			data.each do |movie,value|
+				next if value.to_i <= 0
+				tdata.push([movie,value.to_f])
+			end
+			
+			$json_data = JSON.generate(tdata).html_safe
+		rescue
+			render :file => "#{Rails.root}/public/400", :layout => false, :status => :bad_request
+			return
+		end	
+		render :layout => false
+	end
 end
 
 class String
