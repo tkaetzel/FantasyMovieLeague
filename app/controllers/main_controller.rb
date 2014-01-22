@@ -1,6 +1,5 @@
 
 class MainController < ApplicationController
-	
 	# constants
 	COL_HEADER = "'%s', "
 	COL_MODEL = "{name:'%s', align:'right', index:'%s', width:45, sorttype:sortMoney},\r\n"
@@ -10,6 +9,8 @@ class MainController < ApplicationController
 	COL_MODEL_SHARES = "{name:'%s', align:'right', index:'%s', width:35, sorttype:'int'},\r\n"
 	
   def index
+  	return #lol
+	
 	$output = ""
 	$START_DATE = DateTime.new(2013,11,1,0,0,0,'-4')
 	$NOW = DateTime.now

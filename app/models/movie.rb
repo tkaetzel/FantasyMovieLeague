@@ -1,4 +1,6 @@
-class Movie
+class Movie < ActiveRecord::Base
+has_many :shares
+=begin
 	@name = ""
 	@gross = 0
 	@theaters = 0
@@ -35,5 +37,5 @@ class Movie
 	def open=(v)
 		@open = DateTime.strptime(v,"%m/%d/%y")
 	end
-	
+=end
 end
