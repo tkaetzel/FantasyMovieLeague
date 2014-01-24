@@ -18,13 +18,13 @@ class Base < ActiveRecord::Migration
 	create_join_table :players, :teams
 	
 	create_table :shares do |t|
-		t.references :players
-		t.references :movies
-		t.integer :shares
+		t.references :player
+		t.references :movie
+		t.integer :num_shares
 	end
 	
 	create_table :earnings do |t|
-		t.references :movies
+		t.references :movie
 		t.integer :gross
 		
 		t.timestamps

@@ -14,7 +14,7 @@
 ActiveRecord::Schema.define(version: 20140122025315) do
 
   create_table "earnings", force: true do |t|
-    t.integer  "movies_id"
+    t.integer  "movie_id"
     t.integer  "gross"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -37,9 +37,9 @@ ActiveRecord::Schema.define(version: 20140122025315) do
   end
 
   create_table "shares", force: true do |t|
-    t.integer "players_id"
-    t.integer "movies_id"
-    t.integer "shares"
+    t.integer "player_id"
+    t.integer "movie_id"
+    t.integer "num_shares"
   end
 
   create_table "teams", force: true do |t|

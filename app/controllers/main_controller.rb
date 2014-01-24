@@ -9,8 +9,6 @@ class MainController < ApplicationController
 	COL_MODEL_SHARES = "{name:'%s', align:'right', index:'%s', width:35, sorttype:'int'},\r\n"
 	
   def index
-  	return #lol
-	
 	$output = ""
 	$START_DATE = DateTime.new(2013,11,1,0,0,0,'-4')
 	$NOW = DateTime.now
@@ -19,17 +17,21 @@ class MainController < ApplicationController
 		redirect_to 'http://www.google.com'
 	end
 
+	players = []
+	
 	case (params[:team] || "").downcase
 	when 'friends'
-		@team = 1
+		players = Team.find(1).players
 	when 'work'
-		@team = 2
+		players = Team.find(2).players
 	when ''
-		@team = 0
+		players = Player.all
 	else
 		render :file => "#{Rails.root}/public/404", :layout => false, :status => :not_found
 		return
 	end
+	
+	movies = Movie.all
 	
 	percentages = {}
 	grosses = {}
@@ -37,90 +39,36 @@ class MainController < ApplicationController
 	shares = {}
 	shares_in_use = {}
 	release_dates = {}
-	
-	db = connect
-	results = db.query("CALL GetPercentages(#{@team})")
-	
-	results.each do |row|
-		percentages[row["name"]] = row.except("name")
-	end
-	
-	db.close
-	db = connect
-		results = db.query("CALL GetShares(#{@team})")
-	
-	results.each do |row|
-		shares[row["Movie"]] = row.except("Movie")
-	end
-	
-	db.close
-	db = connect
-	
-	results = db.query("CALL GetNewestGross()")
-	
-	results.each do |row|
-		grosses[row["name"]] = (row.except("name"))["gross"]
-	end
-
-	db.close
-	db = connect
-	
-	results = db.query("SELECT * FROM `players`")
-	
-	results.each do |row|
-		long_names[row["short_name"]] = row["long_name"]
-	end
-	
-	db.close
-	db = connect
-		results = db.query("CALL GetSharesInUse(#{@team})")
-	
-	results.each do |row|
-		shares_in_use[row["name"]] = row["pct_in_use"]
-	end
-	
-	db.close
-	
 	results = {}
 	results_by_movie = {}
-
-	percentages.each do |movie,pct|
-		# movie = key (movie title)
-		# pct = value (array of ownage percentages for $movie by each user)
-
-		next if grosses[movie].nil?
-
-		total = grosses[movie]
-		
-		# now for this movie, iterate over the players who own some part of it
-		pct.each do |player, owned_pct|
-			# player = key (player's short name)
-			# owned_pct = value (percentage of $movie that $player owns)
-			
-			results[player] ||= Hash.new
-			results_by_movie[movie] ||= Hash.new
-			
-			results[player][movie] = owned_pct * total
-			results_by_movie[movie][player] = owned_pct * total
-			
-		end
-	end
-
 	sums = {}
+	
+	movies.each do |m|
+		grosses[m.name] = m.earnings.empty? ? 0 : m.earnings.order("created_at DESC").first.gross
+		
+		total_shares = m.shares.sum(:num_shares)
+		this_movie = {}
+		players.each do |p|
+			s = p.shares.find_by_movie_id(m.id)
+			share = s.nil? ? 0 : s.num_shares.to_f / total_shares * grosses[m.name]
+			
+			sums[p.short_name] ||= 0
+			this_movie[p.short_name] = share
+			sums[p.short_name] += share
+		end
+		results_by_movie[m.name] = this_movie
+	end
+	sums = Hash[(sums.sort_by &:last).reverse]
+	
 	sums_display = {} # this hash will be the same as sums except with html formatting
 	standings = []
 	$col_headers = ""
 	$col_models = ""
-	
-	results.each do |player,totals|
-		sums[player] = totals.values.sum
-	end
-	sums = Hash[(sums.sort_by &:last).reverse]
 
 	sums.each do |player,total|
 		full_name = long_names[player]
-		
-		sums_display[player] = FOOTER_TEMPLATE % [URI.escape(full_name), URI.escape(Base64.encode64(JSON.generate(results[player]))), to_currency(total)]
+		sums_display[player] = ""
+		#sums_display[player] = FOOTER_TEMPLATE % [URI.escape(full_name), URI.escape(Base64.encode64(JSON.generate(results[player]))), to_currency(total)]
 		$col_headers += COL_HEADER % player
 		$col_models += COL_MODEL % [player, player]
 	end
@@ -135,14 +83,14 @@ class MainController < ApplicationController
 			$output += "," 
 		end
 		
-		$output += "{'id':%d, 'movie':\"%s\", 'releasedate':'%s'" % [i+=1, movie, shares[movie]["ReleaseDate"]]
+		$output += "{'id':%d, 'movie':\"%s\", 'releasedate':'%s'" % [i+=1, movie, ""] #shares[movie]["ReleaseDate"]]
 		total = 0
 		data.each do |player,revenue|
 			total += revenue
 			$output += ",'%s':'%s'" % [player, to_currency(revenue)]
 		end
 		
-		value = total / shares[movie]["Total"]
+		value = 0 #total / shares[movie]["Total"]
 		
 		$output += ", 'total':'%s'" % to_currency(total)
 		$output += ", 'value':'%s'}" % to_currency(value)
@@ -154,13 +102,13 @@ class MainController < ApplicationController
 	
 	i=0
 	sums.each do |player,score|
-		next if long_names[player].empty?
+		#next if long_names[player].empty?
 		i+=1
 		a = Ranking.new
 		a.rank = i
-		a.player = long_names[player]
+		a.player = player#long_names[player]
 		a.revenue = score
-		a.pct_in_use = shares_in_use[player]
+		a.pct_in_use = 0#shares_in_use[player]
 
 		standings.push(a)
 	end
@@ -186,16 +134,7 @@ class MainController < ApplicationController
 	$col_headers = ""
 	$col_models = ""
 	$json_data = ""
-	
-	db = connect
-	shares = {}
-	results = db.query("CALL GetShares(#{@team})")
-	
-	results.each do |row|
-		shares[row["Movie"]] = row.except("Movie")
-	end
-	db.close
-	
+		
 	i=1
 	names = []
 	json = []

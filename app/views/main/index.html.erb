@@ -87,7 +87,7 @@ $(function(){
 <table id="tblStandings"><tr><td/></tr></table>
 
 <h3 style="text-align:center;">
-	<% 	if @team > 0 then %>
+	<% 	if !params[:team].nil? then %>
 		[ <a href="#" onclick="return popupDetails('/graph/weekly/<%= params[:team] %>');">Weekly Totals</a> ]
 		[ <a href="#" onclick="return popupDetails('/graph/rank/<%= params[:team] %>');">Weekly Rankings</a> ]
 		[ <a href="#" onclick="return popupDetails('/graph/spread/<%= params[:team] %>');">Weekly Spread</a> ]

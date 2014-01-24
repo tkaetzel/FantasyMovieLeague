@@ -43,5 +43,7 @@ end
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
+gem 'pry', :group => :development
+gem 'pry-nav'
 gem 'awesome_print'
 gem 'nokogiri'
