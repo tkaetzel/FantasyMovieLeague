@@ -40,7 +40,7 @@ class MainController < ApplicationController
 	movies.each do |m|
 		grosses[m.name] = m.earnings.empty? ? 0 : m.earnings.order("created_at DESC").first.gross
 		
-		total_shares = m.shares.sum(:num_shares)
+		total_shares = m.shares.where(:player_id => players).sum(:num_shares)
 		this_movie = {}
 		players.each do |p|
 			s = p.shares.find_by_movie_id(m.id)
