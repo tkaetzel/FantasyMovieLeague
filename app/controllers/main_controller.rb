@@ -21,36 +21,36 @@ class MainController < ApplicationController
 	
 	case (params[:team] || "").downcase
 	when 'friends'
-		players = Team.find(1).players
+		players = Team.find(1).players.includes(:shares)
 	when 'work'
-		players = Team.find(2).players
+		players = Team.find(2).players.includes(:shares)
 	when ''
-		players = Player.all
+		players = Player.all.includes(:shares)
 	else
 		render :file => "#{Rails.root}/public/404", :layout => false, :status => :not_found
 		return
 	end
 	
-	movies = Movie.all
+	movies = Movie.all.includes(:shares, :earnings)
 	
 	grosses = {}
 	results_by_movie = {}
 	sums = {}
 	
 	movies.each do |m|
-		grosses[m.name] = m.earnings.empty? ? 0 : m.earnings.order("created_at DESC").first.gross
+		grosses[m.name] = m.earnings.empty? ? 0 : m.earnings.max_by{|a| a.created_at}.gross
 		
 		total_shares = m.shares.where(:player_id => players).sum(:num_shares)
 		this_movie = {}
 		players.each do |p|
-			s = p.shares.find_by_movie_id(m.id)
+			s = p.shares.select {|s| s.movie_id == m.id}.first
 			share = s.nil? ? 0 : s.num_shares.to_f / total_shares * grosses[m.name]
 			
-			sums[p.short_name] ||= 0
-			this_movie[p.short_name] = share
-			sums[p.short_name] += share
+			sums[p] ||= 0
+			this_movie[p] = share
+			sums[p] += share
 		end
-		results_by_movie[m.name] = this_movie
+		results_by_movie[m] = this_movie
 	end
 	sums = Hash[(sums.sort_by &:last).reverse]
 	
@@ -60,9 +60,9 @@ class MainController < ApplicationController
 	$col_models = ""
 
 	sums.each do |player,total|
-		sums_display[player] = FOOTER_TEMPLATE % [to_currency(total)]
-		$col_headers += COL_HEADER % player
-		$col_models += COL_MODEL % [player, player]
+		sums_display[player.short_name] = FOOTER_TEMPLATE % [to_currency(total)]
+		$col_headers += COL_HEADER % player.short_name
+		$col_models += COL_MODEL % [player.short_name, player.short_name]
 	end
 	
 	$col_headers = $col_headers.html_safe
@@ -70,16 +70,17 @@ class MainController < ApplicationController
 		
 	sums_display["movie"] = "<a href=\"#\" onclick=\"popupDetails('/graph/details');return false;\">Total</a>"
 	i=0
-	results_by_movie.each do |movie,data|
+	release_dates = {} # save these to prevent future processing
+	results_by_movie.each do |m,data|
 		if !$output.empty? then 
 			$output += "," 
 		end
-		m = Movie.find_by_name(movie)
+		release_dates[m.id] = m.release_date
 		$output += "{'id':%d, 'movie':\"%s\", 'releasedate':'%s'" % [i+=1, m.name, m.release_date.strftime("%Y-%m-%d")]
 		total = 0
 		data.each do |player,revenue|
 			total += revenue
-			$output += ",'%s':'%s'" % [player, to_currency(revenue)]
+			$output += ",'%s':'%s'" % [player.short_name, to_currency(revenue)]
 		end
 		
 		value = total / m.shares.sum(:num_shares)
@@ -93,18 +94,17 @@ class MainController < ApplicationController
 	$output_sums = JSON.generate(sums_display).html_safe
 	
 	i=0
-	sums.each do |player,score|
+	sums.each do |p,score|
 		i+=1
 		a = Ranking.new
 		a.rank = i
 		a.revenue = score
 		a.pct_in_use = 0
 
-		p = Player.find_by_short_name(player)
 		p.shares.each do |s|
-			m = Movie.find_by_id(s.movie_id)
-			a.pct_in_use += s.num_shares if m.release_date < DateTime.now
+			a.pct_in_use += s.num_shares if release_dates[s.movie_id] < DateTime.now
 		end
+
 		a.player = p.long_name
 		standings.push(a)
 	end
@@ -114,27 +114,41 @@ class MainController < ApplicationController
   end
   
   def shares
-	
 	case (params[:team] || "").downcase
 	when 'friends'
-		@team = 1
+		players = Team.find(1).players
 	when 'work'
-		@team = 2
+		players = Team.find(2).players
 	when ''
-		@team = 0
+		players = Player.all
 	else
 		render :file => "#{Rails.root}/public/404", :layout => false, :status => :not_found
 		return
 	end
 	
+	movies = Movie.all
+	
 	$col_headers = ""
 	$col_models = ""
 	$json_data = ""
-		
+	shares_by_movie = {}
+	
+	movies.each do |m|
+		this_movie = {}
+		players.each do |p|
+			s = p.shares.find_by_movie_id(m.id)
+			share = s.nil? ? 0 : s.num_shares
+			this_movie[p.short_name] = share
+		end
+		this_movie['Total'] = m.shares.where(:player_id => players).sum(:num_shares)
+		this_movie['ReleaseDate'] = m.release_date.strftime("%Y-%m-%d")
+		shares_by_movie[m.name] = this_movie
+	end
+	
 	i=1
 	names = []
 	json = []
-	shares.each do |movie,data|
+	shares_by_movie.each do |movie,data|
 		row = { 
 			:id => i+=1,
 			:movie => movie,
@@ -159,7 +173,6 @@ class MainController < ApplicationController
 	$col_headers = $col_headers.html_safe
 	$col_models = $col_models.html_safe
 	$json_data = JSON.generate(json).html_safe
-	
   end
   
   def to_currency(a, figures=3)

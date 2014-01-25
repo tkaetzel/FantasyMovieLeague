@@ -1,4 +1,4 @@
 class Share < ActiveRecord::Base
-	belongs_to :shares
-	belongs_to :movies
+	belongs_to :player
+	belongs_to :movie
 end
