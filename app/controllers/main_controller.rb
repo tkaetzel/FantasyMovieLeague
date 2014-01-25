@@ -4,7 +4,7 @@ class MainController < ApplicationController
 	COL_HEADER = "'%s', "
 	COL_MODEL = "{name:'%s', align:'right', index:'%s', width:45, sorttype:sortMoney},\r\n"
 	SHARES_COL_MODEL = "{name:'%s', align:'right', index:'%s', width:45, sorttype:'int'},\r\n"
-	FOOTER_TEMPLATE = '<a href="#" onclick="popupDetails(&quot;/graph/breakdown?contestant=%s&amp;data=%s&quot;);return false;">%s</a>'
+	FOOTER_TEMPLATE = '<a href="#" onclick="popupDetails(&quot;/graph/breakdown&quot;);return false;">%s</a>'
 	COL_HEADER_SHARES = "'%s', "
 	COL_MODEL_SHARES = "{name:'%s', align:'right', index:'%s', width:35, sorttype:'int'},\r\n"
 	
@@ -33,13 +33,7 @@ class MainController < ApplicationController
 	
 	movies = Movie.all
 	
-	percentages = {}
 	grosses = {}
-	long_names = {}
-	shares = {}
-	shares_in_use = {}
-	release_dates = {}
-	results = {}
 	results_by_movie = {}
 	sums = {}
 	
@@ -66,9 +60,7 @@ class MainController < ApplicationController
 	$col_models = ""
 
 	sums.each do |player,total|
-		full_name = long_names[player]
-		sums_display[player] = ""
-		#sums_display[player] = FOOTER_TEMPLATE % [URI.escape(full_name), URI.escape(Base64.encode64(JSON.generate(results[player]))), to_currency(total)]
+		sums_display[player] = FOOTER_TEMPLATE % [to_currency(total)]
 		$col_headers += COL_HEADER % player
 		$col_models += COL_MODEL % [player, player]
 	end
@@ -82,15 +74,15 @@ class MainController < ApplicationController
 		if !$output.empty? then 
 			$output += "," 
 		end
-		
-		$output += "{'id':%d, 'movie':\"%s\", 'releasedate':'%s'" % [i+=1, movie, ""] #shares[movie]["ReleaseDate"]]
+		m = Movie.find_by_name(movie)
+		$output += "{'id':%d, 'movie':\"%s\", 'releasedate':'%s'" % [i+=1, m.name, m.release_date.strftime("%Y-%m-%d")]
 		total = 0
 		data.each do |player,revenue|
 			total += revenue
 			$output += ",'%s':'%s'" % [player, to_currency(revenue)]
 		end
 		
-		value = 0 #total / shares[movie]["Total"]
+		value = total / m.shares.sum(:num_shares)
 		
 		$output += ", 'total':'%s'" % to_currency(total)
 		$output += ", 'value':'%s'}" % to_currency(value)
@@ -102,14 +94,18 @@ class MainController < ApplicationController
 	
 	i=0
 	sums.each do |player,score|
-		#next if long_names[player].empty?
 		i+=1
 		a = Ranking.new
 		a.rank = i
-		a.player = player#long_names[player]
 		a.revenue = score
-		a.pct_in_use = 0#shares_in_use[player]
+		a.pct_in_use = 0
 
+		p = Player.find_by_short_name(player)
+		p.shares.each do |s|
+			m = Movie.find_by_id(s.movie_id)
+			a.pct_in_use += s.num_shares if m.release_date < DateTime.now
+		end
+		a.player = p.long_name
 		standings.push(a)
 	end
 	

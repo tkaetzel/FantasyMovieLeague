@@ -13,9 +13,5 @@ class ApplicationController < ActionController::Base
 		return ""
 	end
   end
-
-  def connect
-	return Mysql2::Client.new(Rails.configuration.database_configuration["development"])
-  end
   
 end
