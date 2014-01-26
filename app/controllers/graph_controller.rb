@@ -19,84 +19,73 @@ class GraphController < ApplicationController
 	
 	case (params[:team] || "").downcase
 	when 'friends'
-		@team = 1
+		players = Team.find(1).players
 	when 'work'
-		@team = 2
+		players = Team.find(2).players
 	when ''
-		@team = 0
+		players = Player.all
 	else
 		render :file => "#{Rails.root}/public/404", :layout => false, :status => :not_found
 		return
 	end
 	
-	percentages = {}
-	
-	db = connect
-	results = db.query("CALL GetPercentages(#{@team})")
-	
-	results.each do |row|
-		percentages[row["name"]] = row.except("name")
-	end
-	db.close
-	
 	start_date = Date.new(2013,11,3)
 	now = DateTime.now
 	stop_date = Date.new(2014,1,22)
-	data = {}
-	
-	stop_date = now if now < stop_date
 	table_data = {}
+	table_data_by_name = {}
+	table_data_rankings = {}
+	
+	movies = Movie.all.includes(:shares, :earnings)
+	stop_date = now if now < stop_date
 	
 	while start_date < stop_date
-		db = connect
-		query = "CALL GetGross('%s')" % start_date.strftime('%Y-%m-%d')
-		grs = db.query(query)
-		
-		grosses = {}
-		scores = {}
-		
-		grs.each do |row|
-			grosses[row["name"]] = row["Gross"]
-		end
+		sums = {}
+		table_data_by_date = {}
+		movies.each do |m|
+			earnings_by_date = m.earnings.select {|e| e.created_at < start_date}
+			earnings = earnings_by_date.empty? ? 0 : earnings_by_date.max_by{|a| a.created_at}.gross
+			
+			total_shares = m.shares.where(:player_id => players).sum(:num_shares)
+			players.each do |p|
+				s = p.shares.select {|s| s.movie_id == m.id}.first
+				share = s.nil? ? 0 : s.num_shares.to_f / total_shares * earnings
 
-		pct = percentages.clone
-		pct.each do |movie,p|
-			next if grosses[movie].nil?
-
-			p.each do |key, _|
-				scores[key] ||= 0
-				scores[key] += p[key] * grosses[movie]
+				table_data_by_name[p.long_name] ||= {}
+				table_data_by_name[p.long_name][start_date] ||= 0
+				table_data_by_name[p.long_name][start_date] += share
+				
+				table_data_by_date[start_date] ||= {}
+				table_data_by_date[start_date][p.long_name] ||= 0
+				table_data_by_date[start_date][p.long_name] += share
 			end
 		end
-		db.close
-
-		i=1
-		s_min = scores.min_by(&:last)[1]
-		spread = scores.max_by(&:last)[1] - s_min
-		Hash[(scores.sort_by &:last).reverse].each do |key,gross| 
-			table_data[key] ||= {}
-			case @graph_type
-			when 0
-				table_data[key][start_date] = gross
-			when 1
-				table_data[key][start_date] = i
-			when 2
-				table_data[key][start_date] = (gross - s_min)/spread * 100
-			end
+		
+		i=0
+		s_min = table_data_by_date[start_date].min_by(&:last)[1]
+		spread = table_data_by_date[start_date].max_by(&:last)[1] - s_min
+		table_data_by_date[start_date].sort_by {|a| a.last}.reverse.each do |k,v|
 			i+=1
+			table_data_rankings[k] ||= {}
+			table_data_rankings[k][start_date] = @graph_type == 1 ? i : (v - s_min)/spread * 100
 		end
 		
 		start_date += 7
 	end
-	
+
+	if @graph_type.zero?
+		table_data = table_data_by_name
+	else
+		table_data = table_data_rankings
+	end
+
 	json_data = ""
-	
 	table_data.each do |name,a|
 		
 		# wish i could just convert a hash straight to a json string...
 		# but the Date.UTC code would be in a string then...
 		
-		json_data += "," if not json_data.empty?
+		json_data += "," unless json_data.empty?
 		json_data += "{\"name\": \"%s\", \"data\":" % name
 		lr = ""
 		a.each do |date,total|
@@ -105,7 +94,7 @@ class GraphController < ApplicationController
 		end
 		json_data += "[%s]}" % lr
 	end
-	
+
 	$title = case @graph_type when 0 then "Revenue (USD)" when 1 then "Ranking" when 2 then "Spread %" end
 	$min = @graph_type == 1 ? 1 : 0
 	$reversed = @graph_type == 1 ? "true" : "false"
@@ -114,47 +103,38 @@ class GraphController < ApplicationController
 end
 
 	def details
-		db = connect
-		$movie = params[:movie] || ""
-		$movie = URI.unescape($movie)
-		if !$movie.empty? then
-			query = "SELECT m.name AS 'Movie', e.gross AS 'Gross', YEAR(e.on_date) AS 'Year', MONTH(e.on_date) AS 'Month', DAY(e.on_date) AS 'Day' FROM `earnings` e
-		INNER JOIN `movies` m ON m.id = e.movie_id
-		WHERE m.name LIKE \"#{params[:movie]}\" ORDER BY e.on_date ASC"
+		movies = []
+		if params[:movie].nil? then
+			movies = Movie.includes(:earnings)
 		else
-			query = "SELECT m.name AS 'Movie', e.gross AS 'Gross', YEAR(e.on_date) AS 'Year', MONTH(e.on_date) AS 'Month', DAY(e.on_date) AS 'Day' FROM `earnings` e
-		INNER JOIN `movies` m ON m.id = e.movie_id
-		ORDER BY m.name, e.on_date ASC"
+			movies = Movie.includes(:earnings).where(:id => params[:movie].to_i)
 		end
-	
-		result = db.query(query)
-		$movie = ""
+
 		data = []
 		to_add = {}
 		
-		if result.count.zero? then
+		if movies.empty? then
 			render :file => "#{Rails.root}/public/404", :layout => false, :status => :not_found
 			return			
 		end
 		
-		result.each do |a|
-			if a["Movie"] != $movie then
-				if !to_add.empty? then
-					data.push to_add
-				end
-				to_add = {}
-				to_add["name"] = a["Movie"]
-				to_add["data"] ||= []
-				to_add["data"].push "[Date.UTC(%d,%d,%d), %d]" % [a["Year"], a["Month"]-1, a["Day"]-1, 0]
-				
-				$movie = a["Movie"]
-			end
+		movies.each do |m|
+			$movie = m.name
+			next if m.earnings.empty?
 			
-			to_add["data"].push "[Date.UTC(%d,%d,%d), %d]" % [a["Year"], a["Month"]-1, a["Day"], a["Gross"]]
-		end
-		
-		if !to_add.empty? then
-			data.push to_add
+			to_add = {}
+			to_add["name"] = $movie
+			to_add["data"] = []
+			
+			m.earnings.each do |e|
+				if e == m.earnings.first then
+					to_add["data"].push "[Date.UTC(%d,%d,%d), %d]" % [e.created_at.strftime("%Y"), e.created_at.strftime("%-m").to_i-1, e.created_at.strftime("%-d").to_i-1, 0]
+				end
+				to_add["data"].push "[Date.UTC(%d,%d,%d), %d]" % [e.created_at.strftime("%Y"), e.created_at.strftime("%-m").to_i-1, e.created_at.strftime("%-d"), e.gross]
+			end
+			if !to_add.empty? then
+				data.push to_add
+			end
 		end
 		
 		if (params[:movie] || "").empty? then
@@ -173,27 +153,7 @@ end
 		$json_data = $json_data.html_safe
 		render :layout => false
 	end
-	
-	def breakdown
-		db = connect
-		data = {}
-		tdata = []
-		begin
-			data = JSON.parse(Base64.decode64(params[:data]))
-			$contestant = URI.unescape(params[:contestant]).html_safe
-			
-			data.each do |movie,value|
-				next if value.to_i <= 0
-				tdata.push([movie,value.to_f])
-			end
-			
-			$json_data = JSON.generate(tdata).html_safe
-		rescue
-			render :file => "#{Rails.root}/public/400", :layout => false, :status => :bad_request
-			return
-		end	
-		render :layout => false
-	end
+
 end
 
 class String

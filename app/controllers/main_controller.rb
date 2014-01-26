@@ -4,7 +4,6 @@ class MainController < ApplicationController
 	COL_HEADER = "'%s', "
 	COL_MODEL = "{name:'%s', align:'right', index:'%s', width:45, sorttype:sortMoney},\r\n"
 	SHARES_COL_MODEL = "{name:'%s', align:'right', index:'%s', width:45, sorttype:'int'},\r\n"
-	FOOTER_TEMPLATE = '<a href="#" onclick="popupDetails(&quot;/graph/breakdown&quot;);return false;">%s</a>'
 	COL_HEADER_SHARES = "'%s', "
 	COL_MODEL_SHARES = "{name:'%s', align:'right', index:'%s', width:35, sorttype:'int'},\r\n"
 	
@@ -60,7 +59,7 @@ class MainController < ApplicationController
 	$col_models = ""
 
 	sums.each do |player,total|
-		sums_display[player.short_name] = FOOTER_TEMPLATE % [to_currency(total)]
+		sums_display[player.short_name] = to_currency(total)
 		$col_headers += COL_HEADER % player.short_name
 		$col_models += COL_MODEL % [player.short_name, player.short_name]
 	end
@@ -126,7 +125,7 @@ class MainController < ApplicationController
 		return
 	end
 	
-	movies = Movie.all
+	movies = Movie.all.includes(:shares)
 	
 	$col_headers = ""
 	$col_models = ""
@@ -136,7 +135,7 @@ class MainController < ApplicationController
 	movies.each do |m|
 		this_movie = {}
 		players.each do |p|
-			s = p.shares.find_by_movie_id(m.id)
+			s = p.shares.select {|s| s.movie_id == m.id}.first
 			share = s.nil? ? 0 : s.num_shares
 			this_movie[p.short_name] = share
 		end
