@@ -23,12 +23,16 @@ ActiveRecord::Schema.define(version: 20140122025315) do
   create_table "movies", force: true do |t|
     t.string   "name"
     t.string   "mapped_name"
+    t.text     "plot"
+    t.string   "actors"
     t.datetime "release_date"
   end
 
   create_table "players", force: true do |t|
-    t.string "long_name"
-    t.string "short_name"
+    t.string   "long_name"
+    t.string   "short_name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "players_teams", id: false, force: true do |t|

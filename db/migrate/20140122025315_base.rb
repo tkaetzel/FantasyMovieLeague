@@ -3,12 +3,16 @@ class Base < ActiveRecord::Migration
 	create_table :movies do |t|
 		t.string :name
 		t.string :mapped_name, {default: nil}
+		t.text :plot
+		t.string :actors
 		t.datetime :release_date
 	end
 	
 	create_table :players do |t|
 		t.string :long_name
 		t.string :short_name
+		
+		t.timestamps
 	end
 	
 	create_table :teams do |t|
