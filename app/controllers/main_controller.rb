@@ -43,11 +43,14 @@ class MainController < ApplicationController
 		this_movie = {}
 		players.each do |p|
 			s = p.shares.select {|s| s.movie_id == m.id}.first
-			share = s.nil? ? 0 : s.num_shares.to_f / total_shares * grosses[m.name]
-			
 			sums[p] ||= 0
+			if grosses[m.name].nil? or grosses[m.name].zero? then
+				share = s.nil? ? 0 : s.num_shares
+			else
+				share = s.nil? ? 0 : s.num_shares.to_f / total_shares * grosses[m.name]
+				sums[p] += share
+			end
 			this_movie[p] = share
-			sums[p] += share
 		end
 		results_by_movie[m] = this_movie
 	end
@@ -83,6 +86,7 @@ class MainController < ApplicationController
 		end
 		
 		value = total / m.shares.sum(:num_shares)
+		value = 0 if value < 1000
 		
 		$output += ", 'total':'%s'" % to_currency(total)
 		$output += ", 'value':'%s'}" % to_currency(value)
@@ -175,7 +179,7 @@ class MainController < ApplicationController
   end
   
   def to_currency(a, figures=3)
-	ret = ""
+	ret = a.to_s
 	figures -= 1
 	if a >= 1000000000 then
 		fig = (figures - Math.log10(a/1000000000)).ceil
@@ -186,6 +190,8 @@ class MainController < ApplicationController
 	elsif a >= 1000 then
 		fig = (figures - Math.log10(a/1000)).ceil
 		ret = (a/1000).round(fig).to_s + "k"
+	elsif a == 0 then
+		return ""
 	end
 
 	ret = ret.gsub(/\.0([bmk])$/,"\\1")

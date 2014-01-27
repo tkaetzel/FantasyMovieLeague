@@ -25,6 +25,17 @@ function linkCells()
 			cells.eq(i).html(v);
 		}
 	}
+	
+	var cells = $("#list tr>td");
+	for (var i = 0; i < cells.length; i++)
+	{
+		var v = cells.eq(i).html();
+		if (v != "" && parseInt(v) == v)
+		{
+			cells.eq(i).addClass("shares");
+		}
+	}
+	
 }
 
 $(function(){ 
