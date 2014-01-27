@@ -6,6 +6,7 @@ Ruby::Application.routes.draw do
   get "/graph/details/:movie", to: "graph#details"
   get "/graph/:type", to: "graph#get_graph"
   get "/graph/:type/:team", to: "graph#get_graph"
+  get "/new", to: "new#index"
   get "/:team", to: "main#index"
 
   root 'main#index'

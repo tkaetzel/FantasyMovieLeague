@@ -1,0 +1,70 @@
+// Place all the styles related to the new controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.movie {
+	.movie_name {
+		border-bottom: solid 1px #000;
+		border-right: solid 1px #000;
+		border-radius: 2px;
+		background-color:#D5D5D5;
+		color: #000;
+		padding-right: 4px;
+		margin-bottom:8px;
+		margin-right: 8px;
+		font-size:22px;
+		font-weight:bold;
+		float:left;
+		width:400px;
+	}
+	
+	.movie_plot {
+		
+	}
+	
+	.movie_actors {
+		position:absolute;
+		bottom: 0;
+		left:0;
+		border-top:solid 1px #000;
+		width:900px;
+	}
+	
+	.shares_container {
+		border-left: solid 1px #000;
+		height:100%;
+		float:right;
+		width: 60px;
+		font-size:10px;
+		font-weight:bold;
+		font-style:italic;
+		text-align:center;
+		
+		input {
+			text-align: center;
+			font-family:'Segoe UI','Helvetica','Arial';
+			font-size:18px;
+			font-weight:bold;
+			width:50px;
+		}
+	}
+	
+	width: 960px;
+	height:120px;
+	margin:8px auto;
+	border: solid 1px #000;
+	border-radius: 4px;
+	position:relative;
+}
+
+.whoareyou {
+	width: 960px;
+	margin:8px auto;
+}
+
+input {
+	text-align: center;
+	font-family:'Segoe UI','Helvetica','Arial';
+	font-size:18px;
+	font-weight:bold;
+}

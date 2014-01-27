@@ -9,11 +9,11 @@ class MainController < ApplicationController
 	
   def index
 	$output = ""
-	$START_DATE = DateTime.new(2013,11,1,0,0,0,'-4')
+	$START_DATE = DateTime.new(2014,4,4,0,0,0,'-4')
 	$NOW = DateTime.now
 	
 	if $NOW < $START_DATE then
-		redirect_to 'http://www.google.com'
+		redirect_to controller:"new"
 	end
 
 	players = []
