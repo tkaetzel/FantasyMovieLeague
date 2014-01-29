@@ -118,6 +118,14 @@ class MainController < ApplicationController
   end
   
   def shares
+  	$output = ""
+	$START_DATE = DateTime.new(2014,4,4,0,0,0,'-4')
+	$NOW = DateTime.now
+	
+	if $NOW < $START_DATE then
+		redirect_to controller:"new"
+	end
+	
 	case (params[:team] || "").downcase
 	when 'friends'
 		players = Team.find(1).players

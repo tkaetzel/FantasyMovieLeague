@@ -3,12 +3,103 @@
 	<div class="whoareyou">Who are you?
 	<%= text_field_tag "name", nil, placeholder:"First & Last Name" %>
 	</div>
+	<div class="moneyRemaining">
+		<div id="progressbar"><div class="progress-label"></div></div>
+	</div>
+	<p style="clear:both">&nbsp;</p>
 	<% $movies.each do |m| %>
 		<div class="movie">
-			<div class="shares_container">Shares: <br/><%= text_field_tag "shares_" + m.id.to_s, 0, size:3, maxlength:3 %></div>
-			<span class="movie_name"><%= link_to m.name, m.imdb, {:target=>"_blank"} %></span>
-			<span class="movie_plot"><%= m.plot %></span><br/>
+			<div class="shares_container">Shares: <br/><%= text_field_tag "shares_" + m.id.to_s, 0, {size:3, maxlength:3, class:"shares_box"} %></div>
+			<div class="movie_name"><%= link_to m.name, m.imdb, {:target=>"_blank"} %></div>
+			<div class="movie_plot"><%= m.plot %></div><br/>
 			<div class="movie_actors"><strong>Starring</strong>: <%= m.actors %><br/><strong>Release Date</strong>: <%= m.release_date.strftime("%m/%d/%Y") %></div>
 		</div>
 	<% end %>
 </div>
+<script type="text/javascript">
+<!--
+	$(".shares_box").keyup(updateMoneyRemaining);
+	$( "#progressbar" ).progressbar({value:100});
+	$(updateMoneyRemaining);
+	function updateMoneyRemaining()
+	{
+		var start = 100;
+		var error = false;
+		var boxes = $(".shares_box");
+		for (i=0;i<boxes.length;i++)
+		{
+			var val = boxes.eq(i).val();
+			if (val === "")
+			{
+				boxes.eq(i).val("0");
+				val = 0;
+			}
+			if (isNaN(val) || val > 100 || val < 0 || val % 1 != 0)
+			{
+				boxes.eq(i).css("background-color","#F55");
+				error = true;
+			}
+			else
+			{
+				start -= parseInt(val);
+				boxes.eq(i).css("background-color","");
+			}
+		}
+
+		$( "#progressbar" ).progressbar({value:start});
+		$( "#progressbar .progress-label" ).text(start + " remaining");
+		if (start < 0)
+			$( "#progressbar .progress-label" ).css("color","#F00");
+		else
+			$( "#progressbar .progress-label" ).css("color","#000");
+		var pct = Math.max(0,120*(start/100));
+		$( "#progressbar .ui-progressbar-value" ).css("background", hsl2rgb(pct, 100, 80));
+		if (start < 0 || error)
+			$("#btnSave").attr("disabled","disabled");
+		else
+			$("#btnSave").removeAttr("disabled");
+
+		return start;
+	}
+	
+	function hsl2rgb(h, s, l) {
+		var m1, m2, hue;
+		var r, g, b
+		s /=100;
+		l /= 100;
+		if (s == 0)
+			r = g = b = (l * 255);
+		else {
+			if (l <= 0.5)
+				m2 = l * (s + 1);
+			else
+				m2 = l + s - l * s;
+			m1 = l * 2 - m2;
+			hue = h / 360;
+			r = HueToRgb(m1, m2, hue + 1/3);
+			g = HueToRgb(m1, m2, hue);
+			b = HueToRgb(m1, m2, hue - 1/3);
+		}
+		return "rgb("+Math.round(r)+", "+Math.round(g)+", "+Math.round(b)+")";
+	}
+
+	function HueToRgb(m1, m2, hue) {
+		var v;
+		if (hue < 0)
+			hue += 1;
+		else if (hue > 1)
+			hue -= 1;
+
+		if (6 * hue < 1)
+			v = m1 + (m2 - m1) * hue * 6;
+		else if (2 * hue < 1)
+			v = m2;
+		else if (3 * hue < 2)
+			v = m1 + (m2 - m1) * (2/3 - hue) * 6;
+		else
+			v = m1;
+
+		return 255 * v;
+	}	
+// -->
+</script>

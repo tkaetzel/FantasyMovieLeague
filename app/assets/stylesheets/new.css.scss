@@ -20,7 +20,7 @@
 	}
 	
 	.movie_plot {
-		
+		padding:9px;
 	}
 	
 	.movie_actors {
@@ -59,14 +59,27 @@
 	float:left;
 }
 
-.whoareyou {
-	width: 960px;
-	margin:8px auto;
+.whoareyou, .moneyRemaining {
+	width: 480px;
+	float:left;
 }
+
+#nav a {display:none !important;}
 
 input {
 	text-align: center;
 	font-family:'Segoe UI','Helvetica','Arial';
 	font-size:18px;
 	font-weight:bold;
+}
+
+.ui-progressbar {
+	position: relative;
+}
+.progress-label {
+	position: absolute;
+	left: 4px;
+	top: 4px;
+	font-weight: bold;
+	text-shadow: 1px 1px 0 #fff;
 }
