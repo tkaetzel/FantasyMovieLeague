@@ -9,17 +9,17 @@
 		border-radius: 2px;
 		background-color:#D5D5D5;
 		color: #000;
+		padding-left: 4px;
 		padding-right: 4px;
 		margin-bottom:8px;
 		margin-right: 8px;
 		font-size:22px;
 		font-weight:bold;
 		float:left;
-		width:400px;
 	}
 	
 	.movie_plot {
-		
+		font-size:13px;
 	}
 	
 	.movie_actors {
@@ -27,7 +27,8 @@
 		bottom: 0;
 		left:0;
 		border-top:solid 1px #000;
-		width:900px;
+		width:896px;
+		padding-left: 4px;
 	}
 	
 	.shares_container {
@@ -41,17 +42,13 @@
 		text-align:center;
 		
 		input {
-			text-align: center;
-			font-family:'Segoe UI','Helvetica','Arial';
-			font-size:18px;
-			font-weight:bold;
 			width:50px;
 		}
 	}
 	
 	width: 960px;
 	height:120px;
-	margin:8px auto;
+	margin:18px auto;
 	border: solid 1px #000;
 	border-radius: 4px;
 	position:relative;

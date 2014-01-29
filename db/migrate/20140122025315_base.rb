@@ -6,6 +6,7 @@ class Base < ActiveRecord::Migration
 		t.text :plot
 		t.string :actors
 		t.datetime :release_date
+		t.string :imdb
 	end
 	
 	create_table :players do |t|
