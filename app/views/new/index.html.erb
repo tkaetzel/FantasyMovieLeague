@@ -1,14 +1,14 @@
 <br/><br/>
-<div class="container">
-<div class="whoareyou">Who are you?
-<%= text_field_tag "name", nil, placeholder:"First & Last Name" %>
-</div>
-<% $movies.each do |m| %>
-	<div class="movie">
-		<div class="shares_container">Shares: <br/><%= text_field_tag "shares_" + m.id.to_s, 0, size:3, maxlength:3 %></div>
-		<span class="movie_name"><%= m.name %></span>
-		<span class="movie_plot"><%= m.plot %></span><br/>
-		<span class="movie_actors"><strong>Starring</strong>: <%= m.actors %><br/><strong>Release Date</strong>: <%= m.release_date.strftime("%m/%d/%Y") %></span>
+<div id="container">
+	<div class="whoareyou">Who are you?
+	<%= text_field_tag "name", nil, placeholder:"First & Last Name" %>
 	</div>
-<% end %>
+	<% $movies.each do |m| %>
+		<div class="movie">
+			<div class="shares_container">Shares: <br/><%= text_field_tag "shares_" + m.id.to_s, 0, size:3, maxlength:3 %></div>
+			<span class="movie_name"><%= link_to m.name, m.imdb, {:target=>"_blank"} %></span>
+			<span class="movie_plot"><%= m.plot %></span><br/>
+			<div class="movie_actors"><strong>Starring</strong>: <%= m.actors %><br/><strong>Release Date</strong>: <%= m.release_date.strftime("%m/%d/%Y") %></div>
+		</div>
+	<% end %>
 </div>

@@ -2,24 +2,25 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+#container {
+	width:990px;
+	margin:0 auto;
+}
+
 .movie {
 	.movie_name {
 		border-bottom: solid 1px #000;
-		border-right: solid 1px #000;
-		border-radius: 2px;
 		background-color:#D5D5D5;
 		color: #000;
-		padding-left: 4px;
-		padding-right: 4px;
-		margin-bottom:8px;
-		margin-right: 8px;
 		font-size:22px;
 		font-weight:bold;
 		float:left;
+		width:419px;
+		text-align:center;
 	}
 	
 	.movie_plot {
-		font-size:13px;
+		
 	}
 	
 	.movie_actors {
@@ -27,8 +28,9 @@
 		bottom: 0;
 		left:0;
 		border-top:solid 1px #000;
-		width:896px;
+		width:416px;
 		padding-left: 4px;
+		text-align:left;
 	}
 	
 	.shares_container {
@@ -46,12 +48,15 @@
 		}
 	}
 	
-	width: 960px;
-	height:120px;
-	margin:18px auto;
+	width: 480px;
+	height:130px;
+	margin:6px;
 	border: solid 1px #000;
 	border-radius: 4px;
 	position:relative;
+	text-align:center;
+	font-size:12px;
+	float:left;
 }
 
 .whoareyou {
