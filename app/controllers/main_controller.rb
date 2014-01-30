@@ -12,10 +12,6 @@ class MainController < ApplicationController
 	$START_DATE = DateTime.new(2014,4,4,0,0,0,'-4')
 	$NOW = DateTime.now
 	
-	if $NOW < $START_DATE then
-		redirect_to controller:"new"
-	end
-
 	players = []
 	
 	case (params[:team] || "").downcase
@@ -27,6 +23,11 @@ class MainController < ApplicationController
 		players = Player.all.includes(:shares)
 	else
 		render :file => "#{Rails.root}/public/404", :layout => false, :status => :not_found
+		return
+	end
+	
+	if $NOW < $START_DATE then
+		redirect_to controller:"new"
 		return
 	end
 	

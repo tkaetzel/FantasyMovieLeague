@@ -9,6 +9,8 @@ Ruby::Application.routes.draw do
   get "/new", to: "new#index"
   get "/:team", to: "main#index"
 
+  post "/save", to: "save#index"
+  
   root 'main#index'
 
 end

@@ -83,3 +83,11 @@ input {
 	font-weight: bold;
 	text-shadow: 1px 1px 0 #fff;
 }
+
+#submit_container {
+	width:990px;
+	text-align:center;
+	&:input {
+		width:140px;
+	}
+}
