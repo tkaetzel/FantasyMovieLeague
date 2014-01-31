@@ -3,18 +3,13 @@ require "net/http"
 class RevenuesController < ApplicationController
   def index
 	urls = ["http://boxofficemojo.com/seasonal/?page=1&view=releasedate&yr=2013&season=Holiday&sort=open&order=DESC&p=.htm","http://boxofficemojo.com/seasonal/?page=1&view=releasedate&yr=2013&season=Holiday&sort=open&order=DESC&p=.htm&page=2"]
-	
-	@now = DateTime.now
-	@start_date = DateTime.new(2013,11,1,0,0,0,"-4")
-	@end_date = DateTime.new(2013,12,25,0,0,0,"-4")
-	@season_end_date = @end_date + 4.weeks
 		
 	Mysql2::Client.default_query_options[:connect_flags] |= Mysql2::Client::MULTI_STATEMENTS
 	db = connect
-	del_sql = "DELETE FROM `earnings` WHERE `on_date`='%s'" % @now.strftime("%Y-%m-%d")
+	del_sql = "DELETE FROM `earnings` WHERE `on_date`='%s'" % $NOW.strftime("%Y-%m-%d")
 	db.query(del_sql)
 	
-	urls = [] if @now >= @season_end_date
+	urls = [] if $NOW >= $SEASON_END_DATE
 	
 	results = db.query("SELECT COALESCE(`mapped_name`, `name`) FROM `movies`")
 	movies = []
@@ -48,7 +43,7 @@ class RevenuesController < ApplicationController
 	end
 	@queries = ""
 	earnings.each do |o|
-		@queries += "INSERT INTO `earnings` (`movie_id`,`gross`,`on_date`) SELECT `id`, %d, \"%s\" FROM `movies` WHERE `name` LIKE \"%s\" OR `mapped_name` LIKE \"%s\";\r\n" % [o.gross, @now.strftime("%Y-%m-%d"), o.name, o.name]
+		@queries += "INSERT INTO `earnings` (`movie_id`,`gross`,`on_date`) SELECT `id`, %d, \"%s\" FROM `movies` WHERE `name` LIKE \"%s\" OR `mapped_name` LIKE \"%s\";\r\n" % [o.gross, $NOW.strftime("%Y-%m-%d"), o.name, o.name]
 	end
 	db.query @queries
   end

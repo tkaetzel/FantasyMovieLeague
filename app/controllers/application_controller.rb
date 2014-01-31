@@ -1,7 +1,10 @@
 class ApplicationController < ActionController::Base
-  # Prevent CSRF attacks by raising an exception.
-  # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
+  
+  $START_DATE = DateTime.new(2014,4,4,0,0,0,'-4')
+  $NOW = DateTime.now
+  $END_DATE  = DateTime.new(2013,12,25,0,0,0,"-4")
+  $SEASON_END_DATE = $END_DATE + 4.weeks
 
   helper_method :is_active
   

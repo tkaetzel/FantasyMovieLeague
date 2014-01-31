@@ -63,8 +63,7 @@
 	width: 480px;
 	float:left;
 }
-
-#nav a {display:none !important;}
+#nav {position:fixed !important; z-index:1000;}
 
 input {
 	text-align: center;

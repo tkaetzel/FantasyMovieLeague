@@ -9,8 +9,6 @@ class MainController < ApplicationController
 	
   def index
 	$output = ""
-	$START_DATE = DateTime.new(2014,4,4,0,0,0,'-4')
-	$NOW = DateTime.now
 	
 	players = []
 	
@@ -25,12 +23,12 @@ class MainController < ApplicationController
 		render :file => "#{Rails.root}/public/404", :layout => false, :status => :not_found
 		return
 	end
-	
+=begin
 	if $NOW < $START_DATE then
-		redirect_to controller:"new"
+	redirect_to controller:"new"
 		return
 	end
-	
+=end
 	movies = Movie.all.includes(:shares, :earnings)
 	
 	grosses = {}
@@ -120,8 +118,6 @@ class MainController < ApplicationController
   
   def shares
   	$output = ""
-	$START_DATE = DateTime.new(2014,4,4,0,0,0,'-4')
-	$NOW = DateTime.now
 	
 	if $NOW < $START_DATE then
 		redirect_to controller:"new"
