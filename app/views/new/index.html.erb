@@ -38,10 +38,8 @@
 		{
 			var val = boxes.eq(i).val();
 			if (val === "")
-			{
-				boxes.eq(i).val("0");
 				val = 0;
-			}
+
 			if (isNaN(val) || val > 100 || val < 0 || val % 1 != 0)
 			{
 				boxes.eq(i).css("background-color","#F55");
