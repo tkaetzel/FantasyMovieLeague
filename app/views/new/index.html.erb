@@ -1,6 +1,12 @@
 <br/><br/>
 <%= form_tag("/save", method: "post") do %>
 <div id="container">
+	<% if !flash[:thanks].nil? then %>
+      <%= content_tag :div, class: "notice" do %>
+	    Thanks!<br/>
+		<%= image_tag "http://replygif.net/i/218.gif" %>
+	  <% end %>
+    <% end %>
 	<div class="whoareyou">Who are you?
 	<%= text_field_tag "name", nil, placeholder:"First & Last Name" %>
 	</div>

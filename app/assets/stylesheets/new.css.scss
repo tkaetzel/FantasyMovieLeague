@@ -3,66 +3,85 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 #container {
-	width:990px;
-	margin:0 auto;
-}
-
-.movie {
-	.movie_name {
-		border-bottom: solid 1px #000;
-		background-color:#D5D5D5;
-		color: #000;
-		font-size:22px;
-		font-weight:bold;
-		float:left;
-		width:419px;
-		text-align:center;
-	}
-	
-	.movie_plot {
-		padding:9px;
-	}
-	
-	.movie_actors {
-		position:absolute;
-		bottom: 0;
-		left:0;
-		border-top:solid 1px #000;
-		width:416px;
-		padding-left: 4px;
-		text-align:left;
-	}
-	
-	.shares_container {
-		border-left: solid 1px #000;
-		height:100%;
-		float:right;
-		width: 60px;
-		font-size:10px;
-		font-weight:bold;
-		font-style:italic;
-		text-align:center;
+	.movie {
+		.movie_name {
+			border-bottom: solid 1px #000;
+			background-color:#D5D5D5;
+			color: #000;
+			font-size:22px;
+			font-weight:bold;
+			float:left;
+			width:419px;
+			text-align:center;
+		}
 		
-		input {
-			width:50px;
+		.movie_plot {
+			padding:9px;
+		}
+		
+		.movie_actors {
+			position:absolute;
+			bottom: 0;
+			left:0;
+			border-top:solid 1px #000;
+			width:416px;
+			padding-left: 4px;
+			text-align:left;
+		}
+		
+		.shares_container {
+			border-left: solid 1px #000;
+			height:100%;
+			float:right;
+			width: 60px;
+			font-size:10px;
+			font-weight:bold;
+			font-style:italic;
+			text-align:center;
+			
+			input {
+				width:50px;
+			}
+		}
+		
+		width: 480px;
+		height:130px;
+		margin:6px;
+		border: solid 1px #000;
+		border-radius: 4px;
+		position:relative;
+		text-align:center;
+		font-size:12px;
+		float:left;
+	}
+
+	#submit_container {
+		width:990px;
+		text-align:center;
+		&:input {
+			width:140px;
 		}
 	}
 	
-	width: 480px;
-	height:130px;
-	margin:6px;
-	border: solid 1px #000;
-	border-radius: 4px;
-	position:relative;
-	text-align:center;
-	font-size:12px;
-	float:left;
+	.notice {
+		width:480px;
+		padding:9px;
+		border-radius: 4px;
+		border: solid 2px #080;
+		background-color: #DFD;
+		margin:24px auto;
+		text-align:center;
+	}
+	
+	width:990px;
+	margin:0 auto;
 }
 
 .whoareyou, .moneyRemaining {
 	width: 480px;
 	float:left;
 }
+
 #nav {position:fixed !important; z-index:1000;}
 
 input {
@@ -81,12 +100,4 @@ input {
 	top: 4px;
 	font-weight: bold;
 	text-shadow: 1px 1px 0 #fff;
-}
-
-#submit_container {
-	width:990px;
-	text-align:center;
-	&:input {
-		width:140px;
-	}
 }

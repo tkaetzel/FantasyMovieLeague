@@ -9,8 +9,8 @@ class SaveController < ApplicationController
 			return
 		end
 		
-		shares = params[:shares].values.map {|s| Integer(s)} rescue return
-		return if shares.any? {|s| s < 0} or shares.sum > 100
+		shares = params[:shares].values.map {|s| Integer(s)}
+		raise ArgumentError, 'At least one share is negative, or total is over 100' if shares.any? {|s| s < 0} or shares.sum > 100
 		
 		p = Player.create long_name: params[:name], short_name: params[:name]
 		
@@ -18,5 +18,7 @@ class SaveController < ApplicationController
 			Share.create player_id: p.id, movie_id: k, num_shares: v
 		end
 		
+		flash[:thanks] = 1
+		redirect_to controller:"new"
 	end
 end
