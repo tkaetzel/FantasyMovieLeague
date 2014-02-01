@@ -17,15 +17,15 @@
 	<div class="moneyRemaining">
 		<div id="progressbar"><div class="progress-label"></div></div>
 	</div>
-	<% if params[:controller] == "main" %>
 	<ul>
+		<% if params[:controller] == "main" %>
 		<li <%= is_active('/') %>><a href="/">All</a></li>
 		<li <%= is_active('/friends') %>><a href="/friends">Friends</a></li>
 		<li <%= is_active('/work') %>><a href="/work">Work</a></li>
 		<li <%= is_active('/shares') %>><a href="/shares">Shares</a></li>
+		<% end %>
 		<li class="page_title">2014 Summer Movie Contest</li>
 	</ul>
-	<% end %>
 </div>
 
 <%= yield %>

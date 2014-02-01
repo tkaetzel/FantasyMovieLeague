@@ -23,12 +23,12 @@ class MainController < ApplicationController
 		render :file => "#{Rails.root}/public/404", :layout => false, :status => :not_found
 		return
 	end
-=begin
+
 	if $NOW < $START_DATE then
 	redirect_to controller:"new"
 		return
 	end
-=end
+
 	movies = Movie.all.includes(:shares, :earnings)
 	
 	grosses = {}
