@@ -13,7 +13,7 @@
 	<p style="clear:both">&nbsp;</p>
 	<% $movies.each do |m| %>
 		<div class="movie">
-			<div class="shares_container">Shares: <br/><%= text_field_tag "shares[" + m.id.to_s + "]", 0, {tabindex: m.id+1, size:3, maxlength:3, class:"shares_box"} %></div>
+			<div class="shares_container">Shares: <br/><%= text_field_tag "shares[" + m.id.to_s + "]", 0, {type:"tel", stabindex: m.id+1, size:3, maxlength:3, class:"shares_box"} %></div>
 			<div class="movie_name"><%= link_to m.name, m.imdb, {:target=>"_blank"} %></div>
 			<div class="movie_plot"><%= m.plot %></div><br/>
 			<div class="movie_actors"><strong>Starring</strong>: <%= m.actors %><br/><strong>Release Date</strong>: <%= m.release_date.strftime("%m/%d/%Y") %></div>

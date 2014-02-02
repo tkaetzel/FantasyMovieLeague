@@ -40,7 +40,7 @@
 			text-align:center;
 			
 			input {
-				width:50px;
+				width:65%;
 			}
 		}
 		
@@ -56,7 +56,7 @@
 	}
 
 	#submit_container {
-		width:990px;
+		width:100%;
 		text-align:center;
 		&:input {
 			width:140px;
@@ -101,4 +101,13 @@ input {
 	top: 4px;
 	font-weight: bold;
 	text-shadow: 1px 1px 0 #fff;
+}
+
+@media only screen and (max-device-width: 480px) {
+	#container,#wrapper,#nav {
+		width:480px;
+	}
+	#container {
+		margin-top:60px;
+	}
 }

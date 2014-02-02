@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>2014 Summer Movie Contest</title>
+  <meta name="viewport" content="width=480,user-scalable=no" />
   <%= stylesheet_link_tag    "http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/themes/south-street/jquery-ui.css", media: "all", "data-turbolinks-track" => true %>
   <%= stylesheet_link_tag    "ui.jqgrid", media: "screen", "data-turbolinks-track" => true %>
   <%= stylesheet_link_tag    "application", media: "screen", "data-turbolinks-track" => true %>
@@ -12,7 +13,7 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-
+<div id="wrapper">
 <div id="nav">
 	<div class="moneyRemaining">
 		<div id="progressbar"><div class="progress-label"></div></div>
@@ -72,5 +73,6 @@
   </a>
   <%= image_tag "ruby.png" %>
 </p>
+</div>
 </body>
 </html>
