@@ -11,6 +11,17 @@
   <%= javascript_include_tag "i18n/grid.locale-en.js", "data-turbolinks-track" => true %>
   <%= javascript_include_tag "jquery.jqGrid.min", "data-turbolinks-track" => true %>
   <%= csrf_meta_tags %>
+<script type="text/javascript">
+
+function stopRKey(evt) {
+  var evt = (evt) ? evt : ((event) ? event : null);
+  var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
+  if ((evt.keyCode == 13) && (node.type=="text"))  {return false;}
+}
+
+document.onkeypress = stopRKey;
+
+</script>
 </head>
 <body>
 <div id="wrapper">
