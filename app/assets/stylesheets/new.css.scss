@@ -3,6 +3,9 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 #container {
+	.music {
+		text-align:right;
+	}
 	.movie {
 		.movie_name {
 			border-bottom: solid 1px #000;
@@ -109,5 +112,11 @@ input {
 	}
 	#container {
 		margin-top:60px;
+	}
+	#nav {
+		position:static !important;
+	}
+	.music {
+		display:none;
 	}
 }

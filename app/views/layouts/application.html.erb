@@ -2,7 +2,7 @@
 <html>
 <head>
   <title>2014 Summer Movie Contest</title>
-  <meta name="viewport" content="width=480,user-scalable=no" />
+  <meta name="viewport" content="width=480" />
   <%= stylesheet_link_tag    "http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/themes/south-street/jquery-ui.css", media: "all", "data-turbolinks-track" => true %>
   <%= stylesheet_link_tag    "ui.jqgrid", media: "screen", "data-turbolinks-track" => true %>
   <%= stylesheet_link_tag    "application", media: "screen", "data-turbolinks-track" => true %>
@@ -11,6 +11,17 @@
   <%= javascript_include_tag "i18n/grid.locale-en.js", "data-turbolinks-track" => true %>
   <%= javascript_include_tag "jquery.jqGrid.min", "data-turbolinks-track" => true %>
   <%= csrf_meta_tags %>
+<script type="text/javascript">
+
+function stopRKey(evt) {
+  var evt = (evt) ? evt : ((event) ? event : null);
+  var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
+  if ((evt.keyCode == 13) && (node.type=="text"))  {return false;}
+}
+
+document.onkeypress = stopRKey;
+
+</script>
 </head>
 <body>
 <div id="wrapper">
