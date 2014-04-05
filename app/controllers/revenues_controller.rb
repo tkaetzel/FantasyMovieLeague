@@ -2,21 +2,15 @@ require "net/http"
 
 class RevenuesController < ApplicationController
   def index
-	urls = ["http://boxofficemojo.com/seasonal/?page=1&view=releasedate&yr=2013&season=Holiday&sort=open&order=DESC&p=.htm","http://boxofficemojo.com/seasonal/?page=1&view=releasedate&yr=2013&season=Holiday&sort=open&order=DESC&p=.htm&page=2"]
-		
-	Mysql2::Client.default_query_options[:connect_flags] |= Mysql2::Client::MULTI_STATEMENTS
-	db = connect
-	del_sql = "DELETE FROM `earnings` WHERE `on_date`='%s'" % $NOW.strftime("%Y-%m-%d")
-	db.query(del_sql)
-	
+	urls = ["http://boxofficemojo.com/seasonal/?page=1&view=releasedate&yr=2014&season=Spring&sort=open&order=DESC&p=.htm","http://boxofficemojo.com/seasonal/?chart=&season=Summer&yr=2014&view=releasedate&sort=open&order=DESC&page=1",
+	"http://boxofficemojo.com/seasonal/?chart=&season=Summer&yr=2014&view=releasedate&sort=open&order=DESC&page=2"]
+
 	urls = [] if $NOW >= $SEASON_END_DATE
+	data = []
+	@queries = ""
+	movies = Movie.all
 	
-	results = db.query("SELECT COALESCE(`mapped_name`, `name`) FROM `movies`")
-	movies = []
-	earnings = []
-	results.each do |d|
-		movies.push(d.first[1])
-	end
+	Earning.where("DATE(created_at) = ?", Date.today).destroy_all # to prevent duplicates
 	
 	urls.each do |url|
 		uri = URI(url)
@@ -28,23 +22,17 @@ class RevenuesController < ApplicationController
 		for i in 1..context.length-1 do
 			row = context[i]
 			begin
-				o = Movie.new
-				o.name = row.xpath("td[3]")[0].content
-				o.gross = row.xpath("td[5]")[0].content
-				o.theaters = row.xpath("td[6]")[0].content
-				o.open = row.xpath("td[9]")[0].content
+				name = row.xpath("td[3]")[0].content
+				movie = movies.select {|m| m.name == name || m.mapped_name == name}
+				next if movie.empty?
 				
-				earnings.push o if movies.member? o.name
-				
+				gross = row.xpath("td[5]")[0].content.gsub(/\$|,/,'').to_i
+				movie.first.earnings += [Earning.new(gross: gross)]
+				@queries += "%s: %d" % [name, gross]
 			rescue
 				next
 			end
 		end		
 	end
-	@queries = ""
-	earnings.each do |o|
-		@queries += "INSERT INTO `earnings` (`movie_id`,`gross`,`on_date`) SELECT `id`, %d, \"%s\" FROM `movies` WHERE `name` LIKE \"%s\" OR `mapped_name` LIKE \"%s\";\r\n" % [o.gross, $NOW.strftime("%Y-%m-%d"), o.name, o.name]
-	end
-	db.query @queries
   end
 end
