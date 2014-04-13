@@ -29,7 +29,7 @@ class GraphController < ApplicationController
 		return
 	end
 	
-	start_date = DateTime.new(2014,4,4,0,0,0,'-4')
+	start_date = DateTime.new(2014,4,6,0,0,0,'-4')
 	now = DateTime.now
 	stop_date = DateTime.new(2014,9,5,0,0,0,'-4')
 	table_data = {}

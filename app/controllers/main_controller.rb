@@ -105,7 +105,7 @@ class MainController < ApplicationController
 		a.pct_in_use = 0
 
 		p.shares.each do |s|
-			a.pct_in_use += s.num_shares if release_dates[s.movie_id] < DateTime.now
+			a.pct_in_use += s.num_shares if (release_dates[s.movie_id] + 1.days) < DateTime.now
 		end
 
 		a.player = p.long_name
