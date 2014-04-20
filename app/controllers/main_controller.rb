@@ -84,7 +84,7 @@ class MainController < ApplicationController
 			$output += ",'%s':'%s'" % [player.short_name, to_currency(revenue)]
 		end
 		
-		total_shares = m.shares.sum(:num_shares)
+		total_shares = m.shares.where(:player_id => players).sum(:num_shares)
 		value = total_shares > 0 ? total / total_shares : 0
 		value = 0 if value < 1000
 		
