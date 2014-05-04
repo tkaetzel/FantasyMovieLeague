@@ -21,11 +21,11 @@ Let's say *Rocky VI* is coming out this summer, and it winds up making $180,000,
 
 | Player        | Shares        | Score          |
 | ------------- |:-------------:| --------------:|
-| Alice         | 5             | $45,000,000    |
-| Bob           | 10            | $90,000,000    |
+| Alice         | 5             | $36,000,000    |
+| Bob           | 10            | $72,000,000    |
 | Charlie       | 0             | $0             |
-| David         | 3             | $27,000,000    |
-| Eve           | 7             | $63,000,000    |
+| David         | 3             | $21,600,000    |
+| Eve           | 7             | $50,400,000    |
 |**TOTAL**      |**20**         |**$180,000,000**|
 
 Repeat this for each movie, and the sum for each player will be their current score.
