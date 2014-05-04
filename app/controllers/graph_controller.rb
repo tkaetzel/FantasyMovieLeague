@@ -43,7 +43,7 @@ class GraphController < ApplicationController
 		sums = {}
 		table_data_by_date = {}
 		movies.each do |m|
-			earnings_by_date = m.earnings.select {|e| e.created_at < start_date}
+			earnings_by_date = m.earnings.select {|e| e.created_at.to_date <= start_date}
 			earnings = earnings_by_date.empty? ? 0 : earnings_by_date.max_by{|a| a.created_at}.gross
 			
 			total_shares = m.shares.where(:player_id => players).sum(:num_shares)
