@@ -28,7 +28,7 @@ class RevenuesController < ApplicationController
 				
 				gross = row.xpath("td[5]")[0].content.gsub(/\$|,/,'').to_i
 				movie.first.earnings += [Earning.new(gross: gross)]
-				@queries += "%s: %d" % [name, gross]
+				@queries += "%s: %d\r\n" % [name, gross]
 			rescue
 				next
 			end
