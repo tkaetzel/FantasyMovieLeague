@@ -4,6 +4,6 @@ class NewController < ApplicationController
 			redirect_to controller:"main"
 			return
 		end
-		$movies = Movie.order("id")
+		@movies = Movie.order("id")
 	end
 end
