@@ -1,32 +1,32 @@
 <br/><br/>
-<%= form_tag("/save", method: "post") do %>
+<%= form_tag("/new/create", method: "post") do %>
 <div id="container">
+
 	<% if !flash[:thanks].nil? then %>
 		<%= render "thanks" %>
     <% else %>
 		<%= render "music" %>
 	<% end %>
+	
 	<div class="whoareyou">Who are you?
-	<%= text_field_tag "name", nil, placeholder:"First & Last Name", tabindex:1 %>
+		<%= text_field_tag "name", nil, placeholder:"First & Last Name", tabindex:1 %>
 	</div>
+	
 	<p style="clear:both;">&nbsp;</p>
 	<% @movies.each do |m| %>
-		<div class="movie">
-			<div class="shares_container">Shares: <br/><%= text_field_tag "shares[" + m.id.to_s + "]", 0, {type:"tel", stabindex: m.id+1, size:3, maxlength:3, class:"shares_box"} %></div>
-			<div class="movie_name"><%= link_to m.name, m.imdb, {:target=>"_blank"} %></div>
-			<div class="movie_plot"><%= m.plot %></div><br/>
-			<div class="movie_actors"><strong>Director</strong>: <%= m.director %><br/><strong>Starring</strong>: <%= m.actors %><br/><strong>Release Date</strong>: <%= m.release_date.strftime("%m/%d/%Y") %></div>
-		</div>
+		<%= render "movie", :movie => m %>
 	<% end %>
-	<div class="movie">
+	<div class="movie bonus">
 		<div class="shares_container"></div>
-		<div class="movie_name">Bonus 1: +$5,000,000</div>
+		<div class="movie_name">Bonus 1: +$10,000,000</div>
 		<div class="movie_plot">What will be the <strong>highest</strong> rated movie on <%= link_to "Rotten Tomatoes", "http://www.rottentomatoes.com", {:target => "_blank"} %>?</div><br/>
+		<%= select_tag(:bonus1, options_for_select(@movies.map {|m| [m.name,m.id]})) %>
 	</div>
-	<div class="movie">
+	<div class="movie bonus">
 		<div class="shares_container"></div>
-		<div class="movie_name">Bonus 2: +$5,000,000</div>
+		<div class="movie_name">Bonus 2: +$10,000,000</div>
 		<div class="movie_plot">What will be the <strong>lowest</strong> rated movie on <%= link_to "Rotten Tomatoes", "http://www.rottentomatoes.com", {:target => "_blank"} %>?</div><br/>
+		<%= select_tag(:bonus2, options_for_select(@movies.map {|m| [m.name,m.id]})) %>
 	</div>
 	<div id="submit_container">
 		<%= submit_tag("Save", {:id => "btnSave", :tabindex => 99}) %>

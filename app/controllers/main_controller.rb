@@ -25,7 +25,7 @@ class MainController < ApplicationController
 	end
 
 	if $NOW < $START_DATE then
-	redirect_to controller:"new"
+		redirect_to controller:"new"
 		return
 	end
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140803021957) do
+ActiveRecord::Schema.define(version: 20140803185648) do
 
   create_table "earnings", force: true do |t|
     t.integer  "movie_id"
@@ -36,6 +36,8 @@ ActiveRecord::Schema.define(version: 20140803021957) do
     t.string   "short_name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "bonus1"
+    t.integer  "bonus2"
   end
 
   create_table "players_teams", id: false, force: true do |t|
