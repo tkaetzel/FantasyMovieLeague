@@ -1,3 +1,0 @@
-class SaveController < ApplicationController
-
-end
