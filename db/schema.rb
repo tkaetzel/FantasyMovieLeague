@@ -29,6 +29,8 @@ ActiveRecord::Schema.define(version: 20140803185648) do
     t.string   "imdb"
     t.string   "director"
     t.integer  "rating"
+    t.integer  "rotten_tomatoes_id"
+    t.integer  "rotten_tomatoes_rating"
   end
 
   create_table "players", force: true do |t|

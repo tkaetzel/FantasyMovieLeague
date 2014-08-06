@@ -130,7 +130,9 @@ end
 				if e == m.earnings.first then
 					to_add["data"].push "[Date.UTC(%d,%d,%d), %d]" % [e.created_at.strftime("%Y"), e.created_at.strftime("%-m").to_i-1, e.created_at.strftime("%-d").to_i-1, 0]
 				end
-				to_add["data"].push "[Date.UTC(%d,%d,%d), %d]" % [e.created_at.strftime("%Y"), e.created_at.strftime("%-m").to_i-1, e.created_at.strftime("%-d"), e.gross]
+				if e.created_at.wday == 0 || e == m.earnings.last then
+					to_add["data"].push "[Date.UTC(%d,%d,%d), %d]" % [e.created_at.strftime("%Y"), e.created_at.strftime("%-m").to_i-1, e.created_at.strftime("%-d"), e.gross]
+				end
 			end
 			if !to_add.empty? then
 				data.push to_add
