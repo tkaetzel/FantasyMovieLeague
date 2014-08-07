@@ -17,3 +17,4 @@
 
 # Added by nrogers
 /config/database.yml
+/config/secrets.yml

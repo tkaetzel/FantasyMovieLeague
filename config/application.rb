@@ -21,3 +21,5 @@ module Ruby
     # config.i18n.default_locale = :de
   end
 end
+
+SECRETS = YAML.load_file("config/secrets.yml")
