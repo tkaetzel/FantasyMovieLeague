@@ -1,37 +1,38 @@
 <script type="text/javascript">
-function sortMoney(cell)
-{
-	var base = parseFloat(cell) || 0;
-	if (cell.indexOf("b") > 0)
-		return base * 1000000000;
-	if (cell.indexOf("m") > 0)
-		return base * 1000000;
-	if (cell.indexOf("k") > 0)
-		return base * 1000;
-		
-	return base;
+
+function formatMoney(cell, options, row) {
+	var a = parseFloat(cell.earning) || 0;
+	if (a == 0)
+		return (cell.shares || 0) > 0 ? cell.shares : "";
+	
+	if (a >= 1e9)
+		return (a/1e9).toPrecision(3) + "b";
+	if (a >= 1e6)
+		return (a/1e6).toPrecision(3) + "m";
+	if (a >= 1e3)
+		return (a/1e3).toPrecision(3) + "k";
+	return "";
 }
 
-function linkCells()
-{
+function formatMoneyFull(cell, options, row) {
+	return cell.toLocaleString("en-US", {style: "currency", currency:"USD", maximumFractionDigits: 0});
+}
+
+function linkCells(){
 	var cells = $("#list tr>td[aria-describedby='list_movie']");
-	for (var i = 0; i < cells.length; i++)
-	{
+	for (var i = 0; i < cells.length; i++) {
 		var movie = cells.eq(i).parent().children().eq(0).html();
 		var v = cells.eq(i).html();
-		if (v != "")
-		{
+		if (v != "") {
 			v = "<a href=\"#\" onclick=\"popupDetails(&quot;/graph/details/" + movie + "&quot;);return false;\">" + v + "</a>";
 			cells.eq(i).html(v);
 		}
 	}
 	
 	var cells = $("#list tr>td");
-	for (var i = 0; i < cells.length; i++)
-	{
+	for (var i = 0; i < cells.length; i++) {
 		var v = cells.eq(i).html();
-		if (v != "" && parseInt(v) == v)
-		{
+		if (v != "" && parseInt(v) == v) {
 			cells.eq(i).addClass("shares");
 		}
 	}
@@ -39,25 +40,28 @@ function linkCells()
 
 $(function(){ 
   $("#list").jqGrid({
-    datatype: 'local',
-    colNames:['ID','Movie', 'Rel.', 'Total', <%= $col_headers %> 'Value'],
+    datatype: 'json',
+	mtype: 'GET',
+    colNames:['ID','Movie', 'Rel.', 'Total', <% @players.each do |p| %><%= @COL_HEADER.html_safe % p.short_name -%><% end %>'Value'],
     colModel :[ 
 	  {name:'id', index:'id', hidden:true},
 	  {name:'movie', index:'movie', width:220},
 	  {name:'releasedate', index:'releasedate', width:80},
-      {name:'total', align:'right', classes:'tbl_bold', index:'total', sorttype:sortMoney, width:50}, 
-	  <%= $col_models %>
-	  {name:'value', align:'right', classes:'tbl_bold', index:'value', sorttype:sortMoney, width:50},
+      {name:'total', align:'right', classes:'tbl_bold', index:'total', width:50, formatter: formatMoney}, 
+	  <% @players.each do |p| %>
+		<%= @COL_MODEL.html_safe % [p.short_name, p.short_name] %>
+	  <% end %>
+	  {name:'value', align:'right', classes:'tbl_bold', index:'value', width:50, formatter: formatMoney},
     ],
     rowNum:100,
-	data: <%= $output %>,
+	url: '/api/movie_data/<%= params[:team] %>',
     sortname: 'releasedate',
     sortorder: 'asc',
     viewrecords: true,
     gridview: true,
-	footerrow : true,
-	userData : <%= $output_sums %>,
-	userDataOnFooter : true,	
+	jsonReader : {
+		repeatitems: false
+	},
     caption: 'Scoreboard',
 	height:'auto',
 	gridComplete: linkCells,
@@ -66,21 +70,25 @@ $(function(){
   }); 
   
     $("#tblStandings").jqGrid({
-    datatype: 'local',
+    datatype: 'json',
+	mtype: 'GET',
     colNames:['Rank', 'Player', '% Used', 'Revenue'],
     colModel :[ 
 	  {name:'rank', index:'rank', sorttype:'int', width:50},
 	  {name:'player', index:'player', width:280},
 	  {name:'pct_in_use', align:'right', index:'pct_in_use', width:60},
-      {name:'revenue', align:'right', classes:'tbl_bold', index:'revenue', width:120}
+      {name:'revenue', align:'right', classes:'tbl_bold', index:'revenue', width:120, formatter:formatMoneyFull}
     ],	
     rowNum:100,
-	data: <%= $output_rankings %>,
+	url: '/api/rankings/<%= params[:team] %>',
     sortname: 'rank',
     sortorder: 'asc',
 	height:'auto',
     viewrecords: true,
     gridview: true,
+	jsonReader : {
+		repeatitems: false
+	},
     caption: 'Standings'
   });
   

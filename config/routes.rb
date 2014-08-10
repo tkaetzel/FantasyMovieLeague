@@ -7,6 +7,8 @@ Ruby::Application.routes.draw do
   get "/graph/:type", to: "graph#get_graph"
   get "/graph/:type/:team", to: "graph#get_graph"
   get "/new", to: "new#index"
+  get "/api/:action", controller: "api"
+  get "/api/:action/:team", controller: "api"
   get "/:team", to: "application#index"
 
   post "/new/create", to: "new#create"
