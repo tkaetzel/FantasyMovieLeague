@@ -1,16 +1,16 @@
 Ruby::Application.routes.draw do
   get "/revenues", to: "revenues#index"
-  get "/shares", to: "main#shares"
-  get "/shares/:team", to: "main#shares"
+  get "/shares", to: "application#shares"
+  get "/shares/:team", to: "application#shares"
   get "/graph/details", to: "graph#details"
   get "/graph/details/:movie", to: "graph#details"
   get "/graph/:type", to: "graph#get_graph"
   get "/graph/:type/:team", to: "graph#get_graph"
   get "/new", to: "new#index"
-  get "/:team", to: "main#index"
+  get "/:team", to: "application#index"
 
   post "/new/create", to: "new#create"
   
-  root 'main#index'
+  root 'application#index'
 
 end
