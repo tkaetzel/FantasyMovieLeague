@@ -49,7 +49,7 @@ class ApplicationController < ActionController::Base
 		players.each do |p|
 			s = p.shares.select {|s| s.movie_id == m.id}.first
 			sums[p] ||= 0
-			if grosses[m.name].nil? or grosses[m.name].zero? then
+			if grosses[m.name].nil? || grosses[m.name].zero? then
 				share = s.nil? ? 0 : s.num_shares
 			else
 				share = s.nil? ? 0 : s.num_shares.to_f / total_shares * grosses[m.name]
