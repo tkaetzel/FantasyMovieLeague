@@ -23,15 +23,15 @@ class ApplicationController < ActionController::Base
   end
   
   def shares
-    @COL_HEADER_SHARES = "'%s', "
-	@COL_MODEL_SHARES = "{name:'%s', align:'right', index:'%s', width:35, sorttype:'int'},\r\n"
+    @COL_HEADER = "'%s', "
+	@COL_MODEL = "{name:'%s', align:'right', index:'%s', width:35, sorttype:'int'},\r\n"
 	case (params[:team] || "").downcase
 	when 'friends'
-		@players = Team.find(1).players
+		@players = Team.find(1).players.order(:short_name)
 	when 'work'
-		@players = Team.find(2).players
+		@players = Team.find(2).players.order(:short_name)
 	when ''
-		@players = Player.all
+		@players = Player.all.order(:short_name)
 	else
 		render :file => "#{Rails.root}/public/404", :layout => false, :status => :not_found
 		return

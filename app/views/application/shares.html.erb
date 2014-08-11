@@ -3,18 +3,24 @@
 $(function(){ 
  
     $("#shares").jqGrid({
-    datatype: 'local',
-    colNames:['Movie', 'Rel.', 'Total', <%= $col_headers %>],
+    datatype: 'json',
+	mtype: 'GET',
+    colNames:['Movie', 'Rel.', 'Total', <% @players.each do |p| %><%= @COL_HEADER.html_safe % p.short_name -%><% end %>],
     colModel :[ 
 	  {name:'movie', index:'movie', width:150},
 	  {name:'releasedate', index:'releasedate', width:80},
       {name:'total', classes:'tbl_bold', align:'right', index:'total', sorttype:'int', width:50},
-	  <%= $col_models %>
+	  <% @players.each do |p| %>
+		<%= @COL_MODEL.html_safe % [p.short_name, p.short_name] %>
+	  <% end %>
     ],
     rowNum:100,
-	data: <%= $json_data %>,
+	url: '/api/shares/<%= params[:team] %>',
     sortname: 'releasedate',
     sortorder: 'asc',
+	jsonReader : {
+		repeatitems: false
+	},
 	height:'auto',
     viewrecords: true,
     gridview: true,

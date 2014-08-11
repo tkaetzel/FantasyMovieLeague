@@ -36,7 +36,7 @@ class ApiController < ApplicationController
 				if !this_movie_gross.nil? && !this_movie_gross.zero? then
 					earning = s.nil? ? 0 : s.num_shares.to_f / total_shares * this_movie_gross
 				end
-				this_movie[p.short_name] = {
+				this_movie[p.short_name.intern] = {
 					:earning => earning,
 					:shares => s.num_shares
 				}
@@ -50,6 +50,11 @@ class ApiController < ApplicationController
 			:records => movies.count,
 			:rows => rows
 		}
+		
+		if !params[:sidx].nil? && !params[:sord].nil? then
+			rows.sort_by! { |a| do_sort(a[params[:sidx].intern]) }
+			rows.reverse! if params[:sord] == "desc"
+		end
 		
 		render :json => results
 		
@@ -100,6 +105,11 @@ class ApiController < ApplicationController
 			rank = rank + 1
 		end
 		
+		if !params[:sidx].nil? && !params[:sord].nil? then
+			rows.sort_by! {|a| a[params[:sidx].intern]}
+			rows.reverse! if params[:sord] == "desc"
+		end
+		
 		results = {
 			:total => 1,
 			:page => 1,
@@ -125,7 +135,7 @@ class ApiController < ApplicationController
 			return
 		end
 		movies = Movie.all.includes(:shares)
-		
+		rows = []
 		movies.each do |m|
 			this_movie = {}
 			players.each do |p|
@@ -133,38 +143,32 @@ class ApiController < ApplicationController
 				share = s.nil? ? 0 : s.num_shares
 				this_movie[p.short_name] = share
 			end
-			this_movie['Total'] = m.shares.where(:player_id => players).sum(:num_shares)
-			this_movie['ReleaseDate'] = m.release_date.strftime("%F")
-			shares_by_movie[m.name] = this_movie
+			this_movie[:movie] = m.name
+			this_movie[:total] = m.shares.where(:player_id => players).sum(:num_shares)
+			this_movie[:releasedate] = m.release_date.strftime("%F")
+			rows.push this_movie
 		end
 		
-		i=1
-		names = []
-		json = []
-		shares_by_movie.each do |movie,data|
-			row = { 
-				:id => i+=1,
-				:movie => movie,
-				:total => data["Total"],
-				:releasedate => data["ReleaseDate"]
-			}
-			
-			data.each do |player,share_count|
-				next if player == "Total" or player == "ReleaseDate"
-				names.push(player) if not names.include?(player)
-				
-				row[player] = share_count
-			end
-			json.push(row)
+		if !params[:sidx].nil? && !params[:sord].nil? then
+			rows.sort_by! {|a| a[params[:sidx]]}
+			rows.reverse! if params[:sord] == "desc"
 		end
 		
-		names.sort.each do |n|
-			$col_headers += COL_HEADER_SHARES % n
-			$col_models += COL_MODEL_SHARES % [n,n]
-		end
+		results = {
+			:total => 1,
+			:page => 1,
+			:records => movies.count,
+			:rows => rows
+		}
 		
-		$col_headers = $col_headers.html_safe
-		$col_models = $col_models.html_safe
-		$json_data = JSON.generate(json).html_safe
+		render :json => results
+		
+	end
+	
+	def do_sort(a)
+		return a if !a.is_a?(Hash)
+		return a[:earning] if !a[:earning].nil? && a[:earning] > 0
+		return a[:shares] if !a[:shares].nil? && a[:shares] > 0
+		return 0
 	end
 end
