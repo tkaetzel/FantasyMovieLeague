@@ -41,9 +41,10 @@ class RevenuesController < ApplicationController
 		uri = URI("http://api.rottentomatoes.com/api/public/v1.0/movies/%d.json?apikey=%s" % [m.rotten_tomatoes_id, SECRETS["rotten-tomatoes-api-key"]])
 		data = JSON.parse(Net::HTTP.get(uri))
 		rating = Integer(data["ratings"]["critics_score"])
-		m.rotten_tomatoes_rating = rating
+		m.rotten_tomatoes_rating = rating if rating > 0
 		
 		m.save
+		sleep 0.5
 	end
   end
 end
