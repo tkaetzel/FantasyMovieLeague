@@ -25,7 +25,7 @@ class ApiController < ApplicationController
 				:id => m.id,
 				:movie => m.name,
 				:releasedate => m.release_date.strftime("%F"),
-				:rating => m.rotten_tomatoes_rating,
+				:rating => m.rotten_tomatoes_rating.to_s + "%",
 				:total => {:earning => this_movie_gross, :shares => total_shares},
 				:value => {:earning => this_movie_gross / total_shares}
 			}
@@ -43,7 +43,7 @@ class ApiController < ApplicationController
 			end
 			rows.push this_movie
 		end
-		
+
 		results = {
 			:total => 1,
 			:page => 1,
@@ -78,6 +78,12 @@ class ApiController < ApplicationController
 		movies = Movie.all.includes(:shares, :earnings)
 		rows = []
 
+		best_rating = movies.select {|a| !a[:rotten_tomatoes_rating].nil? }.map { |a| a[:rotten_tomatoes_rating] }.max
+		best_movies = movies.select {|a| a[:rotten_tomatoes_rating] == best_rating}.map { |a| a[:id] }
+
+		worst_rating = movies.select {|a| !a[:rotten_tomatoes_rating].nil? }.map { |a| a[:rotten_tomatoes_rating] }.min
+		worst_movies = movies.select {|a| a[:rotten_tomatoes_rating] == worst_rating}.map { |a| a[:id] }
+
 		players.each do |p|
 			this_player = {
 				:rank => 0,
@@ -95,6 +101,16 @@ class ApiController < ApplicationController
 					this_player[:pct_in_use] += s.num_shares if (m.release_date + 1.days) < DateTime.now
 				end
 			end
+
+			if best_movies.include? p[:bonus1] then
+				this_player[:revenue] += 10000000
+				this_player[:player] += '*'
+			end
+			if worst_movies.include? p[:bonus2] then
+				this_player[:revenue] += 10000000
+				this_player[:player] += '*'
+			end
+	
 			rows.push this_player
 		end
 

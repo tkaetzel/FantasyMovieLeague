@@ -1,6 +1,9 @@
 <script type="text/javascript">
 
 function formatMoney(cell, options, row) {
+	if (typeof cell == "undefined")
+		return "";
+		
 	var a = parseFloat(cell.earning) || 0;
 	if (a == 0)
 		return (cell.shares || 0) > 0 ? cell.shares : "";
@@ -42,11 +45,12 @@ $(function(){
   $("#list").jqGrid({
     datatype: 'json',
 	mtype: 'GET',
-    colNames:['ID','Movie', 'Rel.', 'Total', <% @players.each do |p| %><%= @COL_HEADER.html_safe % p.short_name -%><% end %>'Value'],
+    colNames:['ID','Movie', 'Rel.', 'Rating', 'Total', <% @players.each do |p| %><%= @COL_HEADER.html_safe % p.short_name -%><% end %>'Value'],
     colModel :[ 
 	  {name:'id', index:'id', hidden:true},
 	  {name:'movie', index:'movie', width:220},
 	  {name:'releasedate', index:'releasedate', width:80},
+	  {name:'rating', index:'rating', width:50, align:'right'},
       {name:'total', align:'right', classes:'tbl_bold', index:'total', width:50, formatter: formatMoney}, 
 	  <% @players.each do |p| %>
 		<%= @COL_MODEL.html_safe % [p.short_name, p.short_name] %>
