@@ -1,3 +1,8 @@
+<%
+	header = "'%s', "
+	model = "{name:'%s', align:'right', index:'%s', width:35, sorttype:'int'},\r\n"
+%>
+
 <script type="text/javascript">
 
 $(function(){ 
@@ -5,13 +10,13 @@ $(function(){
     $("#shares").jqGrid({
     datatype: 'json',
 	mtype: 'GET',
-    colNames:['Movie', 'Rel.', 'Total', <% @players.each do |p| %><%= @COL_HEADER.html_safe % p.short_name -%><% end %>],
+    colNames:['Movie', 'Rel.', 'Total', <% @players.each do |p| %><%= header.html_safe % p.short_name -%><% end %>],
     colModel :[ 
 	  {name:'movie', index:'movie', width:150},
 	  {name:'releasedate', index:'releasedate', width:80},
       {name:'total', classes:'tbl_bold', align:'right', index:'total', sorttype:'int', width:50},
 	  <% @players.each do |p| %>
-		<%= @COL_MODEL.html_safe % [p.short_name, p.short_name] %>
+		<%= model.html_safe % [p.short_name, p.short_name] %>
 	  <% end %>
     ],
     rowNum:100,

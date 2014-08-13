@@ -7,14 +7,11 @@ class ApplicationController < ActionController::Base
   $SEASON_END_DATE = $END_DATE + 4.weeks
   
   def index
-=begin  
-    if $NOW < $START_DATE then
+    if $NOW < $START_DATE && params[:skip].nil? then
 		redirect_to controller:"new", status: :found
 		return
 	end
-=end
-    @COL_HEADER = "'%s', "
-	@COL_MODEL = "{name:'%s', align:'right', index:'%s', width:45, formatter: formatMoney},"
+
 	case (params[:team] || "").downcase
 	when 'friends'
 		@players = Team.find(1).players.includes(:shares)
@@ -29,14 +26,11 @@ class ApplicationController < ActionController::Base
   end
   
   def shares
-=begin  
-    if $NOW < $START_DATE then
+    if $NOW < $START_DATE && params[:skip].nil? then
 		redirect_to controller:"new", status: :found
 		return
 	end
-=end
-    @COL_HEADER = "'%s', "
-	@COL_MODEL = "{name:'%s', align:'right', index:'%s', width:35, sorttype:'int'},\r\n"
+
 	case (params[:team] || "").downcase
 	when 'friends'
 		@players = Team.find(1).players.order(:short_name)
@@ -50,7 +44,7 @@ class ApplicationController < ActionController::Base
 	end
   end
     
-  helper_method :is_active, :to_currency
+  helper_method :is_active
   
   def is_active(a)
 	if request.env['PATH_INFO'] == a
