@@ -2,6 +2,7 @@
 	header = "'%s', "
 	model = "{name:'%s', align:'right', index:'%s', width:45, formatter: formatMoney},"
 %>
+<%= javascript_include_tag "accounting.min"  %>
 <script type="text/javascript">
 
 function formatMoney(cell, options, row) {
@@ -22,7 +23,7 @@ function formatMoney(cell, options, row) {
 }
 
 function formatMoneyFull(cell, options, row) {
-	return cell.toLocaleString("en-US", {style: "currency", currency:"USD", maximumFractionDigits: 0});
+	return accounting.formatMoney(cell,'$',0)
 }
 
 function linkCells(){

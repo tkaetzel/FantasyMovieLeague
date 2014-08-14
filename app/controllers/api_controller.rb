@@ -31,14 +31,14 @@ class ApiController < ApplicationController
 			movies.each do |m|
 				this_movie_gross = m.earnings.empty? ? 0 : m.earnings.max_by{|a| a.created_at}.gross
 				total_shares = m.shares.where(:player_id => players).sum(:num_shares)
-				
+				this_movie_value = total_shares.zero? ? 0 : this_movie_gross / total_shares
 				this_movie = {
 					"id" => m.id,
 					"movie" => m.name,
 					"releasedate" => m.release_date.strftime("%F"),
 					"rating" => m.rotten_tomatoes_rating.to_s + "%",
 					"total" => {"earning" => this_movie_gross, "shares" => total_shares},
-					"value" => {"earning" => this_movie_gross / total_shares}
+					"value" => {"earning" => this_movie_value}
 				}
 				
 				players.each do |p|
