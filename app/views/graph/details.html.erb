@@ -11,15 +11,11 @@
   </head>
   <body>
 <script type="text/javascript">
-var chart1;
 $(document).ready(function() {
-      chart1 = new Highcharts.Chart({
+      var options = {
          chart: {
             renderTo: 'container',
             type: 'spline'
-         },
-         title: {
-            text: "<%= $movie %>"
          },
          xAxis: {
             type: 'datetime'
@@ -30,9 +26,22 @@ $(document).ready(function() {
             },
 			min: 0
          },
-         series: [<%= $json_data %>]
-		 
-      });
+         series: []
+      };
+	  
+	  $.getJSON("/api/graph_data/<%= params[:id] %>", function(data) {
+			var i = 0;
+			for (; i < data.length; i++) {
+				options.series.push({name: data[i].name, data:data[i].data});
+			}
+			
+			if (data.length == 1)
+				options.title = { text: data[0].name };
+			else
+				options.title = { text: "All Movies" };
+				
+			var chart = new Highcharts.Chart(options);
+	  });
    });
 	
 </script>

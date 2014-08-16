@@ -103,56 +103,6 @@ class GraphController < ApplicationController
 end
 
 	def details
-		movies = []
-		if params[:movie].nil? then
-			movies = Movie.includes(:earnings)
-		else
-			movies = Movie.includes(:earnings).where(:id => params[:movie].to_i)
-		end
-
-		data = []
-		to_add = {}
-		
-		if movies.empty? then
-			render :file => "#{Rails.root}/public/404", :layout => false, :status => :not_found
-			return			
-		end
-		
-		movies.each do |m|
-			$movie = m.name
-			next if m.earnings.empty?
-			
-			to_add = {}
-			to_add["name"] = $movie
-			to_add["data"] = []
-			
-			m.earnings.each do |e|
-				if e == m.earnings.first then
-					to_add["data"].push "[Date.UTC(%d,%d,%d), %d]" % [e.created_at.strftime("%Y"), e.created_at.strftime("%-m").to_i-1, e.created_at.strftime("%-d").to_i-1, 0]
-				end
-				if e.created_at.wday == 0 || e == m.earnings.last then
-					to_add["data"].push "[Date.UTC(%d,%d,%d), %d]" % [e.created_at.strftime("%Y"), e.created_at.strftime("%-m").to_i-1, e.created_at.strftime("%-d"), e.gross]
-				end
-			end
-			if !to_add.empty? then
-				data.push to_add
-			end
-		end
-		
-		if (params[:movie] || "").empty? then
-			$movie = "All Movies"
-		end
-	
-		$json_data = ""
-		data.each do |ta|
-			if !$json_data.empty? then
-				$json_data += ",\r\n"
-			end
-			$json_data += "{'name':'%s', 'data':%s}" % [ta["name"].gsub(/'/,"\\\\'"), JSON.generate(ta["data"]).gsub(/"/,"")]
-		end
-		
-		$movie = $movie.html_safe
-		$json_data = $json_data.html_safe
 		render :layout => false
 	end
 

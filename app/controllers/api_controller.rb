@@ -10,12 +10,12 @@ class ApiController < ApplicationController
 		end
 		
 		rows = []
-		rows_json = redis.get("movie_data:%s" % params[:team])
+		rows_json = redis.get("movie_data:%s" % params[:id])
 		
 		if rows_json.nil? then
 			players = []
 
-			case (params[:team] || "").downcase
+			case (params[:id] || "").downcase
 			when 'friends'
 				players = Team.find(1).players.includes(:shares)
 			when 'work'
@@ -51,7 +51,7 @@ class ApiController < ApplicationController
 				end
 				rows.push this_movie
 			end
-			redis.set("movie_data:%s" % params[:team], rows.to_json)
+			redis.set("movie_data:%s" % params[:id], rows.to_json)
 		else
 			rows = JSON.parse rows_json
 		end
@@ -76,12 +76,12 @@ class ApiController < ApplicationController
 		redis = Redis.new
 		
 		rows = []
-		rows_json = redis.get("rankings:%s" % params[:team])
+		rows_json = redis.get("rankings:%s" % params[:id])
 		
 		if rows_json.nil? then
 			players = []
 
-			case (params[:team] || "").downcase
+			case (params[:id] || "").downcase
 			when 'friends'
 				players = Team.find(1).players.includes(:shares)
 			when 'work'
@@ -137,7 +137,7 @@ class ApiController < ApplicationController
 				a["rank"] = rank
 				rank = rank + 1
 			end
-			redis.set("rankings:%s" % params[:team], rows.to_json)
+			redis.set("rankings:%s" % params[:id], rows.to_json)
 		else
 			rows = JSON.parse rows_json
 		end
@@ -161,11 +161,11 @@ class ApiController < ApplicationController
 		redis = Redis.new
 		
 		rows = []
-		rows_json = redis.get("shares:%s" % params[:team])
+		rows_json = redis.get("shares:%s" % params[:id])
 		if rows_json.nil? then
 			players = []
 
-			case (params[:team] || "").downcase
+			case (params[:id] || "").downcase
 			when 'friends'
 				players = Team.find(1).players.includes(:shares)
 			when 'work'
@@ -190,7 +190,7 @@ class ApiController < ApplicationController
 				this_movie["releasedate"] = m.release_date.strftime("%F")
 				rows.push this_movie
 			end
-			redis.set("shares:%s" % params[:team], rows.to_json)
+			redis.set("shares:%s" % params[:id], rows.to_json)
 		else
 			rows = JSON.parse rows_json
 		end
@@ -209,5 +209,43 @@ class ApiController < ApplicationController
 		
 		render :json => results
 		
+	end
+	
+	def graph_data
+		movies = []
+		if params[:id].nil? then
+			movies = Movie.includes(:earnings)
+		else
+			movies = Movie.includes(:earnings).where(:id => params[:id].to_i)
+		end
+
+		results = []
+		
+		if movies.empty? then
+			render :file => "#{Rails.root}/public/404", :layout => false, :status => :not_found
+			return			
+		end
+		
+		movies.each do |m|
+			next if m.earnings.empty?
+			
+			to_add = {}
+			to_add["name"] = m.name
+			to_add["data"] = []
+			
+			m.earnings.each do |e|
+				if e == m.earnings.first then
+					to_add["data"].push [e.created_at.strftime("%s").to_i * 1000, 0]
+				end
+				if e.created_at.wday == 0 || e == m.earnings.last then
+					to_add["data"].push [e.created_at.strftime("%s").to_i * 1000, e.gross]
+				end
+			end
+			if !to_add.empty? then
+				results.push to_add
+			end
+		end
+
+		render :json => results
 	end
 end
