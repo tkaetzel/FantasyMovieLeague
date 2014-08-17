@@ -248,4 +248,54 @@ class ApiController < ApplicationController
 
 		render :json => results
 	end
+	
+	def graph_totals
+		players = []
+
+		case (params[:id] || "").downcase
+		when 'friends'
+			players = Team.find(1).players.includes(:shares)
+		when 'work'
+			players = Team.find(2).players.includes(:shares)
+		when ''
+			players = Player.all.includes(:shares)
+		else
+			render :status => :not_found, :text => ''
+			return
+		end
+		
+		movies = Movie.all.includes(:shares, :earnings)
+		start_date = @@START_DATE
+		stop_date = @@NOW < @@END_DATE ? @@NOW : @@END_DATE
+		results = []
+		table_data_by_name = {}
+		
+		while start_date <= stop_date
+			until start_date.wday == 0
+				start_date += 1
+			end
+			movies.each do |m|
+				earning = m.earnings.select {|e| e.created_at <= start_date}.last
+				gross = earning.nil? ? 0 : earning.gross
+				total_shares = m.shares.where(:player_id => players).sum(:num_shares)
+				
+				players.each do |p|
+					s = p.shares.select {|s| s.movie_id == m.id}.first
+					share = s.nil? ? 0 : s.num_shares.to_f / total_shares * gross
+
+					table_data_by_name[p.long_name] ||= {}
+					table_data_by_name[p.long_name][start_date.to_i * 1000] ||= 0
+					table_data_by_name[p.long_name][start_date.to_i * 1000] += share
+				end
+			end
+			start_date += 7
+		end
+		
+		table_data_by_name.each do |k,v|
+			d = { :name => k, :data => v }
+			results.push d
+		end
+		
+		render :json => results
+	end
 end

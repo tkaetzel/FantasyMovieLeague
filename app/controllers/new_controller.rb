@@ -1,7 +1,7 @@
 class NewController < ApplicationController
 	def index
-		if $NOW > $START_DATE then
-			redirect_to controller:"main"
+		if @@NOW > @@START_DATE then
+			redirect_to controller:"application"
 			return
 		end
 		@movies = Movie.order("id")
@@ -9,7 +9,7 @@ class NewController < ApplicationController
 	
 	def create
 		raise "Not ready yet!"
-		if $NOW > $START_DATE then
+		if @@NOW > @@START_DATE then
 			render text: "Too late!", status: 400
 			return
 		end
