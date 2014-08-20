@@ -250,6 +250,47 @@ class ApiController < ApplicationController
 	end
 	
 	def graph_totals
+		results = []
+		table_data = get_graph_data.first
+		table_data.each do |k,v|
+			data = v.to_a.map {|a| [a.first, a.last.round]}
+			d = { :name => k, :data => data }
+			results.push d
+		end
+		
+		render :json => results
+	end
+	
+	def graph_rankings
+		results = []
+		table_data = get_graph_data.second
+		table_data.each do |k,v|
+			d = { :name => k, :data => v.to_a }
+			results.push d
+		end
+		
+		render :json => results
+	end
+	
+	def graph_spread
+		results = []
+		table_data = get_graph_data.last
+		table_data.each do |k,v|
+			data = v.to_a.map {|a| [a.first, a.last.round]}
+			d = { :name => k, :data => data }
+			results.push d
+		end
+		
+		render :json => results
+	end
+	
+	private
+	
+	def get_graph_data
+		redis = Redis.new
+		rows_json = redis.get("graph:%s" % params[:id])
+		return JSON.parse rows_json unless rows_json.nil?
+		
 		players = []
 
 		case (params[:id] || "").downcase
@@ -265,15 +306,22 @@ class ApiController < ApplicationController
 		end
 		
 		movies = Movie.all.includes(:shares, :earnings)
+
+		best_rating = movies.select {|a| !a[:rotten_tomatoes_rating].nil? }.map { |a| a[:rotten_tomatoes_rating] }.max
+		best_movies = movies.select {|a| a[:rotten_tomatoes_rating] == best_rating}.map { |a| a[:id] }
+
+		worst_rating = movies.select {|a| !a[:rotten_tomatoes_rating].nil? }.map { |a| a[:rotten_tomatoes_rating] }.min
+		worst_movies = movies.select {|a| a[:rotten_tomatoes_rating] == worst_rating}.map { |a| a[:id] }
+		
 		start_date = @@START_DATE
 		stop_date = @@NOW < @@END_DATE ? @@NOW : @@END_DATE
-		results = []
-		table_data_by_name = {}
-		
+		name, date, rankings, spreads = {}, {}, {}, {}
+
 		while start_date <= stop_date
 			until start_date.wday == 0
 				start_date += 1
 			end
+			timestamp = start_date.to_i * 1000
 			movies.each do |m|
 				earning = m.earnings.select {|e| e.created_at <= start_date}.last
 				gross = earning.nil? ? 0 : earning.gross
@@ -283,19 +331,42 @@ class ApiController < ApplicationController
 					s = p.shares.select {|s| s.movie_id == m.id}.first
 					share = s.nil? ? 0 : s.num_shares.to_f / total_shares * gross
 
-					table_data_by_name[p.long_name] ||= {}
-					table_data_by_name[p.long_name][start_date.to_i * 1000] ||= 0
-					table_data_by_name[p.long_name][start_date.to_i * 1000] += share
+					if m == movies.first then
+						share += 10000000 if best_movies.include? p[:bonus1]
+						share += 10000000 if worst_movies.include? p[:bonus2]
+					end
+					
+					name[p.long_name] ||= {}
+					name[p.long_name][timestamp] ||= 0
+					name[p.long_name][timestamp] += share
+					
+					date[timestamp] ||= {}
+					date[timestamp][p.long_name] ||= 0
+					date[timestamp][p.long_name] += share					
 				end
 			end
+			
+			i=0
+			s_min = date[timestamp].min_by(&:last)[1]
+			spread = date[timestamp].max_by(&:last)[1] - s_min
+			date[timestamp].sort_by {|a| a.last}.reverse.each do |k,v|
+				i+=1
+				rankings[k] ||= {}
+				spreads[k] ||= {}
+				rankings[k][timestamp] = i
+				spreads[k][timestamp] = (v - s_min)/spread * 100
+			end
+			
 			start_date += 7
 		end
 		
-		table_data_by_name.each do |k,v|
-			d = { :name => k, :data => v }
-			results.push d
-		end
+		rows = [
+			name.map {|a| [a.to_a.first, a.to_a.last.to_a]},
+			rankings.map {|a| [a.to_a.first, a.to_a.last.to_a]},
+			spreads.map {|a| [a.to_a.first, a.to_a.last.to_a]}]
+
+		redis.set("graph:%s" % params[:id], rows.to_json)
 		
-		render :json => results
+		return rows
 	end
 end

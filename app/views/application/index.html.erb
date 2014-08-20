@@ -116,12 +116,12 @@ $(function(){
 
 <h3 style="text-align:center;">
 	<% 	if !params[:team].nil? then %>
-		[ <a href="#" onclick="return popupDetails('/graph/weekly/<%= params[:team] %>');">Weekly Totals</a> ]
-		[ <a href="#" onclick="return popupDetails('/graph/rank/<%= params[:team] %>');">Weekly Rankings</a> ]
+		[ <a href="#" onclick="return popupDetails('/graph/totals/<%= params[:team] %>');">Weekly Totals</a> ]
+		[ <a href="#" onclick="return popupDetails('/graph/rankings/<%= params[:team] %>');">Weekly Rankings</a> ]
 		[ <a href="#" onclick="return popupDetails('/graph/spread/<%= params[:team] %>');">Weekly Spread</a> ]
 	<% else %>
-		[ <a href="#" onclick="return popupDetails('/graph/weekly');">Weekly Totals</a> ]
-		[ <a href="#" onclick="return popupDetails('/graph/rank')">Weekly Rankings</a> ]
+		[ <a href="#" onclick="return popupDetails('/graph/totals');">Weekly Totals</a> ]
+		[ <a href="#" onclick="return popupDetails('/graph/rankings')">Weekly Rankings</a> ]
 		[ <a href="#" onclick="return popupDetails('/graph/spread');">Weekly Spread</a> ]
 	<% end %>
 </h3>

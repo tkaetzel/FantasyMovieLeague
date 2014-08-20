@@ -18,21 +18,22 @@
 				type: 'line'
 			},
 			title: {
-				text: "Weekly Data"
+				text: "Weekly Spread"
 			},
 			xAxis: {
 				type: 'datetime'
 			},
 			yAxis: {
 				title: {
-					text: "Revenue (USD)",
+					text: "Spread",
 				},
-				min: 0
+				min: 0,
+				max: 100
 			},
 			series: []
 		};
 		
-		$.getJSON("/api/graph_totals/<%= params[:id] %>", function(data) {
+		$.getJSON("/api/graph_spread/<%= params[:id] %>", function(data) {
 			var i = 0;
 			for (; i < data.length; i++) {
 				options.series.push({name: data[i].name, data:data[i].data});
