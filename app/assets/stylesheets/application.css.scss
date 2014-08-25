@@ -48,24 +48,44 @@ a {
 	}
 }
 
-#main_left {
-	padding: 16px;
-	max-width:600px;
-}
-#main_right {
-	padding: 16px;
-	max-width:800px;
+#main {
+	#main_left {
+		padding: 16px;
+		max-width:600px;
+	}
+	#main_right {
+		padding: 16px;
+		max-width:800px;
+	}
+	table {
+		th,td{
+			font-size:14px;
+		}
+		.tbl_bold {
+			font-weight:bold !important;
+		}
+		.shares {
+			font-size:11px;font-style:italic;
+		}
+		.darkgreen {
+			background-color:#050;
+			color:#FFF;
+		}
+		.darkred {
+			background-color:#500;
+			color:#FFF;
+		}
+		.green {
+			background-color:#CFC;
+			color:#000 !important;
+		}
+		.red {
+			background-color:#FCC;
+			color:#000 !important;
+		}
+	}
 }
 
 body {
 	font-family:'Segoe UI','Helvetica','Arial' !important;
-}
-th,td{
-	font-size:14px;
-}
-.tbl_bold {
-	font-weight:bold !important;
-}
-.shares {
-	font-size:11px;font-style:italic;
 }

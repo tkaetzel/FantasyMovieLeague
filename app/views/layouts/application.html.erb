@@ -31,7 +31,7 @@ document.onkeypress = stopRKey;
 		<div id="progressbar"><div class="progress-label"></div></div>
 	</div>
 	<ul>
-		<% if params[:controller] == "application" %>
+		<% if params[:controller] == "main" %>
 		<li <%= is_active('/') %>><a href="/">All</a></li>
 		<li <%= is_active('/friends') %>><a href="/friends">Friends</a></li>
 		<li <%= is_active('/work') %>><a href="/work">Work</a></li>

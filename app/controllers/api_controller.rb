@@ -4,6 +4,7 @@ class ApiController < ApplicationController
 		
 		do_sort = Proc.new do |a|
 			next a if !a.is_a?(Hash)
+			next a["rating"] if !a["rating"].nil? && a["rating"] > 0
 			next a["earning"] if !a["earning"].nil? && a["earning"] > 0
 			next a["shares"] if !a["shares"].nil? && a["shares"] > 0
 			next 0
@@ -38,32 +39,42 @@ class ApiController < ApplicationController
 					"id" => m.id,
 					"movie" => m.name,
 					"releasedate" => m.release_date.strftime("%F"),
-					"rating" => m.rotten_tomatoes_rating.to_s + "%",
+					"rating" => {"rating" => m.rotten_tomatoes_rating, "class" => ""},
 					"total" => {"earning" => this_movie_gross, "shares" => total_shares},
 					"value" => {"earning" => this_movie_value}
 				}
 				
+				if best_movies.include? m.id then
+					this_movie["rating"]["class"] = "darkgreen"
+				elsif worst_movies.include? m.id then
+					this_movie["rating"]["class"] = "darkred"
+				end
+				
 				players.each do |p|
 					s = p.shares.select {|s| s.movie_id == m.id}.first
 					earning = 0
+					css_class = ""
+					
 					if !this_movie_gross.nil? && !this_movie_gross.zero? then
 						earning = s.nil? ? 0 : s.num_shares.to_f / total_shares * this_movie_gross					
 					end
-					this_movie[p.short_name] = {"earning" => earning, "shares" => s.num_shares, "class" => ""}
 					
-					if best_movies.include? m.id && p["bonus1"] == m.id then
+					if best_movies.include?(m.id) && p["bonus1"] == m.id then
 						earning += 10000000
-						this_movie[p.short_name]["class"] = "darkgreen"
+						css_class = "darkgreen"
 					elsif p["bonus1"] == m.id then
-						this_movie[p.short_name]["class"] = "green"
+						css_class = "green"
 					end
 					
-					if worst_movies.include? m.id && p["bonus2"] == m.id then
+					if worst_movies.include?(m.id) && p["bonus2"] == m.id then
 						earning += 10000000
-						this_movie[p.short_name]["class"] = "darkred"
+						css_class = "darkred"
 					elsif p["bonus2"] == m.id then
-						this_movie[p.short_name]["class"] = "red"
+						css_class = "red"
 					end	
+					
+					this_movie[p.short_name] = {"earning" => earning, "shares" => s.num_shares, "class" => css_class}
+					
 				end
 				rows.push this_movie
 			end
@@ -188,13 +199,14 @@ class ApiController < ApplicationController
 				return
 			end
 			movies = Movie.all.includes(:shares)
-
+			
 			movies.each do |m|
 				this_movie = {}
 				players.each do |p|
 					s = p.shares.select {|s| s.movie_id == m.id}.first
 					share = s.nil? ? 0 : s.num_shares
-					this_movie[p.short_name] = share
+					css_class = p["bonus1"] == m.id ? "green" : p["bonus2"] == m.id ? "red" : ""
+					this_movie[p.short_name] = {"shares"=>share, "class"=>css_class}
 				end
 				this_movie["movie"] = m.name
 				this_movie["total"] = m.shares.where(:player_id => players).sum(:num_shares)

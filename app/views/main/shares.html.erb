@@ -1,9 +1,18 @@
 <%
 	header = "'%s', "
-	model = "{name:'%s', align:'right', index:'%s', width:35, sorttype:'int'},\r\n"
+	model = "{name:'%s', align:'right', index:'%s', width:35, sorttype:'int', formatter:formatShares, cellattr:applyClass},\r\n"
 %>
 
 <script type="text/javascript">
+
+function formatShares(cell, options, row) {
+	return cell.shares;
+}
+
+function applyClass(rowid, val, rawObject, cm, rdata) {
+	if (rawObject[cm.name].class != "")
+		return "class='"+rawObject[cm.name].class+"' ";
+}
 
 $(function(){ 
  
@@ -37,4 +46,4 @@ $(function(){
 </script>
 
 <br/><br/><br/>
-<center><table id="shares"><tr><td/></tr></table></center>
+<center><div id="main"><table id="shares"><tr><td/></tr></table></div></center>

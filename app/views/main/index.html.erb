@@ -1,6 +1,6 @@
 <%
 	header = "'%s', "
-	model = "{name:'%s', align:'right', index:'%s', width:45, formatter: formatMoney},"
+	model = "{name:'%s', align:'right', index:'%s', width:45, formatter: formatMoney, cellattr: applyClass},"
 %>
 <%= javascript_include_tag "accounting.min"  %>
 <script type="text/javascript">
@@ -24,6 +24,15 @@ function formatMoney(cell, options, row) {
 
 function formatMoneyFull(cell, options, row) {
 	return accounting.formatMoney(cell,'$',0)
+}
+
+function formatRating(cell, options, row) {
+	return cell.rating + '%';
+}
+
+function applyClass(rowid, val, rawObject, cm, rdata) {
+	if (rawObject[cm.name].class != "")
+		return "class='"+rawObject[cm.name].class+"' ";
 }
 
 function linkCells(){
@@ -55,7 +64,7 @@ $(function(){
 	  {name:'id', index:'id', hidden:true},
 	  {name:'movie', index:'movie', width:220},
 	  {name:'releasedate', index:'releasedate', width:80},
-	  {name:'rating', index:'rating', width:50, align:'right'},
+	  {name:'rating', index:'rating', width:50, align:'right', formatter: formatRating, cellattr: applyClass},
       {name:'total', align:'right', classes:'tbl_bold', index:'total', width:50, formatter: formatMoney}, 
 	  <% @players.each do |p| %>
 		<%= model.html_safe % [p.short_name, p.short_name] %>
