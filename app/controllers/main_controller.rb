@@ -16,6 +16,9 @@ class MainController < ApplicationController
 		render :file => "#{Rails.root}/public/404", :layout => false, :status => :not_found
 		return
 	end
+	
+	redis = Redis.new
+	@col_names = redis.get("rankings-colnames:%s" % params[:team])
   end
   
   def shares

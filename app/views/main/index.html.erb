@@ -59,7 +59,7 @@ $(function(){
   $("#list").jqGrid({
     datatype: 'json',
 	mtype: 'GET',
-    colNames:['ID','Movie', 'Rel.', 'Rating', 'Total', <% @players.each do |p| %><%= header.html_safe % p.short_name -%><% end %>'Value'],
+    colNames:['ID','Movie', 'Rel.', 'Rating', 'Total', <%- if !@col_names.nil? then %><%= @col_names.html_safe %><% else @players.each do |p| %><%= header.html_safe % p.short_name -%><% end; end %>'Value'],
     colModel :[ 
 	  {name:'id', index:'id', hidden:true},
 	  {name:'movie', index:'movie', width:220},
@@ -93,7 +93,7 @@ $(function(){
     colNames:['Rank', 'Player', '% Used', 'Revenue'],
     colModel :[ 
 	  {name:'rank', index:'rank', sorttype:'int', width:50},
-	  {name:'player', index:'player', width:280},
+	  {name:'player', index:'player', width:280, formatter:function(v,a,b){return v.long_name;}},
 	  {name:'pct_in_use', align:'right', index:'pct_in_use', width:60},
       {name:'revenue', align:'right', classes:'tbl_bold', index:'revenue', width:120, formatter:formatMoneyFull}
     ],	

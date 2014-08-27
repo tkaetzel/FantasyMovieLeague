@@ -126,7 +126,7 @@ class ApiController < ApplicationController
 			players.each do |p|
 				this_player = {
 					"rank" => 0,
-					"player" => p.long_name,
+					"player" => {"long_name" => p.long_name, "short_name" => p.short_name},
 					"pct_in_use" => 0,
 					"revenue" => 0
 				}
@@ -143,23 +143,26 @@ class ApiController < ApplicationController
 
 				if best_movies.include? p[:bonus1] then
 					this_player["revenue"] += 10000000
-					this_player["player"] += '*'
+					this_player["player"]["long_name"] += '*'
 				end
 				if worst_movies.include? p[:bonus2] then
 					this_player["revenue"] += 10000000
-					this_player["player"] += '*'
+					this_player["player"]["long_name"] += '*'
 				end
 		
 				rows.push this_player
 			end
 
 			rank = 1
+			col_names = ""
 			rows.sort_by! { |a| a["revenue"] }.reverse!
 			rows.each do |a|
 				a["rank"] = rank
 				rank = rank + 1
+				col_names += "'%s', " % a["player"]["short_name"]
 			end
 			redis.set("rankings:%s" % params[:id], rows.to_json)
+			redis.set("rankings-colnames:%s" % params[:id], col_names)
 		else
 			rows = JSON.parse rows_json
 		end
