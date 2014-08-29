@@ -44,9 +44,9 @@ class ApiController < ApplicationController
 					"value" => {"earning" => this_movie_value}
 				}
 				
-				if best_movies.include? m.id then
+				if best_movies.include? m.id && !m.rotten_tomatoes_rating.nil? then
 					this_movie["rating"]["class"] = "darkgreen"
-				elsif worst_movies.include? m.id then
+				elsif worst_movies.include? m.id && !m.rotten_tomatoes_rating.nil? then
 					this_movie["rating"]["class"] = "darkred"
 				end
 				
@@ -387,10 +387,9 @@ class ApiController < ApplicationController
 		
 		return rows
 	end
-	
-	private
-	
+
 	def get_best_and_worst_movies(movies)
+		return [[],[]] unless movies.any? {|m| !m.rotten_tomatoes_rating.nil? }
 		best_rating = movies.select {|a| !a[:rotten_tomatoes_rating].nil? }.map { |a| a[:rotten_tomatoes_rating] }.max
 		best_movies = movies.select {|a| a[:rotten_tomatoes_rating] == best_rating}.map { |a| a[:id] }
 

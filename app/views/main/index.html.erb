@@ -27,6 +27,8 @@ function formatMoneyFull(cell, options, row) {
 }
 
 function formatRating(cell, options, row) {
+	if (cell.rating == null)
+		return "";
 	return cell.rating + '%';
 }
 
