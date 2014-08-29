@@ -18,7 +18,12 @@ class MainController < ApplicationController
 	end
 	
 	redis = Redis.new
-	@col_names = redis.get("rankings-colnames:%s" % params[:team])
+	rankings_str = redis.get("rankings:%s" % params[:team])
+	
+	if !rankings_str.nil? then
+		rankings = JSON.parse(rankings_str)
+		@players.sort_by! {|p| rankings.index {|r| r["player"]["id"] == p.id}}
+	end
   end
   
   def shares
