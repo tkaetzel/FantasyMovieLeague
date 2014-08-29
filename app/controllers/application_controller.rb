@@ -1,9 +1,9 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   
-  @@START_DATE = DateTime.new(2014,4,4,0,0,0,'-4')
+  @@START_DATE = DateTime.new(2014,11,7,0,0,0,'-4')
   @@NOW = DateTime.now
-  @@END_DATE  = DateTime.new(2014,8,8,0,0,0,"-4")
+  @@END_DATE  = DateTime.new(2014,12,25,0,0,0,'-4')
   @@SEASON_END_DATE = @@END_DATE + 4.weeks
       
   helper_method :is_active

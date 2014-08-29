@@ -35,7 +35,7 @@ class RevenuesController < ApplicationController
 	end
 	
 	# now get the rotten tomatoes data
-	movies = Movie.where("release_date <= date('2014-11-11','-3 days')")
+	movies = Movie.where("release_date <= date('%s','-3 days')" % DateTime.now.strftime('%F'))
 	movies.each do |m|
 		next if m.rotten_tomatoes_id.nil?
 		uri = URI("http://api.rottentomatoes.com/api/public/v1.0/movies/%d.json?apikey=%s" % [m.rotten_tomatoes_id, SECRETS["rotten-tomatoes-api-key"]])

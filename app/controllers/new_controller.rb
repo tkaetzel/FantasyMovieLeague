@@ -8,7 +8,6 @@ class NewController < ApplicationController
 	end
 	
 	def create
-		raise "Not ready yet!"
 		if @@NOW > @@START_DATE then
 			render text: "Too late!", status: 400
 			return
