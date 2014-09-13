@@ -1,15 +1,7 @@
 class ApiController < ApplicationController
 	def movie_data
 		redis = Redis.new
-		
-		do_sort = Proc.new do |a|
-			next a if !a.is_a?(Hash)
-			next a["rating"] if !a["rating"].nil? && a["rating"] > 0
-			next a["earning"] if !a["earning"].nil? && a["earning"] > 0
-			next a["shares"] if !a["shares"].nil? && a["shares"] > 0
-			next 0
-		end
-		
+
 		rows = []
 		rows_json = redis.get("movie_data:%s" % params[:id])
 		
@@ -91,7 +83,7 @@ class ApiController < ApplicationController
 		}
 
 		if !params[:sidx].nil? && !params[:sord].nil? then
-			rows.sort_by! { |a| do_sort.call a[params[:sidx]] }
+			rows.sort_by! { |a| do_sort(a[params[:sidx]]) }
 			rows.reverse! if params[:sord] == "desc"
 		end
 		
@@ -165,7 +157,7 @@ class ApiController < ApplicationController
 		end
 		
 		if !params[:sidx].nil? && !params[:sord].nil? then
-			rows.sort_by! {|a| a[params[:sidx]]}
+			rows.sort_by! { |a| do_sort(a[params[:sidx]]) }
 			rows.reverse! if params[:sord] == "desc"
 		end
 		
@@ -219,7 +211,7 @@ class ApiController < ApplicationController
 		end
 		
 		if !params[:sidx].nil? && !params[:sord].nil? then
-			rows.sort_by! {|a| a[params[:sidx]]}
+			rows.sort_by! { |a| do_sort(a[params[:sidx]]) }
 			rows.reverse! if params[:sord] == "desc"
 		end
 		
@@ -397,5 +389,13 @@ class ApiController < ApplicationController
 		worst_movies = movies.select {|a| a[:rotten_tomatoes_rating] == worst_rating}.map { |a| a[:id] }
 		
 		return [best_movies, worst_movies]
+	end
+	
+	def do_sort(a)
+		return a if !a.is_a?(Hash)
+		return a["rating"] if !a["rating"].nil? && a["rating"] > 0
+		return a["earning"] if !a["earning"].nil? && a["earning"] > 0
+		return a["shares"] if !a["shares"].nil? && a["shares"] > 0
+		return 0
 	end
 end

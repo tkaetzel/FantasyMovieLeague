@@ -26,6 +26,10 @@ class NewController < ApplicationController
 		end
 
 		flash[:thanks] = 1
+		
+		redis = Redis.new
+		redis.flushall
+		
 		redirect_to action:"index"
 	end
 end

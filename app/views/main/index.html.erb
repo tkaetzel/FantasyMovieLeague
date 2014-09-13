@@ -33,7 +33,7 @@ function formatRating(cell, options, row) {
 }
 
 function applyClass(rowid, val, rawObject, cm, rdata) {
-	if (rawObject[cm.name].class != "")
+	if (typeof rawObject[cm.name] !== "undefined" && rawObject[cm.name].class != "")
 		return "class='"+rawObject[cm.name].class+"' ";
 }
 
@@ -140,6 +140,7 @@ $(function(){
 </td>
 <td id="main_right">
 	<table id="list"><tr><td/></tr></table>
+	<strong><a href="#" onclick="return popupDetails('/graph/details');">All Movies Graph</a></strong>
 </td>
 </tr>
 </table>
