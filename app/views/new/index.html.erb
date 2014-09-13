@@ -5,7 +5,7 @@
 	<% if !flash[:thanks].nil? then %>
 		<%= render "thanks" %>
     <% else %>
-		<% render "music" %>
+		<%= render "music" %>
 	<% end %>
 	
 	<div class="whoareyou">Who are you?
@@ -16,17 +16,19 @@
 	<% @movies.each do |m| %>
 		<%= render "movie", :movie => m %>
 	<% end %>
-	<div class="movie bonus">
-		<div class="shares_container"></div>
-		<div class="movie_name">Bonus 1: +$10,000,000</div>
-		<div class="movie_plot">What will be the <strong>highest</strong> rated movie on <%= link_to "Rotten Tomatoes", "http://www.rottentomatoes.com", {:target => "_blank"} %>?</div><br/>
-		<%= select_tag(:bonus1, options_for_select(@movies.map {|m| [m.name,m.id]})) %>
-	</div>
-	<div class="movie bonus">
-		<div class="shares_container"></div>
-		<div class="movie_name">Bonus 2: +$10,000,000</div>
-		<div class="movie_plot">What will be the <strong>lowest</strong> rated movie on <%= link_to "Rotten Tomatoes", "http://www.rottentomatoes.com", {:target => "_blank"} %>?</div><br/>
-		<%= select_tag(:bonus2, options_for_select(@movies.map {|m| [m.name,m.id]})) %>
+	<div id="bonuses" style="clear:both;">
+		<div class="movie bonus">
+			<div class="shares_container"></div>
+			<div class="movie_name">Bonus 1: +$10,000,000</div>
+			<div class="movie_plot">What will be the <strong>highest</strong> rated movie on <%= link_to "Rotten Tomatoes", "http://www.rottentomatoes.com", {:target => "_blank"} %>?</div><br/>
+			<%= select_tag(:bonus1, options_for_select(@movies.map {|m| [m.name,m.id]})) %>
+		</div>
+		<div class="movie bonus">
+			<div class="shares_container"></div>
+			<div class="movie_name">Bonus 2: +$10,000,000</div>
+			<div class="movie_plot">What will be the <strong>lowest</strong> rated movie on <%= link_to "Rotten Tomatoes", "http://www.rottentomatoes.com", {:target => "_blank"} %>?</div><br/>
+			<%= select_tag(:bonus2, options_for_select(@movies.map {|m| [m.name,m.id]})) %>
+		</div>
 	</div>
 	<div id="submit_container">
 		<%= submit_tag("Save", {:id => "btnSave", :tabindex => 99}) %>
