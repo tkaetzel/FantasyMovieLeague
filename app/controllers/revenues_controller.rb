@@ -4,9 +4,9 @@ class RevenuesController < ApplicationController
   def index
 	urls = ["http://boxofficemojo.com/seasonal/?page=1&view=releasedate&yr=2014&season=Holiday&sort=open&order=DESC&p=.htm&page=1","http://boxofficemojo.com/seasonal/?page=1&view=releasedate&yr=2014&season=Holiday&sort=open&order=DESC&p=.htm&page=2"]
 
-	urls = [] if $NOW >= $SEASON_END_DATE
+	urls = [] if @@NOW >= @@SEASON_END_DATE
 	data = []
-	@queries = ""
+	queries = ""
 	movies = Movie.all
 	
 	Earning.where("DATE(created_at) = ?", Date.today).destroy_all # to prevent duplicates
@@ -27,13 +27,13 @@ class RevenuesController < ApplicationController
 				
 				gross = row.xpath("td[5]")[0].content.gsub(/\$|,/,'').to_i
 				movie.first.earnings += [Earning.new(gross: gross)]
-				@queries += "%s: %d\r\n" % [name, gross]
+				queries += "%s: %d\r\n" % [name, gross]
 			rescue
 				next
 			end
 		end		
 	end
-	
+	queries += "\r\n"
 	# now get the rotten tomatoes data
 	movies = Movie.where("release_date <= date('%s','-3 days')" % DateTime.now.strftime('%F'))
 	movies.each do |m|
@@ -41,10 +41,23 @@ class RevenuesController < ApplicationController
 		uri = URI("http://api.rottentomatoes.com/api/public/v1.0/movies/%d.json?apikey=%s" % [m.rotten_tomatoes_id, SECRETS["rotten-tomatoes-api-key"]])
 		data = JSON.parse(Net::HTTP.get(uri))
 		rating = Integer(data["ratings"]["critics_score"])
-		m.rotten_tomatoes_rating = rating if rating > 0
-		
-		m.save
+		if rating > 0 then
+			m.rotten_tomatoes_rating = rating
+			queries += "%s: %d%%" % [m.name, rating]
+			m.save
+		end
 		sleep 0.5
 	end
+	
+	output = <<OUTPUT
+Now: #{@@NOW.rfc3339}
+First Movie Released: #{@@START_DATE.rfc3339}
+Last Movie Released: #{@@END_DATE.rfc3339}
+Season Ends: #{@@SEASON_END_DATE.rfc3339}
+
+#{queries}
+OUTPUT
+	render layout: false, text: output, content_type:"text/plain"
+	
   end
 end
