@@ -30,6 +30,9 @@ class NewController < ApplicationController
 		redis = Redis.new
 		redis.flushall
 		
+		pushbullet = "curl -u %s: https://api.pushbullet.com/v2/pushes -d type=note -d body=\"New movie draft submission by %s!\"" % [SECRETS['pushbullet-api-key'], p.long_name]
+		system(pushbullet)
+		
 		redirect_to action:"index"
 	end
 end
