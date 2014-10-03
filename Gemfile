@@ -8,6 +8,7 @@ gem 'therubyracer', platforms: :ruby
 gem 'jquery-rails'
 gem 'nokogiri'
 gem 'redis'
+gem 'uglifier'
 
 group :development do
 	gem 'pry'
