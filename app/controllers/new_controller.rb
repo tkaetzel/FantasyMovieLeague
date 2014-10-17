@@ -4,7 +4,7 @@ class NewController < ApplicationController
 			redirect_to controller:"application"
 			return
 		end
-		@movies = Movie.order("id")
+		@movies = Movie.order("release_date, id")
 	end
 	
 	def create
