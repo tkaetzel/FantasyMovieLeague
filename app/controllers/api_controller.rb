@@ -396,6 +396,7 @@ class ApiController < ApplicationController
 		return a["rating"] if !a["rating"].nil? && a["rating"] > 0
 		return a["earning"] if !a["earning"].nil? && a["earning"] > 0
 		return a["shares"] if !a["shares"].nil? && a["shares"] > 0
+		return a["long_name"] if !a["long_name"].nil?
 		return 0
 	end
 end
