@@ -2,7 +2,8 @@ require "net/http"
 
 class RevenuesController < ApplicationController
   def index
-	urls = ["http://boxofficemojo.com/seasonal/?page=1&view=releasedate&yr=2014&season=Holiday&sort=open&order=DESC&p=.htm&page=1","http://boxofficemojo.com/seasonal/?page=1&view=releasedate&yr=2014&season=Holiday&sort=open&order=DESC&p=.htm&page=2"]
+	urls = ["http://boxofficemojo.com/seasonal/?page=1&view=releasedate&yr=2014&season=Fall&sort=open&order=DESC&p=.htm&page=1",
+	"http://boxofficemojo.com/seasonal/?page=1&view=releasedate&yr=2014&season=Holiday&sort=open&order=DESC&p=.htm&page=1","http://boxofficemojo.com/seasonal/?page=1&view=releasedate&yr=2014&season=Holiday&sort=open&order=DESC&p=.htm&page=2"]
 
 	urls = [] if @@NOW >= @@SEASON_END_DATE
 	data = []
@@ -35,7 +36,7 @@ class RevenuesController < ApplicationController
 	end
 	queries += "\r\n"
 	# now get the rotten tomatoes data
-	movies = Movie.where("release_date <= date('%s','-3 days')" % DateTime.now.strftime('%F'))
+	movies = Movie.where("release_date <= date('%s','3 days')" % DateTime.now.strftime('%F'))
 	movies.each do |m|
 		next if m.rotten_tomatoes_id.nil?
 		uri = URI("http://api.rottentomatoes.com/api/public/v1.0/movies/%d.json?apikey=%s" % [m.rotten_tomatoes_id, SECRETS["rotten-tomatoes-api-key"]])
@@ -43,11 +44,14 @@ class RevenuesController < ApplicationController
 		rating = Integer(data["ratings"]["critics_score"])
 		if rating > 0 then
 			m.rotten_tomatoes_rating = rating
-			queries += "%s: %d%%" % [m.name, rating]
+			queries += "%s: %d%%\r\n" % [m.name, rating]
 			m.save
 		end
 		sleep 0.5
 	end
+	
+	redis = Redis.new
+	redis.flushall
 	
 	output = <<OUTPUT
 Now: #{@@NOW.rfc3339}
