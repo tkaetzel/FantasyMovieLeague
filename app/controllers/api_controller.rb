@@ -333,7 +333,7 @@ class ApiController < ApplicationController
 			end
 			timestamp = start_date.to_i * 1000
 			movies.each do |m|
-				earning = m.earnings.select {|e| e.created_at <= start_date}.last
+				earning = m.earnings.select {|e| e.created_at < (start_date + 1)}.last
 				gross = earning.nil? ? 0 : earning.gross
 				total_shares = m.shares.where(:player_id => players).sum(:num_shares)
 				
