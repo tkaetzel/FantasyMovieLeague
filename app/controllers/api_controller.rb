@@ -135,11 +135,11 @@ class ApiController < ApplicationController
 
 				if best_movies.include? p[:bonus1] then
 					this_player["revenue"] += 10000000
-					this_player["player"]["long_name"] += '*'
+					this_player["player"]["long_name"] += '&sup1;'
 				end
 				if worst_movies.include? p[:bonus2] then
 					this_player["revenue"] += 10000000
-					this_player["player"]["long_name"] += '*'
+					this_player["player"]["long_name"] += '&sup2;'
 				end
 		
 				rows.push this_player
