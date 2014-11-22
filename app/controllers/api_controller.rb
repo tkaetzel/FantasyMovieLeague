@@ -250,7 +250,7 @@ class ApiController < ApplicationController
 			
 			m.earnings.each do |e|
 				if e == m.earnings.first then
-					to_add["data"].push [e.created_at.strftime("%s").to_i * 1000, 0]
+					to_add["data"].push [(e.created_at - 1.day ).strftime("%s").to_i * 1000, 0]		
 				end
 				if e.created_at.wday == 0 || e == m.earnings.last then
 					to_add["data"].push [e.created_at.strftime("%s").to_i * 1000, e.gross]
