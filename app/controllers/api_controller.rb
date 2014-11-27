@@ -248,11 +248,13 @@ class ApiController < ApplicationController
 			to_add["name"] = m.name
 			to_add["data"] = []
 			
-			m.earnings.each do |e|
+			last_earning = m.earnings.order(:created_at).last
+			
+			m.earnings.order(:created_at).each do |e|
 				if e == m.earnings.first then
 					to_add["data"].push [(e.created_at - 1.day ).strftime("%s").to_i * 1000, 0]		
 				end
-				if e.created_at.wday == 0 || e == m.earnings.last then
+				if e.created_at.wday == 0 || e == last_earning then
 					to_add["data"].push [e.created_at.strftime("%s").to_i * 1000, e.gross]
 				end
 			end
