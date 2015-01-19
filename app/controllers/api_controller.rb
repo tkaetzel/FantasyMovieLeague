@@ -326,7 +326,7 @@ class ApiController < ApplicationController
 		best_movies, worst_movies = get_best_and_worst_movies(movies)
 		
 		start_date = @@START_DATE
-		stop_date = @@NOW < @@END_DATE ? @@NOW : @@END_DATE
+		stop_date = @@NOW < @@SEASON_END_DATE ? @@NOW : @@SEASON_END_DATE
 		name, date, rankings, spreads = {}, {}, {}, {}
 
 		while start_date <= stop_date
