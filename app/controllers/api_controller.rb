@@ -3,7 +3,7 @@ class ApiController < ApplicationController
 		redis = Redis.new
 
 		rows = []
-		rows_json = redis.get("movie_data:%s" % params[:id])
+		rows_json = redis.get("%s:movie_data:%s" % [Rails.env, params[:id]])
 		
 		if rows_json.nil? then
 			players = []
@@ -95,7 +95,7 @@ class ApiController < ApplicationController
 		redis = Redis.new
 		
 		rows = []
-		rows_json = redis.get("rankings:%s" % params[:id])
+		rows_json = redis.get("%s:rankings:%s" % [Rails.env, params[:id]])
 		
 		if rows_json.nil? then
 			players = []
@@ -175,7 +175,7 @@ class ApiController < ApplicationController
 		redis = Redis.new
 		
 		rows = []
-		rows_json = redis.get("shares:%s" % params[:id])
+		rows_json = redis.get("%s:shares:%s" % [Rails.env, params[:id]])
 		if rows_json.nil? then
 			players = []
 
@@ -305,7 +305,7 @@ class ApiController < ApplicationController
 	
 	def get_graph_data
 		redis = Redis.new
-		rows_json = redis.get("graph:%s" % params[:id])
+		rows_json = redis.get("%s:graph:%s" % [Rails.env, params[:id]])
 		return JSON.parse rows_json unless rows_json.nil?
 		
 		players = []

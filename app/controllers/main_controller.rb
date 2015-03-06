@@ -18,7 +18,7 @@ class MainController < ApplicationController
 	end
 	
 	redis = Redis.new
-	rankings_str = redis.get("rankings:%s" % params[:team])
+	rankings_str = redis.get("%s:rankings:%s" % [Rails.env, params[:team]])
 	
 	if !rankings_str.nil? then
 		rankings = JSON.parse(rankings_str)

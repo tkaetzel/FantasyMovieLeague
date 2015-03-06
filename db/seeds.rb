@@ -2,21 +2,213 @@
 Team.create(name:"Friends")
 Team.create(name:"Work")
 
-Movie.create(name:"Interstellar", plot:"A group of explorers make use of a newly discovered wormhole to surpass the limitations on human space travel and conquer the vast distances involved in an interstellar voyage.", director:"Christopher Nolan", actors:"Matthew McConaughey, Anne Hathaway, Jessica Chastain, Michael Caine", release_date:"2014-11-07", imdb:"http://www.imdb.com/title/tt0816692", rotten_tomatoes_id: 771351912)
-Movie.create(name:"Big Hero 6", plot:"The special bond that develops between plus-sized inflatable robot Baymax, and prodigy Hiro Hamada, who team up with a group of friends to form a band of high-tech heroes.", director:"Don Hall, Chris Williams", actors:"Genesis Rodriguez, Alan Tudyk, Jamie Chung, T.J. Miller", release_date:"2014-11-07", imdb:"http://www.imdb.com/title/tt2245084", rotten_tomatoes_id: 771355766)
-Movie.create(name:"Dumb and Dumber To", plot:"20 years after the dimwits set out on their first adventure, they head out in search of one of their long lost children in the hope of gaining a new kidney.", director:"Farrelly Bros.", actors:"Jim Carrey, Jeff Daniels", release_date:"2014-11-14", imdb:"http://www.imdb.com/title/tt2096672", rotten_tomatoes_id: 771359313)
-Movie.create(name:"Beyond the Lights", plot:"A talented young musician on the brink of super stardom struggles with the pressure of her new-found success.", director:"Gina Prince-Blythewood", actors:"Gugu Mbatha-Raw, Minnie Driver, Danny Glover", release_date:"2014-11-14", imdb:"http://www.imdb.com/title/tt3125324", rotten_tomatoes_id: 771371300)
-Movie.create(name:"Foxcatcher", plot:"Based on the true story of Mark Schultz, an Olympic wrestler whose relationship with sponsor John du Pont and brother Dave Schultz would lead to unlikely circumstances.", director:"Bennett Miller", actors:"Channing Tatum, Mark Ruffalo, Steve Carell, Anthony Michael Hall", release_date:"2014-11-14", imdb:"http://www.imdb.com/title/tt1100089", rotten_tomatoes_id: 771256839)
-Movie.create(name:"The Hunger Games: Mockingjay, Part 1", plot:"Katniss Everdeen reluctantly becomes the symbol of a mass rebellion against the autocratic Capitol.", director:"Francis Lawrence", actors:"Jennifer Lawrence, Josh Hutcherson, Liam Hemsworth, Woody Harrelson", release_date:"2014-11-21", imdb:"http://www.imdb.com/title/tt1951265", rotten_tomatoes_id: 771312088)
-Movie.create(name:"The Imitation Game", plot:"English mathematician and logician, Alan Turing, helps crack the Enigma code during World War II.", director:"Morten Tyldum", actors:"Benedict Cumberbatch, Keira Knightley", release_date:"2014-11-21", imdb:"http://www.imdb.com/title/tt2084970", rotten_tomatoes_id: 771372271)
-Movie.create(name:"Horrible Bosses 2", plot:"Dale, Kurt and Nick decide to start their own business but things don't go as planned because of a slick investor, prompting the trio to pull off a harebrained and misguided kidnapping scheme.", director:"Sean Anders", actors:"Jason Bateman, Jason Sudeikis, Kevin Spacey", release_date:"2014-11-28", imdb:"http://www.imdb.com/title/tt2170439", rotten_tomatoes_id: 771352288)
-Movie.create(name:"The Penguins of Madagascar", plot:"Super spy teams aren't born...they're hatched.", director:"Eric Darnell, Simon J. Smith", actors:"Benedict Cumberbatch, Peter Stormare, John Malkovich, Ken Jeong", release_date:"2014-11-28", imdb:"http://www.imdb.com/title/tt1911658", rotten_tomatoes_id: 771315645)
-Movie.create(name:"Exodus: Gods and Kings", plot:"An account of Moses' hand in leading the Israelite slaves out of Egypt.", director:"Ridley Scott", actors:"Aaron Paul, Christian Bale, Sigourney Weaver, Joel Edgerton", release_date:"2014-12-12", imdb:"http://www.imdb.com/title/tt1528100", rotten_tomatoes_id: 771356224)
-Movie.create(name:"The Hobbit: The Battle of the Five Armies", plot:"The Company of Thorin has reached Smaug's lair; but can Bilbo and the Dwarves reclaim Erebor and the treasure? And, if so, can they hold on to it?", director:"Peter Jackson", actors:"Martin Freeman, Orlando Bloom, Benedict Cumberbatch, Ian McKellen", release_date:"2014-12-19", imdb:"http://www.imdb.com/title/tt2310332", rotten_tomatoes_id: 771191433)
-Movie.create(name:"Annie", plot:"Business tycoon and mayoral candidate Benjamin Stacks launches a campaign to take in Annie, a young girl who has been living with her mean foster mom Miss Hannigan since her parents left her as a baby.", director:"Will Gluck", actors:"Jamie Foxx, Quvenzhané Wallis, Rose Byrne", release_date:"2014-12-19", imdb:"http://www.imdb.com/title/tt1823664", rotten_tomatoes_id: 771229367)
-Movie.create(name:"Night at the Museum: Secret of the Tomb", plot:"Larry leaves New York City for London on a quest to save the magic before it is gone forever.", director:"Shawn Levy", actors:"Robin Williams, Ben Stiller, Rebel Wilson, Owen Wilson", release_date:"2014-12-19", imdb:"http://www.imdb.com/title/tt2692250", rotten_tomatoes_id: 771349839)
-Movie.create(name:"Hot Tub Time Machine 2", plot:"When Lou, who has become the \"father of the Internet,\" is shot by an unknown assailant, Jacob and Nick fire up the time machine again to save their friend.", director:"Shawn Levy", actors:"Rob Corddry, Craig Robinson, Chevy Chase", release_date:"2014-12-25", imdb:"http://www.imdb.com/title/tt2637294", rotten_tomatoes_id: 771369273)
-Movie.create(name:"The Interview", mapped_name:"The Interview (2014)", plot:"Dave Skylark and his producer Aaron Rapoport run the popular celebrity tabloid TV show \"Skylark Tonight.\" When they discover that North Korean dictator Kim Jong-un is a fan of the show, they land an interview with him in an attempt to legitimize themselves as journalists.", director:"Seth Rogen, Evan Goldberg", actors:"Seth Rogen, James Franco", release_date:"2014-12-25", imdb:"http://www.imdb.com/title/tt2788710", rotten_tomatoes_id: 771353053)
-Movie.create(name:"Into the Woods", plot:"A witch conspires to teach important lessons to various characters of popular children's stories including Little Red Riding Hood, Cinderella, Jack and the Beanstalk and Rapunzel.", director:"Rob Marshall", actors:"Johnny Depp, Anna Kendrick, Emily Blunt", release_date:"2014-12-25", imdb:"http://www.imdb.com/title/tt2180411", rotten_tomatoes_id: 771356920)
-Movie.create(name:"Paddington", plot:"A young Peruvian bear with a passion for all things British travels to London in search of a home.", director:"Paul King", actors:"Nicole Kidman, Peter Capaldi, Ben Whishaw", release_date:"2014-12-25", imdb:"http://www.imdb.com/title/tt1109624", rotten_tomatoes_id: 771366608)
-Movie.create(name:"Unbroken", plot:"A chronicle of the life of Louis Zamperini, an Olympic runner who was taken prisoner by Japanese forces during World War II.", director:"Angelina Jolie", actors:"Jack O'Connell, Domhnall Gleeson", release_date:"2014-12-25", imdb:"http://www.imdb.com/title/tt1809398", rotten_tomatoes_id: 771360552)
+Movie.create(name:"Avengers: Age of Ultron",
+ plot:"When Tony Stark tries to jumpstart a dormant peacekeeping program, things go awry and it is up to the Avengers to stop the villainous Ultron from enacting his terrible plans.",
+ director:"Joss Whedon",
+ actors:"Robert Downey Jr., Chris Evans, Chris Hemsworth, Mark Ruffalo",
+ release_date:"2015-05-01",
+ imdb:"http://www.imdb.com/title/tt2395427",
+ rotten_tomatoes_id: 771313962)
+Movie.create(name:"She's Funny That Way",
+ plot:"A married Broadway director falls for a prostitute-turned-actress and works to help her advance her career.",
+ director:"Peter Bogdanovich",
+ actors:"Owen Wilson, Jennifer Aniston, Imogen Poots",
+ release_date:"2015-05-01",
+ imdb:"http://www.imdb.com/title/tt1767372",
+ rotten_tomatoes_id: 771402562)
+Movie.create(name:"Hot Pursuit",
+ plot:"An inept police officer must protect a drug dealer's widow from criminals and dirty cops.",
+ director:"Anne Fletcher",
+ actors:"Reese Witherspoon, Sofia Vergara",
+ release_date:"2015-05-08",
+ imdb:"http://www.imdb.com/title/tt2967224",
+ rotten_tomatoes_id: 771358545)
+Movie.create(name:"Mad Max: Fury Road",
+ plot:"In a post-apocalyptic wasteland, loner Max meets Furiosa, a woman who believes her path to survival may be achieved if she can make it across the desert back to her childhood homeland.",
+ director:"George Miller",
+ actors:"Tom Hardy, Charlize Theron",
+ release_date:"2015-05-15",
+ imdb:"http://www.imdb.com/title/tt1392190",
+ rotten_tomatoes_id: 771028170)
+Movie.create(name:"Pitch Perfect 2",
+ plot:"Collegiate a cappella group the Barden Bellas enter into an international competition that no American team has ever won.",
+ director:"Elizabeth Banks",
+ actors:"Anna Kendrick, Rebel Wilson",
+ release_date:"2015-05-15",
+ imdb:"http://www.imdb.com/title/tt2848292",
+ rotten_tomatoes_id: 771356696)
+Movie.create(name:"Poltergeist",
+ plot:"A reimagined version of the 1982 classic horror film about a family whose suburban home is invaded by angry spirits.",
+ director:"Gil Kenan",
+ actors:"Sam Rockwell, Rosemarie DeWitt",
+ release_date:"2015-05-22",
+ imdb:"http://www.imdb.com/title/tt1029360",
+ rotten_tomatoes_id: 770799339)
+Movie.create(name:"Tomorrowland",
+ plot:"Bound by a shared destiny, a teen bursting with scientific curiosity and a former boy-genius inventor embark on a mission to unearth the secrets of a place somewhere in time and space that exists in their collective memory.",
+ director:"Brad Bird",
+ actors:"George Clooney, Britt Robertson, Hugh Laurie",
+ release_date:"2015-05-22",
+ imdb:"http://www.imdb.com/title/tt1964418",
+ rotten_tomatoes_id: 771306778)
+Movie.create(name:"Aloha",
+ plot:"A celebrated military contractor returns to the site of his greatest career triumphs and re-connects with a long-ago love while unexpectedly falling for the hard-charging Air Force watchdog assigned to him.",
+ director:"Cameron Crowe",
+ actors:"Bradley Cooper, Emma Stone",
+ release_date:"2015-05-29",
+ imdb:"http://www.imdb.com/title/tt1243974",
+ rotten_tomatoes_id: 771356651)
+Movie.create(name:"San Andreas",
+ plot:"In the aftermath of a massive earthquake in California, a rescue-chopper pilot makes a dangerous journey across the state in order to rescue his estranged daughter.",
+ director:"Brad Peyton",
+ actors:"Dwayne Johnson, Kylie Minogue",
+ release_date:"2015-05-29",
+ imdb:"http://www.imdb.com/title/tt2126355",
+ rotten_tomatoes_id: 771374432)
+Movie.create(name:"Entourage",
+ plot:"Film star Vince Chase and his cronies take on Hollywood.",
+ director:"Doug Ellin",
+ actors:"Kevin Connolly, Adrian Grenier",
+ release_date:"2015-06-05",
+ imdb:"http://www.imdb.com/title/tt1674771",
+ rotten_tomatoes_id: 771370467) 
+Movie.create(name:"Spy",
+ plot:"A desk-bound CIA analyst volunteers to go undercover to infiltrate the world of a deadly arms dealer, and prevent diabolical global disaster.",
+ director:"Paul Feig",
+ actors:"Melissa McCarthy, Jason Statham",
+ release_date:"2015-06-05",
+ imdb:"http://www.imdb.com/title/tt3079380",
+ rotten_tomatoes_id: 771361497) 
+Movie.create(name:"Dope",
+ plot:"A geek gets caught in the middle of a drug buy gone bad.",
+ director:"Rick Famuyiwa",
+ actors:"Shameik Moore, Zoe Kravitz, A$AP Rocky",
+ release_date:"2015-06-12",
+ imdb:"http://www.imdb.com/title/tt3850214",
+ rotten_tomatoes_id: 771412133)  
+Movie.create(name:"Jurassic World",
+ plot:"In order to fulfill a corporate mandate, a new attraction is created to re-spark visitor's interest in the dinosaur theme park, which backfires horribly.",
+ director:"Colin Trevorrow",
+ actors:"Chris Pratt, Bryce Dallas Howard",
+ release_date:"2015-06-12",
+ imdb:"http://www.imdb.com/title/tt0369610",
+ rotten_tomatoes_id: 771324839)
+Movie.create(name:"Inside Out",
+ plot:"A story told from the perspective of the emotions inside the mind of a little girl.",
+ director:"Peter Docter",
+ actors:"Diane Lane, Amy Poehler",
+ release_date:"2015-06-19",
+ imdb:"http://www.imdb.com/title/tt2096673",
+ rotten_tomatoes_id: 771306118)
+Movie.create(name:"The Transporter Legacy",
+ plot:"A reboot of the story of transporter Frank Martin.",
+ director:"Camille Delamarre",
+ actors:"Ed Skrein",
+ release_date:"2015-06-19",
+ imdb:"http://www.imdb.com/title/tt2938956",
+ rotten_tomatoes_id: 771385925)
+Movie.create(name:"Ted 2",
+ plot:"Newlywed couple Ted and Tami-Lynn want to have a baby, but in order to qualify to be a parent, Ted will have to prove he's a person in a court of law.",
+ director:"Seth MacFarlane",
+ actors:"Seth MacFarlane, Mark Wahlberg, Liam Neeson",
+ release_date:"2015-06-26",
+ imdb:"http://www.imdb.com/title/tt2637276",
+ rotten_tomatoes_id: 771362652)
+Movie.create(name:"Magic Mike XXL",
+ plot:"The continuing story of male stripper, Magic Mike.",
+ director:"Gregory Jacobs",
+ actors:"Channing Tatum, Amber Heard",
+ release_date:"2015-07-01",
+ imdb:"http://www.imdb.com/title/tt2268016/",
+ rotten_tomatoes_id: 771378808)
+Movie.create(name:"Terminator: Genisys",
+ plot:"After finding himself in a new time-line, Kyle Reese teams up with John Connor's mother Sarah and an aging terminator to try and stop the one thing that the future fears, Judgement Day.",
+ director:"Alan Taylor",
+ actors:"Arnold Schwarzenegger, Emilia Clarke",
+ release_date:"2015-07-01",
+ imdb:"http://www.imdb.com/title/tt1340138",
+ rotten_tomatoes_id: 771359910)
+Movie.create(name:"Minions",
+ plot:"Minions Stuart, Kevin and Bob are recruited by Scarlet Overkill, a super-villain who, alongside her inventor husband Herb, hatches a plot to take over the world.",
+ director:"Kyle Balda",
+ actors:"Sandra Bullock, Jon Hamm, Michael Keaton",
+ release_date:"2015-07-10",
+ imdb:"http://www.imdb.com/title/tt2293640",
+ rotten_tomatoes_id: 771314279)
+Movie.create(name:"Ant-Man",
+ plot:"Armed with a super-suit with the astonishing ability to shrink in scale but increase in strength, con-man Scott Lang must embrace his inner hero and help his mentor, Dr. Hank Pym, plan and pull off a heist that will save the world.",
+ director:"Peyton Reed",
+ actors:"Paul Rudd, Evangeline Lilly, Michael Douglas",
+ release_date:"2015-07-17",
+ imdb:"http://www.imdb.com/title/tt0478970",
+ rotten_tomatoes_id: 770680853)
+Movie.create(name:"Trainwreck",
+ plot:"Having thought that monogamy was never possible, a commitment-phobic career woman may have to face her fears when she meets a good guy.",
+ director:"Judd Apatow",
+ actors:"Amy Schumer, Bill Hader, LeBron James",
+ release_date:"2015-07-17",
+ imdb:"http://www.imdb.com/title/tt3152624",
+ rotten_tomatoes_id: 771372670)
+Movie.create(name:"Pan",
+ plot:"The story of an orphan who is spirited away to the magical Neverland.",
+ director:"Joe Wright",
+ actors:"Hugh Jackman, Garrett Hedlund, Levi Miller",
+ release_date:"2015-07-24",
+ imdb:"http://www.imdb.com/title/tt3332064",
+ rotten_tomatoes_id: 771371532)
+Movie.create(name:"Paper Towns",
+ plot:"A young man and his four friends embark upon the road trip of their lives to find the missing girl next door.",
+ director:"Jake Schreier",
+ actors:"Nat Wolff, Cara Delevingne",
+ release_date:"2015-07-24",
+ imdb:"http://www.imdb.com/title/tt3622592",
+ rotten_tomatoes_id: 771370467) 
+Movie.create(name:"Pixels",
+ plot:"Video game experts are recruited by the military to fight 1980s-era video game characters who have attacked New York.",
+ director:"Chris Columbus",
+ actors:"Adam Sandler, Kevin James, Peter Dinklage",
+ release_date:"2015-07-24",
+ imdb:"http://www.imdb.com/title/tt2120120",
+ rotten_tomatoes_id: 771263974)
+Movie.create(name:"Mission: Impossible 5",
+ plot:"",
+ director:"Christopher McQuarrie",
+ actors:"Tom Cruise, Jeremy Renner, Simon Pegg",
+ release_date:"2015-07-31",
+ imdb:"http://www.imdb.com/title/tt2381249",
+ rotten_tomatoes_id: 771357161) 
+Movie.create(name:"Self/Less",
+ plot:"An extremely wealthy elderly man, dying from cancer, undergoes a radical medical procedure that transfers his consciousness to the body of a healthy young man, but all is not as it seems.",
+ director:"Tarsem Singh",
+ actors:"Ryan Reynolds, Natalie Martinez",
+ release_date:"2015-07-31",
+ imdb:"http://www.imdb.com/title/tt2140379",
+ rotten_tomatoes_id: 771357231)
+Movie.create(name:"Southpaw",
+ plot:"A boxer fights his way to the top, only to find his life falling apart around him.",
+ director:"Antoine Fuqua",
+ actors:"Jake Gyllenhaal, Rachel McAdams",
+ release_date:"2015-07-31",
+ imdb:"http://www.imdb.com/title/tt1798684",
+ rotten_tomatoes_id: 771258788) 
+Movie.create(name:"Masterminds",
+ plot:"A night guard at an armored car company in the Southern U.S. organizes one of the biggest bank heists in American history.",
+ director:"Jared Hess",
+ actors:"Kristen Wiig, Jason Sudeikis, Zach Galifianakis",
+ release_date:"2015-08-07",
+ imdb:"http://www.imdb.com/title/tt2461150",
+ rotten_tomatoes_id: 771319639) 
+Movie.create(name:"Fantastic Four",
+ plot:"Four young scientists achieve superhuman abilities through a teleportation experiment gone haywire. They must now use these abilities to save the world from an uprising tyrant.",
+ director:"Josh Trank",
+ actors:"Miles Teller, Kate Mara, Michael B. Jordan",
+ release_date:"2015-08-07",
+ imdb:"http://www.imdb.com/title/tt1502712",
+ rotten_tomatoes_id: 771323153)
+Movie.create(name:"Ricki and the Flash",
+ plot:"An aging rocker returns home to her family after years on the road to try and make things right with them. ",
+ director:"Jonathan Demme",
+ actors:"Meryl Streep, Kevin Kline",
+ release_date:"2015-08-07",
+ imdb:"http://www.imdb.com/title/tt3623726",
+ rotten_tomatoes_id: 771380174)
