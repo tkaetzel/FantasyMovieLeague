@@ -70,7 +70,7 @@ class ApiController < ApplicationController
 				end
 				rows.push this_movie
 			end
-			redis.set("movie_data:%s" % params[:id], rows.to_json)
+			redis.set("%s:movie_data:%s" % [Rails.env, params[:id]], rows.to_json)
 		else
 			rows = JSON.parse rows_json
 		end
@@ -151,7 +151,7 @@ class ApiController < ApplicationController
 				a["rank"] = rank
 				rank = rank + 1
 			end
-			redis.set("rankings:%s" % params[:id], rows.to_json)
+			redis.set("%s:rankings:%s" % [Rails.env, params[:id]], rows.to_json)
 		else
 			rows = JSON.parse rows_json
 		end
@@ -205,7 +205,7 @@ class ApiController < ApplicationController
 				this_movie["releasedate"] = m.release_date.strftime("%F")
 				rows.push this_movie
 			end
-			redis.set("shares:%s" % params[:id], rows.to_json)
+			redis.set("%s:shares:%s" % [Rails.env, params[:id]], rows.to_json)
 		else
 			rows = JSON.parse rows_json
 		end
@@ -377,7 +377,7 @@ class ApiController < ApplicationController
 			rankings.map {|a| [a.to_a.first, a.to_a.last.to_a]},
 			spreads.map {|a| [a.to_a.first, a.to_a.last.to_a]}]
 
-		redis.set("graph:%s" % params[:id], rows.to_json)
+		redis.set("%s:graph:%s" % [Rails.env, params[:id]], rows.to_json)
 		
 		return rows
 	end

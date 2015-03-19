@@ -2,9 +2,7 @@ require "net/http"
 
 class RevenuesController < ApplicationController
   def index
-	urls = ["http://boxofficemojo.com/seasonal/?view=releasedate&yr=2014&season=Fall&sort=open&order=DESC&p=.htm&page=1",
-	"http://boxofficemojo.com/seasonal/?view=releasedate&yr=2014&season=Holiday&sort=open&order=DESC&p=.htm&page=1","http://boxofficemojo.com/seasonal/?view=releasedate&yr=2014&season=Holiday&sort=open&order=DESC&p=.htm&page=2",
-	"http://boxofficemojo.com/seasonal/?view=releasedate&yr=2015&season=Winter&sort=open&order=DESC&p=.htm&page=1"]
+	urls = ["http://boxofficemojo.com/seasonal/?view=releasedate&yr=2015&season=Summer&sort=open&order=DESC&p=.htm&page=1","http://boxofficemojo.com/seasonal/?view=releasedate&yr=2015&season=Summer&sort=open&order=DESC&p=.htm&page=2","http://boxofficemojo.com/seasonal/?view=releasedate&yr=2015&season=Summer&sort=open&order=DESC&p=.htm&page=3"]
 
 	urls = [] if @@NOW >= @@SEASON_END_DATE
 	data = []
