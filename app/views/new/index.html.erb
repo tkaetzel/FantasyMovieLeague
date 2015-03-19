@@ -8,11 +8,14 @@
 		<%= render "music" %>
 	<% end %>
 	
+	<p style="clear:both;">&nbsp;</p>
+	
 	<div class="whoareyou">Who are you?
 		<%= text_field_tag "name", nil, placeholder:"First & Last Name", tabindex:1 %>
 	</div>
 	
 	<p style="clear:both;">&nbsp;</p>
+	
 	<% @movies.each do |m| %>
 		<%= render "movie", :movie => m %>
 	<% end %>

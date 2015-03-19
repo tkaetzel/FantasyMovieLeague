@@ -11,7 +11,8 @@ class MainController < ApplicationController
 	when 'work'
 		@players = Team.find(2).players.includes(:shares)
 	when ''
-		@players = Player.all.includes(:shares)
+		render "no_team"
+		return
 	else
 		render :file => "#{Rails.root}/public/404", :layout => false, :status => :not_found
 		return
@@ -32,16 +33,8 @@ class MainController < ApplicationController
 		return
 	end
 
-	case (params[:team] || "").downcase
-	when 'friends'
-		@players = Team.find(1).players.order(:short_name)
-	when 'work'
-		@players = Team.find(2).players.order(:short_name)
-	when ''
-		@players = Player.all.order(:short_name)
-	else
-		render :file => "#{Rails.root}/public/404", :layout => false, :status => :not_found
-		return
-	end
+	@friends = Team.find(1).players.order(:short_name)
+	@work = Team.find(1).players.order(:short_name)
+	
   end
 end
