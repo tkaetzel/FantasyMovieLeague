@@ -19,12 +19,12 @@ $(function(){
     $("#shares").jqGrid({
     datatype: 'json',
 	mtype: 'GET',
-    colNames:['Movie', 'Rel.', 'Total', <% @friends.each do |p| %><%= header.html_safe % p.short_name -%><% end %>],
+    colNames:['Movie', 'Rel.', 'Total', <% @players.each do |p| %><%= header.html_safe % p.short_name -%><% end %>],
     colModel :[ 
 	  {name:'movie', index:'movie', width:150},
 	  {name:'releasedate', index:'releasedate', width:80},
       {name:'total', classes:'tbl_bold', align:'right', index:'total', sorttype:'int', width:50},
-	  <% @friends.each do |p| %>
+	  <% @players.each do |p| %>
 		<%= model.html_safe % [p.short_name, p.short_name] %>
 	  <% end %>
     ],
@@ -40,32 +40,7 @@ $(function(){
     gridview: true,
     caption: 'Share Distribution'
   });
-  
-      $("#shares2").jqGrid({
-    datatype: 'json',
-	mtype: 'GET',
-    colNames:['Movie', 'Rel.', 'Total', <% @work.each do |p| %><%= header.html_safe % p.short_name -%><% end %>],
-    colModel :[ 
-	  {name:'movie', index:'movie', width:150},
-	  {name:'releasedate', index:'releasedate', width:80},
-      {name:'total', classes:'tbl_bold', align:'right', index:'total', sorttype:'int', width:50},
-	  <% @work.each do |p| %>
-		<%= model.html_safe % [p.short_name, p.short_name] %>
-	  <% end %>
-    ],
-    rowNum:100,
-	url: '/api/shares/<%= params[:team] %>',
-    sortname: 'releasedate',
-    sortorder: 'asc',
-	jsonReader : {
-		repeatitems: false
-	},
-	height:'auto',
-    viewrecords: true,
-    gridview: true,
-    caption: 'Share Distribution'
-  });
-  
+
 }); 
 
 </script>
@@ -73,10 +48,7 @@ $(function(){
 <br/>
 <center>
 <div id="main">
-<h3>Friends</h3>
+<h3><%= @page_title %></h3>
 <table id="shares"><tr><td/></tr></table>
-<hr/>
-<h3>Work</h3>
-<table id="shares2"><tr><td/></tr></table>
 </div>
 </center>

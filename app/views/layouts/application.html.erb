@@ -30,11 +30,18 @@ document.onkeypress = stopRKey;
 	<div class="moneyRemaining">
 		<div id="progressbar"><div class="progress-label"></div></div>
 	</div>
-	<ul>
+	<ul class="mainmenu">
 		<% if params[:controller] == "main" %>
 		<li <%= is_active('/friends') %>><a href="/friends">Friends</a></li>
 		<li <%= is_active('/work') %>><a href="/work">Work</a></li>
-		<li <%= is_active('/shares') %>><a href="/shares">Shares</a></li>
+		<li <%= is_active('/shares') %>><a href="#">Shares</a>
+			<div class="submenu">
+				<ul>
+					<li><a href="/shares/friends">Friends</a></li>
+					<li><a href="/shares/work">Work</a></li>
+				</ul>
+			</div>
+		</li>
 		<% end %>
 		<li class="page_title">2015 Summer Movie Contest</li>
 	</ul>

@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
   helper_method :is_active
   
   def is_active(a)
-	return "class=\"is_active\"".html_safe if request.env['PATH_INFO'] == a
+	return "class=\"is_active\"".html_safe if request.env['PATH_INFO'].start_with? a
 	return ""
   end
 end

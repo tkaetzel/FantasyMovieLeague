@@ -33,8 +33,20 @@ class MainController < ApplicationController
 		return
 	end
 
-	@friends = Team.find(1).players.order(:short_name)
-	@work = Team.find(1).players.order(:short_name)
+	case (params[:team] || "").downcase
+	when 'friends'
+		@players = Team.find(1).players.includes(:shares)
+		@page_title = 'Shares: Friends'
+	when 'work'
+		@players = Team.find(2).players.includes(:shares)
+		@page_title = 'Shares: Work'
+	when ''
+		render "no_team"
+		return
+	else
+		render :file => "#{Rails.root}/public/404", :layout => false, :status => :not_found
+		return
+	end
 	
   end
 end

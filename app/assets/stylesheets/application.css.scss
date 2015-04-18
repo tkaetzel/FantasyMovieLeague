@@ -5,7 +5,7 @@
 	top: 0; 
 	background-color: #d5d5d5; 
 	border-bottom: 1px solid #ccc;  
-	ul {
+	ul.mainmenu {
 		list-style: none; 
 		margin: 0; 
 		text-align:center; 
@@ -30,11 +30,35 @@
 				padding: 8px 15px; 
 				text-decoration: none; 
 				font-weight: bold; 
-				border-right: 
-				1px solid #ccc;
+				border-right: 1px solid #ccc;
 				&:hover {
 					background-color: #fff;
 				}
+			}
+			
+			div.submenu {
+				background-color:#d5d5d5;
+				position:absolute;
+				width:120px;
+				height:80px;
+				display:none;
+				border: 1px solid #ccc;
+				ul {
+					list-style: none; 
+					margin: 0;
+					text-align:center;
+					padding: 0;
+					
+					li {
+						float:none;
+						a {
+							border:none;
+						}
+					}
+				}
+			}
+			&:hover div.submenu {
+				display:block;
 			}
 		}
 	}
