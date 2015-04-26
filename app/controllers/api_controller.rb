@@ -1,28 +1,29 @@
 class ApiController < ApplicationController
 	def movie_data
+		season = get_season
 		redis = Redis.new
 
 		rows = []
-		rows_json = redis.get("%s:movie_data:%s" % [Rails.env, params[:id]])
-		
+		rows_json = redis.get("%s:movie_data:%s:%s" % [Rails.env, season.id, params[:id]])
+
 		if rows_json.nil? then
 			players = []
 
 			case (params[:id] || "").downcase
 			when 'friends'
-				players = Team.find(1).players.includes(:shares)
+				players = Team.find(1).players.where(:season_id => season.id).includes(:shares)
 			when 'work'
-				players = Team.find(2).players.includes(:shares)
+				players = Team.find(2).players.where(:season_id => season.id).includes(:shares)
 			when ''
-				players = Player.all.includes(:shares)
+				players = Player.where(:season_id => season.id)..includes(:shares)
 			else
 				render :status => :not_found, :text => ''
 				return
 			end
 			
-			movies = Movie.all.includes(:shares, :earnings)
+			movies = Movie.where(:season_id => season.id).includes(:shares, :earnings)
 			best_movies, worst_movies = get_best_and_worst_movies(movies)
-			
+
 			movies.each do |m|
 				this_movie_gross = m.earnings.empty? ? 0 : m.earnings.max_by{|a| a.created_at}.gross
 				total_shares = m.shares.where(:player_id => players).sum(:num_shares)
@@ -64,13 +65,13 @@ class ApiController < ApplicationController
 					elsif p["bonus2"] == m.id then
 						css_class = "red"
 					end	
-					
+					binding.pry if s.nil?
 					this_movie[p.short_name] = {"earning" => earning, "shares" => s.num_shares, "class" => css_class}
 					
 				end
 				rows.push this_movie
 			end
-			redis.set("%s:movie_data:%s" % [Rails.env, params[:id]], rows.to_json)
+			redis.set("%s:movie_data:%s:%s" % [Rails.env, season.id, params[:id]], rows.to_json)
 		else
 			rows = JSON.parse rows_json
 		end
@@ -92,27 +93,28 @@ class ApiController < ApplicationController
 	end
 	
 	def rankings
+		season = get_season
 		redis = Redis.new
 		
 		rows = []
-		rows_json = redis.get("%s:rankings:%s" % [Rails.env, params[:id]])
+		rows_json = redis.get("%s:rankings:%s:%s" % [Rails.env, season.id, params[:id]])
 		
 		if rows_json.nil? then
 			players = []
 
 			case (params[:id] || "").downcase
 			when 'friends'
-				players = Team.find(1).players.includes(:shares)
+				players = Team.find(1).players.where(:season_id => season.id).includes(:shares)
 			when 'work'
-				players = Team.find(2).players.includes(:shares)
+				players = Team.find(2).players.where(:season_id => season.id).includes(:shares)
 			when ''
-				players = Player.all.includes(:shares)
+				players = Player.where(:season_id => season.id).includes(:shares)
 			else
 				render :status => :not_found, :text => ''
 				return
 			end
 			
-			movies = Movie.all.includes(:shares, :earnings)
+			movies = Movie.where(:season_id => season.id).includes(:shares, :earnings)
 			best_movies, worst_movies = get_best_and_worst_movies(movies)
 
 			players.each do |p|
@@ -127,6 +129,7 @@ class ApiController < ApplicationController
 					this_movie_gross = m.earnings.empty? ? 0 : m.earnings.max_by{|a| a.created_at}.gross
 					total_shares = m.shares.where(:player_id => players).sum(:num_shares)
 					s = p.shares.select {|s| s.movie_id == m.id}.first
+					
 					if !this_movie_gross.nil? && !this_movie_gross.zero? then
 						this_player["revenue"] += s.nil? ? 0 : s.num_shares.to_f / total_shares * this_movie_gross
 						this_player["pct_in_use"] += s.num_shares if (m.release_date + 1.days) < DateTime.now
@@ -151,7 +154,7 @@ class ApiController < ApplicationController
 				a["rank"] = rank
 				rank = rank + 1
 			end
-			redis.set("%s:rankings:%s" % [Rails.env, params[:id]], rows.to_json)
+			redis.set("%s:rankings:%s:%s" % [Rails.env, season.id, params[:id]], rows.to_json)
 		else
 			rows = JSON.parse rows_json
 		end
@@ -172,25 +175,26 @@ class ApiController < ApplicationController
 	end
 	
 	def shares
+		season = get_season
 		redis = Redis.new
 		
 		rows = []
-		rows_json = redis.get("%s:shares:%s" % [Rails.env, params[:id]])
+		rows_json = redis.get("%s:shares:%s:%s" % [Rails.env, season.id, params[:id]])
 		if rows_json.nil? then
 			players = []
 
 			case (params[:id] || "").downcase
 			when 'friends'
-				players = Team.find(1).players.includes(:shares)
+				players = Team.find(1).players.where(:season_id => season.id).includes(:shares)
 			when 'work'
-				players = Team.find(2).players.includes(:shares)
+				players = Team.find(2).players.where(:season_id => season.id).includes(:shares)
 			when ''
-				players = Player.all.includes(:shares)
+				players = Player.where(:season_id => season.id).includes(:shares)
 			else
 				render :status => :not_found, :text => ''
 				return
 			end
-			movies = Movie.all.includes(:shares)
+			movies = Movie.where(:season_id => season.id).includes(:shares)
 			
 			movies.each do |m|
 				this_movie = {}
@@ -228,10 +232,12 @@ class ApiController < ApplicationController
 	
 	def graph_data
 		movies = []
+		season = get_season
+		
 		if params[:id].nil? then
-			movies = Movie.includes(:earnings)
+			movies = Movie.where(:season_id => season.id).includes(:earnings)
 		else
-			movies = Movie.includes(:earnings).where(:id => params[:id].to_i)
+			movies = Movie.where(:season_id => season.id).includes(:earnings).where(:id => params[:id].to_i)
 		end
 
 		results = []
@@ -304,29 +310,31 @@ class ApiController < ApplicationController
 	private
 	
 	def get_graph_data
+		season = get_season
 		redis = Redis.new
-		rows_json = redis.get("%s:graph:%s" % [Rails.env, params[:id]])
+		
+		rows_json = redis.get("%s:graph:%s:%s" % [Rails.env, season.id, params[:id]])
 		return JSON.parse rows_json unless rows_json.nil?
 		
 		players = []
 
 		case (params[:id] || "").downcase
 		when 'friends'
-			players = Team.find(1).players.includes(:shares)
+			players = Team.find(1).players.where(:season_id => season.id).includes(:shares)
 		when 'work'
-			players = Team.find(2).players.includes(:shares)
+			players = Team.find(2).players.where(:season_id => season.id).includes(:shares)
 		when ''
-			players = Player.all.includes(:shares)
+			players = Player.where(:season_id => season.id).includes(:shares)
 		else
 			render :status => :not_found, :text => ''
 			return
 		end
 		
-		movies = Movie.all.includes(:shares, :earnings)
+		movies = Movie.where(:season_id => season.id).includes(:shares, :earnings)
 		best_movies, worst_movies = get_best_and_worst_movies(movies)
 		
-		start_date = @@START_DATE
-		stop_date = @@NOW < @@SEASON_END_DATE ? @@NOW : @@SEASON_END_DATE
+		start_date = season.movies.order(:release_date).first.release_date
+		stop_date = season.movies.order(:release_date).last.release_date + 4.weeks
 		name, date, rankings, spreads = {}, {}, {}, {}
 
 		while start_date <= stop_date
@@ -369,7 +377,7 @@ class ApiController < ApplicationController
 				spreads[k][timestamp] = (v - s_min)/spread * 100
 			end
 			
-			start_date += 7
+			start_date += 7.days
 		end
 		
 		rows = [
@@ -377,7 +385,7 @@ class ApiController < ApplicationController
 			rankings.map {|a| [a.to_a.first, a.to_a.last.to_a]},
 			spreads.map {|a| [a.to_a.first, a.to_a.last.to_a]}]
 
-		redis.set("%s:graph:%s" % [Rails.env, params[:id]], rows.to_json)
+		redis.set("%s:graph:%s:%s" % [Rails.env, season.id, params[:id]], rows.to_json)
 		
 		return rows
 	end

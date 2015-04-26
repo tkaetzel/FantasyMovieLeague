@@ -1,15 +1,13 @@
 class MainController < ApplicationController
   def index
-    if @@NOW < @@START_DATE && params[:skip].nil? then
-		redirect_to controller:"new", status: :found
-		return
-	end
-
+	season = get_season
+	@seasons = [Season.order("id DESC"), season]
+	
 	case (params[:team] || "").downcase
 	when 'friends'
-		@players = Team.find(1).players.includes(:shares)
+		@players = Team.find(1).players.where(:season_id => season.id).includes(:shares)
 	when 'work'
-		@players = Team.find(2).players.includes(:shares)
+		@players = Team.find(2).players.where(:season_id => season.id).includes(:shares)
 	when ''
 		render "no_team"
 		return
@@ -19,8 +17,7 @@ class MainController < ApplicationController
 	end
 	
 	redis = Redis.new
-	rankings_str = redis.get("%s:rankings:%s" % [Rails.env, params[:team]])
-	
+	rankings_str = redis.get("%s:rankings:%s:%s" % [Rails.env, season.id, params[:team]])
 	if !rankings_str.nil? then
 		rankings = JSON.parse(rankings_str)
 		@players.sort_by! {|p| rankings.index {|r| r["player"]["id"] == p.id}}
@@ -28,17 +25,15 @@ class MainController < ApplicationController
   end
   
   def shares
-    if @@NOW < @@START_DATE && params[:skip].nil? then
-		redirect_to controller:"new", status: :found
-		return
-	end
-
+	season = get_season
+	@seasons = [Season.order("id DESC"), season]
+	
 	case (params[:team] || "").downcase
 	when 'friends'
-		@players = Team.find(1).players.includes(:shares)
+		@players = Team.find(1).players.where(:season_id => season.id).includes(:shares)
 		@page_title = 'Shares: Friends'
 	when 'work'
-		@players = Team.find(2).players.includes(:shares)
+		@players = Team.find(2).players.where(:season_id => season.id).includes(:shares)
 		@page_title = 'Shares: Work'
 	when ''
 		render "no_team"

@@ -1,0 +1,32 @@
+<%
+	show_season = nav.last.id != nav.first.first.id
+%>
+<div id="nav">
+	<div class="moneyRemaining">
+		<div id="progressbar"><div class="progress-label"></div></div>
+	</div>
+	<ul class="mainmenu">
+		<% if params[:controller] == "main" %>
+		<li <%= is_active('/friends') %>><a href="/friends<%= show_season ? "/?season=%s" % nav.last.slug : "" %>">Friends</a></li>
+		<li <%= is_active('/work') %>><a href="/work<%= show_season ? "/?season=%s" % nav.last.slug : "" %>">Work</a></li>
+		<li <%= is_active('/shares') %>><a href="#">Shares</a>
+			<div class="submenu">
+				<ul>
+					<li><a href="/shares/friends<%= show_season ? "/?season=%s" % nav.last.slug : "" %>">Friends</a></li>
+					<li><a href="/shares/work<%= show_season ? "/?season=%s" % nav.last.slug : "" %>">Work</a></li>
+				</ul>
+			</div>
+		</li>
+		<% end %>
+		<li class="page_title">
+			<%= nav.last.page_title %> &#9660;
+			<div class="submenu" style="width:266px">
+				<ul>
+					<% nav.first.each do |n| %>
+						<li><a href="/?season=<%= n.slug %>"><%= n.name %></a></li>
+					<% end %>
+				</ul>
+			</div>
+		</li>
+	</ul>
+</div>

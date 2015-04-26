@@ -29,7 +29,7 @@ $(function(){
 	  <% end %>
     ],
     rowNum:100,
-	url: '/api/shares/<%= params[:team] %>',
+	url: '/api/shares/<%= params[:team] %><%= params[:season].nil? ? "" : "?season="+params[:season] %>',
     sortname: 'releasedate',
     sortorder: 'asc',
 	jsonReader : {

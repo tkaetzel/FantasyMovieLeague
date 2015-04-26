@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140803185648) do
+ActiveRecord::Schema.define(version: 20150419004207) do
 
   create_table "earnings", force: true do |t|
     t.integer  "movie_id"
@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(version: 20140803185648) do
     t.integer  "rating"
     t.integer  "rotten_tomatoes_id"
     t.integer  "rotten_tomatoes_rating"
+    t.integer  "season_id",              default: 0, null: false
   end
 
   create_table "players", force: true do |t|
@@ -40,11 +41,18 @@ ActiveRecord::Schema.define(version: 20140803185648) do
     t.datetime "updated_at"
     t.integer  "bonus1"
     t.integer  "bonus2"
+    t.integer  "season_id",  default: 0, null: false
   end
 
   create_table "players_teams", id: false, force: true do |t|
     t.integer "player_id", null: false
     t.integer "team_id",   null: false
+  end
+
+  create_table "seasons", force: true do |t|
+    t.string "name"
+    t.string "page_title"
+    t.string "slug"
   end
 
   create_table "shares", force: true do |t|

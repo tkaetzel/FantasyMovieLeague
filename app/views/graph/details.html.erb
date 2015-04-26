@@ -1,3 +1,6 @@
+<%
+	season = params[:season].nil? ? "" : "?season=%s" % params[:season]
+%>
 <!doctype html>
 <html>
 <head>
@@ -29,7 +32,7 @@
 			series: []
 		};
 
-		$.getJSON("/api/graph_data/<%= params[:id] %>", function(data) {
+		$.getJSON("/api/graph_data/<%= params[:id] %><%= season %>", function(data) {
 			var i = 0;
 			for (; i < data.length; i++) {
 				options.series.push({name: data[i].name, data:data[i].data});

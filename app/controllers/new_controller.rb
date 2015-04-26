@@ -1,10 +1,8 @@
 class NewController < ApplicationController
 	def index
-		if @@NOW > @@START_DATE then
-			redirect_to controller:"main"
-			return
-		end
-		@movies = Movie.order("release_date, id")
+		season = get_season
+		@seasons = [Season.order("id DESC"), season]
+		@movies = Movie.where(:season_id => season.id).order("release_date, id")
 	end
 	
 	def create

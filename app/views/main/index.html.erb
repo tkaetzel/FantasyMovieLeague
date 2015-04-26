@@ -1,6 +1,7 @@
 <%
 	header = "'%s', "
 	model = "{name:'%s', align:'right', index:'%s', width:45, formatter: formatMoney, cellattr: applyClass},"
+	show_season = @seasons.last.id != @seasons.first.first.id
 %>
 <%= javascript_include_tag "accounting.min"  %>
 <script type="text/javascript">
@@ -27,7 +28,7 @@ function formatMoneyFull(cell, options, row) {
 }
 
 function formatRating(cell, options, row) {
-	if (cell.rating == null)
+	if (cell == null || cell.rating == null)
 		return "";
 	return cell.rating + '%';
 }
@@ -43,7 +44,7 @@ function linkCells(){
 		var movie = cells.eq(i).parent().children().eq(0).html();
 		var v = cells.eq(i).html();
 		if (v != "") {
-			v = "<a href=\"#\" onclick=\"popupDetails(&quot;/graph/details/" + movie + "&quot;);return false;\">" + v + "</a>";
+			v = "<a href=\"#\" onclick=\"popupDetails(&quot;/graph/details/" + movie + "<%= show_season ? "?season=%s" % @seasons.last.slug : "" %>&quot;);return false;\">" + v + "</a>";
 			cells.eq(i).html(v);
 		}
 	}
@@ -74,7 +75,7 @@ $(function(){
 	  {name:'value', align:'right', classes:'tbl_bold', index:'value', width:50, formatter: formatMoney},
     ],
     rowNum:100,
-	url: '/api/movie_data/<%= params[:team] %>',
+	url: '/api/movie_data/<%= params[:team] %><%= show_season ? "?season=%s" % @seasons.last.slug : "" %>',
     sortname: 'releasedate',
     sortorder: 'asc',
     viewrecords: true,
@@ -100,7 +101,7 @@ $(function(){
       {name:'revenue', align:'right', classes:'tbl_bold', index:'revenue', width:120, formatter:formatMoneyFull}
     ],	
     rowNum:100,
-	url: '/api/rankings/<%= params[:team] %>',
+	url: '/api/rankings/<%= params[:team] %><%= show_season ? "?season=%s" % @seasons.last.slug : "" %>',
     sortname: 'rank',
     sortorder: 'asc',
 	height:'auto',
@@ -126,21 +127,15 @@ $(function(){
 <table id="tblStandings"><tr><td/></tr></table>
 
 <h3 style="text-align:center;">
-	<% 	if !params[:team].nil? then %>
-		[ <a href="#" onclick="return popupDetails('/graph/totals/<%= params[:team] %>');">Weekly Totals</a> ]
-		[ <a href="#" onclick="return popupDetails('/graph/rankings/<%= params[:team] %>');">Weekly Rankings</a> ]
-		[ <a href="#" onclick="return popupDetails('/graph/spread/<%= params[:team] %>');">Weekly Spread</a> ]
-	<% else %>
-		[ <a href="#" onclick="return popupDetails('/graph/totals');">Weekly Totals</a> ]
-		[ <a href="#" onclick="return popupDetails('/graph/rankings')">Weekly Rankings</a> ]
-		[ <a href="#" onclick="return popupDetails('/graph/spread');">Weekly Spread</a> ]
-	<% end %>
+		[ <a href="#" onclick="return popupDetails('/graph/totals/<%= params[:team] %><%= show_season ? "?season=%s" % @seasons.last.slug : "" %>');">Weekly Totals</a> ]
+		[ <a href="#" onclick="return popupDetails('/graph/rankings/<%= params[:team] %><%= show_season ? "?season=%s" % @seasons.last.slug : "" %>');">Weekly Rankings</a> ]
+		[ <a href="#" onclick="return popupDetails('/graph/spread/<%= params[:team] %><%= show_season ? "?season=%s" % @seasons.last.slug : "" %>');">Weekly Spread</a> ]
 </h3>
 
 </td>
 <td id="main_right">
 	<table id="list"><tr><td/></tr></table>
-	<strong><a href="#" onclick="return popupDetails('/graph/details');">All Movies Graph</a></strong>
+	<strong><a href="#" onclick="return popupDetails('/graph/details<%= show_season ? "?season=%s" % @seasons.last.slug : "" %>');">All Movies Graph</a></strong>
 </td>
 </tr>
 </table>
