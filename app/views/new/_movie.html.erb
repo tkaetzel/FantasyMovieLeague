@@ -1,7 +1,7 @@
 <div class="movie">
 	<div class="shares_container">
 		Shares: <br/>
-		<%= text_field_tag "shares[" + movie.id.to_s + "]", 0, {type:"tel", tabindex: movie.id+1, size:3, maxlength:3, class:"shares_box"} %>
+		<%= text_field_tag "shares[" + movie.id.to_s + "]", 0, {type:"tel", tabindex: index, size:3, maxlength:3, class:"shares_box"} %>
 	</div>
 	<div class="movie_name">
 		<%= link_to movie.name, movie.imdb, {:target=>"_blank"} %>
