@@ -2,12 +2,13 @@ require "net/http"
 
 class RevenuesController < ApplicationController
   def index
-	urls = ["http://boxofficemojo.com/seasonal/?view=releasedate&yr=2015&season=Summer&sort=open&order=DESC&p=.htm&page=1","http://boxofficemojo.com/seasonal/?view=releasedate&yr=2015&season=Summer&sort=open&order=DESC&p=.htm&page=2","http://boxofficemojo.com/seasonal/?view=releasedate&yr=2015&season=Summer&sort=open&order=DESC&p=.htm&page=3"]
+	urls = ["http://www.boxofficemojo.com/seasonal/?view=releasedate&yr=2015&season=Summer&sort=open&order=DESC&p=.htm&page=1","http://www.boxofficemojo.com/seasonal/?view=releasedate&yr=2015&season=Summer&sort=open&order=DESC&p=.htm&page=2","http://www.boxofficemojo.com/seasonal/?view=releasedate&yr=2015&season=Summer&sort=open&order=DESC&p=.htm&page=3"]
 
-	urls = [] if @@NOW >= @@SEASON_END_DATE
+	#urls = [] if @@NOW >= @@SEASON_END_DATE
 	data = []
 	queries = ""
-	movies = Movie.all
+	season = Season.last
+	movies = Movie.where(:season_id => season.id)
 	
 	Earning.where("DATE(created_at) = ?", Date.today).destroy_all # to prevent duplicates
 	
