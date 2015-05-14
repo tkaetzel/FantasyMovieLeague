@@ -335,6 +335,7 @@ class ApiController < ApplicationController
 		
 		start_date = season.movies.order(:release_date).first.release_date
 		stop_date = season.movies.order(:release_date).last.release_date + 4.weeks
+		stop_date = DateTime.now if DateTime.now < stop_date
 		name, date, rankings, spreads = {}, {}, {}, {}
 
 		while start_date <= stop_date
@@ -343,7 +344,7 @@ class ApiController < ApplicationController
 			end
 			timestamp = start_date.to_i * 1000
 			movies.each do |m|
-				earning = m.earnings.select {|e| e.created_at < (start_date + 1)}.last
+				earning = m.earnings.select {|e| e.created_at < (start_date + 1.days)}.last
 				gross = earning.nil? ? 0 : earning.gross
 				total_shares = m.shares.where(:player_id => players).sum(:num_shares)
 				
