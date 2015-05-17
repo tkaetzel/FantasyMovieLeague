@@ -1,4 +1,4 @@
-Ruby::Application.routes.draw do
+Rails.application.routes.draw do
   get "/revenues", to: "revenues#index"
   get "/shares/(:team)", to: "main#shares"
   get "/graph/:action/(:id)", controller: "graph"
@@ -10,5 +10,4 @@ Ruby::Application.routes.draw do
   post "/new/create", to: "new#create"
   
   root 'main#index'
-
 end

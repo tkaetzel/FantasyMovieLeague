@@ -20,7 +20,7 @@ class MainController < ApplicationController
 	rankings_str = redis.get("%s:rankings:%s:%s" % [Rails.env, season.id, params[:team]])
 	if !rankings_str.nil? then
 		rankings = JSON.parse(rankings_str)
-		@players.sort_by! {|p| rankings.index {|r| r["player"]["id"] == p.id}}
+		@players = @players.sort_by {|p| rankings.index {|r| r["player"]["id"] == p.id}}
 	end
   end
   

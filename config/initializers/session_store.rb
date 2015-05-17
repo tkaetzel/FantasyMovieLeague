@@ -1,3 +1,3 @@
 # Be sure to restart your server when you modify this file.
 
-Ruby::Application.config.session_store :cookie_store, key: '_Ruby_session'
+Rails.application.config.session_store :cookie_store, key: '_movie_new_session'
