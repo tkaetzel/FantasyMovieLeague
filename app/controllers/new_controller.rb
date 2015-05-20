@@ -1,18 +1,18 @@
 class NewController < ApplicationController
 	def index
-	
-		if @@NOW > @@START_DATE then
+		season = get_season
+		
+		if DateTime.now.utc > season.start_date then
 			redirect_to controller:"main"
 			return
 		end
-	
-		season = get_season
+		
 		@seasons = [Season.order("id DESC"), season]
 		@movies = Movie.where(:season_id => season.id).order("release_date, id")
 	end
 	
 	def create
-		if @@NOW > @@START_DATE then
+		if DateTime.now.utc > season.start_date then
 			render text: "Too late!", status: 400
 			return
 		end

@@ -2,15 +2,18 @@ require "net/http"
 
 class RevenuesController < ApplicationController
   def index
-	urls = ["http://www.boxofficemojo.com/seasonal/?view=releasedate&yr=2015&season=Summer&sort=open&order=DESC&p=.htm&page=1","http://www.boxofficemojo.com/seasonal/?view=releasedate&yr=2015&season=Summer&sort=open&order=DESC&p=.htm&page=2","http://www.boxofficemojo.com/seasonal/?view=releasedate&yr=2015&season=Summer&sort=open&order=DESC&p=.htm&page=3"]
-
-	#urls = [] if @@NOW >= @@SEASON_END_DATE
 	data = []
 	queries = ""
 	season = Season.last
 	movies = Movie.where(:season_id => season.id)
 	
 	Earning.where("DATE(created_at) = ?", Date.today).destroy_all # to prevent duplicates
+	
+	urls = season.urls.pluck(:url)
+	if DateTime.now.utc > season.season_end_date
+		render layout: false, content_type:"text/plain"
+		return
+	end
 	
 	urls.each do |url|
 		uri = URI(url)
@@ -54,11 +57,6 @@ class RevenuesController < ApplicationController
 	redis.flushall
 	
 	output = <<OUTPUT
-Now: #{@@NOW.rfc3339}
-First Movie Released: #{@@START_DATE.rfc3339}
-Last Movie Released: #{@@END_DATE.rfc3339}
-Season Ends: #{@@SEASON_END_DATE.rfc3339}
-
 #{queries}
 OUTPUT
 	render layout: false, text: output, content_type:"text/plain"
