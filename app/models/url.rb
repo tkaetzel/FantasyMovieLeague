@@ -1,3 +1,3 @@
 class Url < ActiveRecord::Base
-	belongs_to :seasons
+  belongs_to :seasons
 end

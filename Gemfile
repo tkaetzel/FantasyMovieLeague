@@ -19,3 +19,4 @@ end
 # CUSTOM ADDED BELOW
 gem 'nokogiri'
 gem 'redis'
+gem 'rubocop', require: false

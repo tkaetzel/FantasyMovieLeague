@@ -7,9 +7,9 @@
 	</div>
 	<ul class="mainmenu">
 		<% if params[:controller] == "main" %>
-		<li <%= is_active('/friends') %>><a href="/friends<%= show_season ? "/?season=%s" % nav.last.slug : "" %>">Friends</a></li>
-		<li <%= is_active('/work') %>><a href="/work<%= show_season ? "/?season=%s" % nav.last.slug : "" %>">Work</a></li>
-		<li <%= is_active('/shares') %>><a href="#">Shares</a>
+		<li <%= active?('/friends') %>><a href="/friends<%= show_season ? "/?season=%s" % nav.last.slug : "" %>">Friends</a></li>
+		<li <%= active?('/work') %>><a href="/work<%= show_season ? "/?season=%s" % nav.last.slug : "" %>">Work</a></li>
+		<li <%= active?('/shares') %>><a href="#">Shares</a>
 			<div class="submenu">
 				<ul>
 					<li><a href="/shares/friends<%= show_season ? "/?season=%s" % nav.last.slug : "" %>">Friends</a></li>
