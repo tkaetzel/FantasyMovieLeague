@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title><%= @seasons.last.page_title %></title>
+  <title><%= @seasons[:selected_season].page_title %></title>
   <meta name="viewport" content="width=480" />
   <%= stylesheet_link_tag    "http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/themes/south-street/jquery-ui.css", media: "all"  %>
   <%= stylesheet_link_tag    "ui.jqgrid", media: "screen"  %>

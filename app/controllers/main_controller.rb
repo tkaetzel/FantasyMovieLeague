@@ -1,23 +1,9 @@
 class MainController < ApplicationController
   def index
-    season = get_season
-    @seasons = [Season.order('id DESC'), season]
-
-    case (params[:team] || '').downcase
-    when 'friends'
-      @players = Team.find(1).players.where(season_id: season.id).includes(:shares)
-    when 'work'
-      @players = Team.find(2).players.where(season_id: season.id).includes(:shares)
-    when ''
-      render 'no_team'
-      return
-    else
-      render file: "#{Rails.root}/public/404", layout: false, status: :not_found
-      return
-    end
+    return unless main_start(false)
 
     redis = Redis.new
-    rankings_str = redis.get('%s:rankings:%s:%s' % [Rails.env, season.id, params[:team]])
+    rankings_str = redis.get('%s:rankings:%s:%s' % [Rails.env, @seasons[:selected_season].id, params[:team]])
     unless rankings_str.nil?
       rankings = JSON.parse(rankings_str)
       @players = @players.sort_by { |p| rankings.index { |r| r['player']['id'] == p.id } }
@@ -25,22 +11,31 @@ class MainController < ApplicationController
   end
 
   def shares
-    season = get_season
-    @seasons = [Season.order('id DESC'), season]
+    main_start(true)
+  end
 
-    case (params[:team] || '').downcase
-    when 'friends'
-      @players = Team.find(1).players.where(season_id: season.id).includes(:shares)
-      @page_title = 'Shares: Friends'
-    when 'work'
-      @players = Team.find(2).players.where(season_id: season.id).includes(:shares)
-      @page_title = 'Shares: Work'
-    when ''
-      render 'no_team'
-      return
-    else
+  private
+
+  def main_start(abc_order)
+    begin
+      @seasons = Season.get_seasons(params[:season])
+    rescue StandardError
       render file: "#{Rails.root}/public/404", layout: false, status: :not_found
-      return
+      return false
     end
+
+    if params[:team].nil?
+      render 'no_team'
+      return false
+    end
+
+    begin
+      @players = Team.get_players_by_season(params[:team], @seasons[:selected_season], abc_order)
+    rescue StandardError
+      render file: "#{Rails.root}/public/404", layout: false, status: :not_found
+      return false
+    end
+
+    true
   end
 end

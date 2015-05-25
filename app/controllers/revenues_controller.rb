@@ -4,7 +4,7 @@ class RevenuesController < ApplicationController
   def index
     data = []
     queries = ''
-    season = Season.last
+    season = Season.get_selected_season(nil)
     movies = Movie.where(season_id: season.id)
 
     Earning.where('DATE(created_at) = ?', Date.today).destroy_all # to prevent duplicates

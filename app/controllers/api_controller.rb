@@ -12,14 +12,10 @@ class ApiController < ApplicationController
   end
 
   def graph_data
-    season = get_season
+    season = Season.get_selected_season(params[:season])
     results = []
 
-    if params[:id].nil?
-      movies = Movie.where(season_id: season.id).includes(:earnings)
-    else
-      movies = Movie.where(season_id: season.id).includes(:earnings).where(id: params[:id].to_i)
-    end
+    movies = season.get_movies_with_earnings(params[:id])
 
     movies.each do |m|
       d = m.get_graph_data
@@ -67,14 +63,14 @@ class ApiController < ApplicationController
   private
 
   def get_formatted_data(type)
-    season = get_season
+    season = Season.get_selected_season(params[:season])
     redis = Redis.new
 
     rows_json = redis.get(format('%s:%s:%s:%s', Rails.env, type, season.id, params[:id]))
 
     if rows_json.nil?
       begin
-        players = Team.get_players_by_season(params[:id], season.id)
+        players = Team.get_players_by_season(params[:id], season.id, type == 'shares')
       rescue StandardError => e
         render status: :not_found, text: e
         return
@@ -82,14 +78,14 @@ class ApiController < ApplicationController
 
       case type
       when 'movie_data'
-        rows = Movie.get_movie_data(players, season.id)
+        rows = season.get_movie_data(players)
       when 'rankings'
-        rows = Movie.get_rankings_data(players, season.id)
+        rows = season.get_rankings_data(players)
       when 'shares'
-        rows = Movie.get_shares_data(players, season.id)
+        rows = season.get_shares_data(players)
       end
 
-      redis.set(format('%s:%s:%s:%s', Rails.env, type, season.id, params[:id], rows.to_json))
+      redis.set(format('%s:%s:%s:%s', Rails.env, type, season.id, params[:id]), rows.to_json)
     else
       rows = JSON.parse(rows_json)
     end
@@ -110,10 +106,10 @@ class ApiController < ApplicationController
   end
 
   def get_graph_data
-    season = get_season
+    season = Season.get_selected_season(params[:season])
     redis = Redis.new
 
-    rows_json = redis.get(format('%s:%s:%s:%s', Rails.env, type, season.id, params[:id]))
+    rows_json = redis.get(format('%s:graph:%s:%s', Rails.env, season.id, params[:id]))
 
     if rows_json.nil?
       begin
@@ -123,8 +119,8 @@ class ApiController < ApplicationController
         return
       end
 
-      rows = Movie.get_graph_data(players, season.id)
-      redis.set(format('%s:graph:%s:%s', Rails.env, season.id, params[:id], rows.to_json))
+      rows = season.get_graph_data(players)
+      redis.set(format('%s:graph:%s:%s', Rails.env, season.id, params[:id]), rows.to_json)
     else
       rows = JSON.parse(rows_json)
     end
