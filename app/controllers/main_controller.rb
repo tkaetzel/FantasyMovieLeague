@@ -3,11 +3,11 @@ class MainController < ApplicationController
     return unless main_start(false)
 
     redis = Redis.new
-    rankings_str = redis.get('%s:rankings:%s:%s' % [Rails.env, @seasons[:selected_season].id, params[:team]])
-    unless rankings_str.nil?
-      rankings = JSON.parse(rankings_str)
-      @players = @players.sort_by { |p| rankings.index { |r| r['player']['id'] == p.id } }
-    end
+    rankings_str = redis.get(format('%s:rankings:%s:%s', Rails.env, @seasons[:selected_season].id, params[:team]))
+    return if rankings_str.nil?
+    
+    rankings = JSON.parse(rankings_str)
+    @players = @players.sort_by { |p| rankings.index { |r| r['player']['id'] == p.id } }
   end
 
   def shares
@@ -19,7 +19,7 @@ class MainController < ApplicationController
   def main_start(abc_order)
     begin
       @seasons = Season.get_seasons(params[:season])
-    rescue StandardError
+    rescue Exceptions::SeasonNotFound
       render file: "#{Rails.root}/public/404", layout: false, status: :not_found
       return false
     end
@@ -31,7 +31,7 @@ class MainController < ApplicationController
 
     begin
       @players = Team.get_players_by_season(params[:team], @seasons[:selected_season], abc_order)
-    rescue StandardError
+    rescue Exceptions::TeamNotFound
       render file: "#{Rails.root}/public/404", layout: false, status: :not_found
       return false
     end

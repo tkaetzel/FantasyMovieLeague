@@ -6,7 +6,7 @@ class Season < ActiveRecord::Base
   def self.get_seasons(id)
     seasons = Season.order('id DESC')
     season = !id.nil? ? seasons.find_by(slug: id) : seasons.first
-    fail 'Season not found' if season.nil?
+    fail(Exceptions::SeasonNotFoundError, 'Season not found') if season.nil?
     {
       seasons: seasons,
       selected_season: season

@@ -13,9 +13,8 @@ class ApiController < ApplicationController
 
   def graph_data
     season = Season.get_selected_season(params[:season])
-    results = []
-
     movies = season.get_movies_with_earnings(params[:id])
+    results = []
 
     movies.each do |m|
       d = m.get_graph_data
@@ -27,7 +26,12 @@ class ApiController < ApplicationController
 
   def graph_totals
     results = []
-    table_data = get_graph_data.first
+    begin
+      table_data = get_graph_data.first
+    rescue Exceptions::TeamNotFoundError, Exceptions::SeasonNotFoundError => e
+      render status: :not_found, text: e
+      return
+    end
     table_data.each do |k, v|
       data = v.to_a.map { |a| [a.first, a.last.round] }
       d = { name: k, data: data }
@@ -39,7 +43,12 @@ class ApiController < ApplicationController
 
   def graph_rankings
     results = []
-    table_data = get_graph_data.second
+    begin
+      table_data = get_graph_data.second
+    rescue Exceptions::TeamNotFoundError, Exceptions::SeasonNotFoundError => e
+      render status: :not_found, text: e
+      return
+    end
     table_data.each do |k, v|
       d = { name: k, data: v.to_a }
       results.push d
@@ -50,7 +59,12 @@ class ApiController < ApplicationController
 
   def graph_spread
     results = []
-    table_data = get_graph_data.last
+    begin
+      table_data = get_graph_data.last
+    rescue Exceptions::TeamNotFoundError, Exceptions::SeasonNotFoundError => e
+      render status: :not_found, text: e
+      return
+    end
     table_data.each do |k, v|
       data = v.to_a.map { |a| [a.first, a.last.round] }
       d = { name: k, data: data }
@@ -91,10 +105,10 @@ class ApiController < ApplicationController
     end
 
     results = {
-      'total' => 1,
-      'page' => 1,
-      'records' => rows.length,
-      'rows' => rows
+      total: 1,
+      page: 1,
+      records: rows.length,
+      rows: rows
     }
 
     if !params[:sidx].nil? && !params[:sord].nil?
@@ -112,13 +126,7 @@ class ApiController < ApplicationController
     rows_json = redis.get(format('%s:graph:%s:%s', Rails.env, season.id, params[:id]))
 
     if rows_json.nil?
-      begin
-        players = Team.get_players_by_season(params[:id], season.id)
-      rescue StandardError => e
-        render status: :not_found, text: e
-        return
-      end
-
+      players = Team.get_players_by_season(params[:id], season.id, false)
       rows = season.get_graph_data(players)
       redis.set(format('%s:graph:%s:%s', Rails.env, season.id, params[:id]), rows.to_json)
     else
