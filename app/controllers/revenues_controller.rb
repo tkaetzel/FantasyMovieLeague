@@ -7,10 +7,10 @@ class RevenuesController < ApplicationController
     season = Season.get_selected_season(nil)
     movies = Movie.where(season_id: season.id)
 
-    Earning.where('DATE(created_at) = ?', Date.today).destroy_all # to prevent duplicates
+    Earning.where('DATE(created_at) = ?', Time.now.utc.strftime('%Y-%m-%d')).destroy_all # to prevent duplicates
 
     urls = season.urls.pluck(:url)
-    if DateTime.now.utc > season.season_end_date
+    if Time.now.utc > season.season_end_date
       render layout: false, content_type: 'text/plain'
       return
     end
@@ -31,7 +31,7 @@ class RevenuesController < ApplicationController
 
           gross = row.xpath('td[5]')[0].content.gsub(/\$|,/, '').to_i
           movie.first.earnings += [Earning.new(gross: gross)]
-          queries += "%s: %d\r\n" % [name, gross]
+          queries += format("%s: %d\r\n", name, gross)
         rescue
           next
         end
@@ -39,23 +39,28 @@ class RevenuesController < ApplicationController
     end
     queries += "\r\n"
     # now get the rotten tomatoes data
-    movies = Movie.where("release_date <= date('%s','3 days')" % DateTime.now.strftime('%F'))
+    movies = Movie.where(format("release_date <= date('%s','3 days')", DateTime.now.strftime('%F')))
     movies.each do |m|
       next if m.rotten_tomatoes_id.nil?
-      uri = URI('http://api.rottentomatoes.com/api/public/v1.0/movies/%d.json?apikey=%s' % [m.rotten_tomatoes_id, SECRETS['rotten-tomatoes-api-key']])
+      uri = URI(format('http://api.rottentomatoes.com/api/public/v1.0/movies/%d.json?apikey=%s', m.rotten_tomatoes_id, SECRETS['rotten-tomatoes-api-key']))
       data = JSON.parse(Net::HTTP.get(uri))
       rating = Integer(data['ratings']['critics_score'])
       if rating > 0
         m.rotten_tomatoes_rating = rating
-        queries += "%s: %d%%\r\n" % [m.name, rating]
+        queries += format("%s: %d%%\r\n", m.name, rating)
         m.save
       end
       sleep 0.5
     end
 
+    # flush the cache
     redis = Redis.new
     redis.flushall
 
+    # and load each team page to reset the orders
+    Net::HTTP.get(URI('http://movie.nickroge.rs/api/rankings/friends'))
+    Net::HTTP.get(URI('http://movie.nickroge.rs/api/rankings/work'))
+    
     output = <<OUTPUT
 #{queries}
 OUTPUT
