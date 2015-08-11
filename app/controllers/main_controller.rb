@@ -5,7 +5,7 @@ class MainController < ApplicationController
     redis = Redis.new
     rankings_str = redis.get(format('%s:rankings:%s:%s', Rails.env, @seasons[:selected_season].id, params[:team]))
     return if rankings_str.nil?
-    
+
     rankings = JSON.parse(rankings_str)
     @players = @players.sort_by { |p| rankings.index { |r| r['player']['id'] == p.id } }
   end
@@ -30,7 +30,8 @@ class MainController < ApplicationController
     end
 
     begin
-      @players = Team.get_players_by_season(params[:team], @seasons[:selected_season], abc_order)
+      team = @seasons[:selected_season].get_team(params[:team])
+      @players = team.get_players(abc_order)
     rescue Exceptions::TeamNotFound
       render file: "#{Rails.root}/public/404", layout: false, status: :not_found
       return false

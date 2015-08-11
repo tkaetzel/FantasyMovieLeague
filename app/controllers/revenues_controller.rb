@@ -14,8 +14,8 @@ class RevenuesController < ApplicationController
       render layout: false, content_type: 'text/plain'
       return
     end
-	
-	tries = 0
+
+    tries = 0
 
     urls.each do |url|
       uri = URI(url)
@@ -23,10 +23,10 @@ class RevenuesController < ApplicationController
       doc = Nokogiri::HTML(html)
       context = doc.xpath "//form[@name='MojoDropDown1']/ancestor::table[2]/tr"
       if context.nil? || context.empty?
-	    tries = tries + 1
-		sleep 4
-		redo if tries < 5
-	  end
+        tries += 1
+        sleep 4
+        redo if tries < 5
+    end
 
       for i in 1..context.length - 1 do
         row = context[i]
@@ -66,7 +66,7 @@ class RevenuesController < ApplicationController
     # and load each team page to reset the orders
     Net::HTTP.get(URI('http://movie.nickroge.rs/api/rankings/friends'))
     Net::HTTP.get(URI('http://movie.nickroge.rs/api/rankings/work'))
-    
+
     output = <<OUTPUT
 #{queries}
 OUTPUT

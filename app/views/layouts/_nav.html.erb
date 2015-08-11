@@ -6,18 +6,11 @@
 		<div id="progressbar"><div class="progress-label"></div></div>
 	</div>
 	<ul class="mainmenu">
-		<% if params[:controller] == "main" %>
-		<li <%= active?('/friends') %>><a href="/friends<%= show_season ? "/?season=%s" % nav[:selected_season].slug : "" %>">Friends</a></li>
-		<li <%= active?('/work') %>><a href="/work<%= show_season ? "/?season=%s" % nav[:selected_season].slug : "" %>">Work</a></li>
-		<li <%= active?('/shares') %>><a href="#">Shares</a>
-			<div class="submenu">
-				<ul>
-					<li><a href="/shares/friends<%= show_season ? "/?season=%s" % nav[:selected_season].slug : "" %>">Friends</a></li>
-					<li><a href="/shares/work<%= show_season ? "/?season=%s" % nav[:selected_season].slug : "" %>">Work</a></li>
-				</ul>
-			</div>
-		</li>
-		<% end %>
+		<% if params[:controller] == "main" 
+			nav[:selected_season].teams.each do |t| %>
+				<li <%= active?('/' + t.slug) %>><a href="/<%= t.slug %><%= show_season ? "/?season=%s" % nav[:selected_season].slug : "" %>"><%= t.name %></a></li>
+			<% end
+		end %>
 		<li class="page_title">
 			<%= nav[:selected_season].page_title %> &#9660;
 			<div class="submenu" style="width:266px">

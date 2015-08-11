@@ -84,7 +84,8 @@ class ApiController < ApplicationController
 
     if rows_json.nil?
       begin
-        players = Team.get_players_by_season(params[:id], season.id, type == 'shares')
+	    team = season.get_team(params[:id])
+        players = team.get_players(type == 'shares')
       rescue StandardError => e
         render status: :not_found, text: e
         return
@@ -92,11 +93,11 @@ class ApiController < ApplicationController
 
       case type
       when 'movie_data'
-        rows = season.get_movie_data(players)
+        rows = team.get_movie_data
       when 'rankings'
-        rows = season.get_rankings_data(players)
+        rows = team.get_rankings_data
       when 'shares'
-        rows = season.get_shares_data(players)
+        rows = team.get_shares_data
       end
 
       redis.set(format('%s:%s:%s:%s', Rails.env, type, season.id, params[:id]), rows.to_json)
@@ -126,8 +127,9 @@ class ApiController < ApplicationController
     rows_json = redis.get(format('%s:graph:%s:%s', Rails.env, season.id, params[:id]))
 
     if rows_json.nil?
-      players = Team.get_players_by_season(params[:id], season.id, false)
-      rows = season.get_graph_data(players)
+      team = season.get_team(params[:id])
+      players = team.get_players(false)
+      rows = team.get_graph_data
       redis.set(format('%s:graph:%s:%s', Rails.env, season.id, params[:id]), rows.to_json)
     else
       rows = JSON.parse(rows_json)
