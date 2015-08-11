@@ -84,11 +84,11 @@ class ApiController < ApplicationController
 
     if rows_json.nil?
       begin
-	    team = season.get_team(params[:id])
+        team = season.get_team(params[:id])
         players = team.get_players(type == 'shares')
-      rescue StandardError => e
-        render status: :not_found, text: e
-        return
+        rescue StandardError => e
+          render status: :not_found, text: e
+          return
       end
 
       case type

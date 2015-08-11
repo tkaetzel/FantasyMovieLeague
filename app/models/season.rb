@@ -30,13 +30,11 @@ class Season < ActiveRecord::Base
   end
 
   def get_team(team_slug)
-	team = teams.where(:slug => team_slug)
-	if team.empty?
-	  raise "Team not found"
-	end
-	team.first
+    team = teams.where(slug: team_slug)
+    fail 'Team not found' if team.empty?
+    team.first
   end
-  
+
   def get_movies_with_earnings(id)
     if id.nil?
       return movies.includes(:earnings)

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150810024132) do
+ActiveRecord::Schema.define(version: 20150811023605) do
 
   create_table "earnings", force: :cascade do |t|
     t.integer  "movie_id"
@@ -50,9 +50,10 @@ ActiveRecord::Schema.define(version: 20150810024132) do
   end
 
   create_table "seasons", force: :cascade do |t|
-    t.string "name",       limit: 255
-    t.string "page_title", limit: 255
-    t.string "slug",       limit: 255
+    t.string  "name",         limit: 255
+    t.string  "page_title",   limit: 255
+    t.string  "slug",         limit: 255
+    t.integer "bonus_amount",             default: 0, null: false
   end
 
   create_table "shares", force: :cascade do |t|
