@@ -12,13 +12,24 @@ class ApiController < ApplicationController
   end
 
   def graph_data
-    season = Season.get_selected_season(params[:season])
-    movies = season.get_movies_with_earnings(params[:id])
     results = []
+    if !params[:id].nil?
+      # Single movie
+      movie = Movie.find(params[:id])
+      if movie.nil?
+        render status: not_found
+        return
+      end
+      results.push(movie.get_graph_data)
+    else
+      # "All movies" graph
+      season = Season.get_selected_season(params[:season])
+      movies = season.get_movies_with_earnings(params[:id])
 
-    movies.each do |m|
-      d = m.get_graph_data
-      results.push(d) unless d.nil?
+      movies.each do |m|
+        d = m.get_graph_data
+        results.push(d) unless d.nil?
+      end
     end
 
     render json: results
@@ -85,7 +96,6 @@ class ApiController < ApplicationController
     if rows_json.nil?
       begin
         team = season.get_team(params[:id])
-        players = team.get_players(type == 'shares')
         rescue StandardError => e
           render status: :not_found, text: e
           return
@@ -128,7 +138,6 @@ class ApiController < ApplicationController
 
     if rows_json.nil?
       team = season.get_team(params[:id])
-      players = team.get_players(false)
       rows = team.get_graph_data
       redis.set(format('%s:graph:%s:%s', Rails.env, season.id, params[:id]), rows.to_json)
     else

@@ -26,7 +26,7 @@ class RevenuesController < ApplicationController
         tries += 1
         sleep 4
         redo if tries < 5
-    end
+      end
 
       for i in 1..context.length - 1 do
         row = context[i]
