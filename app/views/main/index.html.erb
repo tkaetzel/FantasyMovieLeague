@@ -3,7 +3,6 @@
 	model = "{name:'%s', align:'right', index:'%s', width:45, formatter: formatMoney, cellattr: applyClass},"
 	show_season = @seasons[:selected_season].id != @seasons[:seasons].first.id
 %>
-<%= javascript_include_tag "accounting.min"  %>
 <script type="text/javascript">
 
 function formatMoney(cell, options, row) {

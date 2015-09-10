@@ -1,6 +1,7 @@
 class NewController < ApplicationController
   def index
-    @season = Team.get_selected_season(nil)
+    @seasons = Season.get_seasons(params[:season])
+    @season = Season.get_selected_season('2015w')
 
     if DateTime.now.utc > @season.start_date
       redirect_to controller: 'main'

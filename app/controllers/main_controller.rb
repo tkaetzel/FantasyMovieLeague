@@ -23,6 +23,11 @@ class MainController < ApplicationController
       render file: "#{Rails.root}/public/404", layout: false, status: :not_found
       return false
     end
+    
+    if @seasons[:selected_season].start_date > DateTime.now
+      redirect_to :controller => 'new'
+      return false
+    end
 
     if params[:team].nil?
       render 'no_team'
