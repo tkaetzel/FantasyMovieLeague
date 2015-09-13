@@ -126,7 +126,7 @@ $(function(){
 <table id="tblStandings"><tr><td/></tr></table>
 
 <h3 style="text-align:center;">
-		[ <%= link_to 'Players\' Shares', action:'shares', team: params[:team], season: show_season ? @seasons[:selected_season].slug : nil %> ]
+		[ <%= link_to 'Shares', action:'shares', team: params[:team], season: show_season ? @seasons[:selected_season].slug : nil %> ]
 </h3>
 <h3 style="text-align:center;">
 		[ <a href="#" onclick="return popupDetails('/graph/totals/<%= params[:team] %><%= show_season ? "?season=%s" % @seasons[:selected_season].slug : "" %>');">Weekly Totals</a> ]

@@ -24,7 +24,7 @@ class MainController < ApplicationController
       return false
     end
 
-    if @seasons[:selected_season].start_date > DateTime.now
+    if @seasons[:selected_season].start_date > DateTime.now && params[:skip].nil?
       redirect_to controller: 'new'
       return false
     end
