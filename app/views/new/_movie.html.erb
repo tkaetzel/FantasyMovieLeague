@@ -1,4 +1,7 @@
 <div class="movie">
+	<div class="poster_container">
+		<%= image_tag 'posters/' + movie.id.to_s + '.jpg', width:'105' %>
+	</div>
 	<div class="shares_container">
 		Shares: <br/>
 		<%= text_field_tag "shares[" + movie.id.to_s + "]", 0, {type:"tel", tabindex: index, size:3, maxlength:3, class:"shares_box"} %>

@@ -5,7 +5,7 @@
 	<% if !flash[:thanks].nil? then %>
 		<%= render "thanks" %>
     <% else %>
-		<%= @season.new_header_content %>
+		<%= @season.new_header_content.html_safe %>
 	<% end %>
 	
 	<p style="clear:both;">&nbsp;</p>

@@ -94,15 +94,15 @@ class AddMoviesForWinter2015 < ActiveRecord::Migration
          rotten_tomatoes_id:'771387173',
          season_id: season.id)
         Movie.create(name:'In the Heart of the Sea',
-         plot:"Based on the 1820 event, a whaling ship is preyed upon by a sperm whale, stranding its crew at sea for 90 days, thousands of miles from home.",
+         plot:"Based on a true 1820 event, a whaling ship is preyed upon by a sperm whale, stranding its crew at sea for 90 days, thousands of miles from home.",
          actors:"Chris Hemsworth, Cillian Murphy, Brendan Gleeson",
          release_date:'2015-12-11',
          director:'Ron Howard',
          imdb:'http://www.imdb.com/title/tt1390411',
          rotten_tomatoes_id:'771362999',
          season_id: season.id)
-        Movie.create(name:'Star Wars',
-         plot:"A continuation of George Lucas's record-breaking space saga.",
+        Movie.create(name:'Star Wars: The Force Awakens',
+         plot:"The continuation of George Lucas's record-breaking space saga.",
          actors:"Harrison Ford, Carrie Fisher, Mark Hamill",
          release_date:'2015-12-18',
          director:'J.J. Abrams',
