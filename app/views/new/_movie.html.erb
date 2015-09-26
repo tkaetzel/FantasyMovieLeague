@@ -13,6 +13,6 @@
 	<div class="movie_actors">
 		<strong>Director</strong>: <%= movie.director %><br/>
 		<strong>Starring</strong>: <%= movie.actors %><br/>
-		<strong>Release Date</strong>: <%= movie.release_date.strftime("%m/%d/%Y") %>
+		<strong>Release Date</strong>: <%= movie.release_date.strftime("%m/%d/%Y") %> <% if movie.limited %><strong>Limited</strong> <% end %>
 	</div>
 </div>

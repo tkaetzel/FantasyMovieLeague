@@ -170,7 +170,8 @@ class AddMoviesForWinter2015 < ActiveRecord::Migration
          director:'Quentin Tarantino',
          imdb:'http://www.imdb.com/title/tt3460252',
          rotten_tomatoes_id:'771372896',
-         season_id: season.id)
+         season_id: season.id,
+         limited: true)
       end
       
       dir.down do

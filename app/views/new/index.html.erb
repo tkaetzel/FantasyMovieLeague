@@ -1,5 +1,6 @@
 <br/><br/>
 <%= form_tag("/new/create", method: "post") do %>
+<%= hidden_field_tag 'team', @team.id %>
 <div id="container">
 
 	<% if !flash[:thanks].nil? then %>
