@@ -1,7 +1,7 @@
 class NewController < ApplicationController
   def index
     @seasons = Season.get_seasons(params[:season])
-    @season = Season.get_selected_season('2015w')
+    @season = Season.get_selected_season(nil)
 
     if DateTime.now.utc > @season.start_date
       redirect_to controller: 'main'
@@ -12,7 +12,8 @@ class NewController < ApplicationController
   end
 
   def create
-    if DateTime.now.utc > season.start_date
+    @season = Season.get_selected_season(nil)
+    if DateTime.now.utc > @season.start_date
       render text: 'Too late!', status: 400
       return
     end
@@ -23,7 +24,7 @@ class NewController < ApplicationController
 
     shares = params[:shares].values.map { |s| Integer(s) }
     fail ArgumentError, 'At least one share is negative, or total is over 100' if shares.any? { |s| s < 0 } || shares.sum > 100
-    p = Player.create(long_name: params[:name], short_name: params[:name], bonus1: params[:bonus1], bonus2: params[:bonus2])
+    p = Player.create(long_name: params[:name], short_name: params[:name], bonus1: params[:bonus1], bonus2: params[:bonus2], season_id: @season.id)
 
     params[:shares].each do |k, v|
       Share.create(player_id: p.id, movie_id: k, num_shares: v)
