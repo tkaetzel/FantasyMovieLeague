@@ -1,6 +1,6 @@
 <div class="movie">
 	<div class="poster_container">
-		<%= image_tag 'posters/' + movie.id.to_s + '.jpg', width:'105' %>
+		<%= image_tag 'posters/' + movie.imdb.gsub(/http:\/\/www\.imdb.com\/title\//,'') + '.jpg', width:'105' %>
 	</div>
 	<div class="shares_container">
 		Shares: <br/>

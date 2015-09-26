@@ -1,5 +1,9 @@
 class AddMoviesForWinter2015 < ActiveRecord::Migration
   def change
+    change_table :movies do |t|
+      t.column(:limited, :boolean, :null => false, :default => false)
+    end
+    
     reversible do |dir|
       dir.up do
         season = Season.where(name:'Winter 2015').first
@@ -36,14 +40,6 @@ class AddMoviesForWinter2015 < ActiveRecord::Migration
          imdb:'http://www.imdb.com/title/tt3707106',
          rotten_tomatoes_id:'771419173',
          season_id: season.id)
-        Movie.create(name:'Rings',
-         plot:"Samara returns with a familiar video tape to strike terror again in the third film of the Ring franchise.",
-         actors:"Aimee Teegarden, Johnny Galecki",
-         release_date:'2015-11-13',
-         director:'F. Javier Gutierrez',
-         imdb:'http://www.imdb.com/title/tt0498381',
-         rotten_tomatoes_id:'770771660',
-         season_id: season.id)
         Movie.create(name:'The Hunger Games: Mockingjay - Part 2',
          plot:"After being symbolized as the \"Mockingjay\",
          Katniss Everdeen and District 13 engage in an all-out revolution against the autocratic Capitol.",
@@ -53,6 +49,15 @@ class AddMoviesForWinter2015 < ActiveRecord::Migration
          imdb:'http://www.imdb.com/title/tt1951266',
          rotten_tomatoes_id:'771312089',
          season_id: season.id)
+        Movie.create(name:'Legend',
+         plot:"The story of the identical twin gangsters Reggie and Ronnie Kray, two of the most notorious criminals in British history, and their organised crime empire in the East End of London during the 1960s.",
+         actors:"Tom Hardy, Christopher Eccleston",
+         release_date:'2015-11-20',
+         director:'Brian Helgeland',
+         imdb:'http://www.imdb.com/title/tt3569230',
+         rotten_tomatoes_id:'771414473',
+         season_id: season.id,
+         limited: true)
         Movie.create(name:'Creed',
          plot:"The former World Heavyweight Champion Rocky Balboa serves as a trainer and mentor to Adonis Creed, the son of his late friend and former rival Apollo Creed.",
          actors:"Sylvester Stallone, Michael B. Jordan",
@@ -101,6 +106,15 @@ class AddMoviesForWinter2015 < ActiveRecord::Migration
          imdb:'http://www.imdb.com/title/tt1390411',
          rotten_tomatoes_id:'771362999',
          season_id: season.id)
+        Movie.create(name:'The Big Short',
+         plot:"Four outsiders in the world of high-finance who predicted the credit and housing bubble collapse of the mid-2000's decide to take on the big banks for their lack of foresight and greed.",
+         actors:"Brad Pitt, Christian Bale, Steve Carell, Ryan Gosling",
+         release_date:'2015-12-11',
+         director:'Adam McKay',
+         imdb:'http://www.imdb.com/title/tt1596363',
+         rotten_tomatoes_id:'771377488',
+         season_id: season.id,
+         limited: true)
         Movie.create(name:'Star Wars: The Force Awakens',
          plot:"The continuation of George Lucas's record-breaking space saga.",
          actors:"Harrison Ford, Carrie Fisher, Mark Hamill",
@@ -148,14 +162,6 @@ class AddMoviesForWinter2015 < ActiveRecord::Migration
          director:'Ericson Core',
          imdb:'http://www.imdb.com/title/tt2058673',
          rotten_tomatoes_id:'771254328',
-         season_id: season.id)
-        Movie.create(name:'Snowden',
-         plot:"CIA employee Edward Snowden leaks thousands of classified documents to the press.",
-         actors:"Joseph Gordon-Levitt",
-         release_date:'2015-12-25',
-         director:'Oliver Stone',
-         imdb:'http://www.imdb.com/title/tt3774114',
-         rotten_tomatoes_id:'771411551',
          season_id: season.id)
         Movie.create(name:'The Hateful Eight',
          plot:"In post-Civil War Wyoming, bounty hunters try to find shelter during a blizzard but get involved in a plot of betrayal and deception.",

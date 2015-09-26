@@ -1,10 +1,11 @@
 require 'net/http'
+require 'open-uri'
 require 'json'
 
 uri = URI('https://imdb.p.mashape.com/movie')
-movies = ['tt2379713','tt2452042','tt2006295','tt3707106','tt0498381','tt1951266','tt3076658','tt1979388',
-'tt3530002','tt1976009','tt3850590','tt1390411','tt2488496','tt1850457','tt3322364','tt1528854','tt2446980',
-'tt2058673','tt3774114','tt3460252']
+movies = ['tt2379713','tt2452042','tt2006295','tt3707106','tt1951266','tt3569230','tt3076658',
+'tt1979388','tt3530002','tt1976009','tt3850590','tt1390411','tt1596363','tt2488496','tt1850457',
+'tt3322364','tt1528854','tt2446980','tt2058673','tt3460252']
 
 movies.each do |m|
 
@@ -19,7 +20,10 @@ movies.each do |m|
     
     jsonStr = response.body
     json = JSON.parse(jsonStr)
-    puts json['result']['poster']
+    posterUri = json['result']['poster']
+    
+    download = open(posterUri)
+    IO.copy_stream(download, format('../app/assets/images/posters/%s.jpg', m))
   end
   sleep 1
 end

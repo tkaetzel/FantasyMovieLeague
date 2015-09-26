@@ -31,7 +31,8 @@ ActiveRecord::Schema.define(version: 20150913204827) do
     t.integer  "rating"
     t.integer  "rotten_tomatoes_id"
     t.integer  "rotten_tomatoes_rating"
-    t.integer  "season_id",                          default: 0, null: false
+    t.integer  "season_id",                          default: 0,     null: false
+    t.boolean  "limited",                            default: false, null: false
   end
 
   create_table "players", force: :cascade do |t|
