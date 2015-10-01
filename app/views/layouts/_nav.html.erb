@@ -13,7 +13,7 @@
 		end %>
 		<li class="page_title">
 			<%= nav[:selected_season].page_title %> &#9660;
-			<div class="submenu" style="width:266px">
+			<div class="submenu">
 				<ul>
 					<% nav[:seasons].each do |n| %>
 						<li><a href="/?season=<%= n.slug %>"><%= n.name %></a></li>

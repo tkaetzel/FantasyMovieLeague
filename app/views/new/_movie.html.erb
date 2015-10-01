@@ -9,7 +9,7 @@
 	<div class="movie_name">
 		<%= link_to movie.name, movie.imdb, {:target=>"_blank"} %>
 	</div>
-	<div class="movie_plot"><%= movie.plot %></div><br/>
+	<div class="movie_plot"><%= movie.plot.html_safe %></div><br/>
 	<div class="movie_actors">
 		<strong>Director</strong>: <%= movie.director %><br/>
 		<strong>Starring</strong>: <%= movie.actors %><br/>

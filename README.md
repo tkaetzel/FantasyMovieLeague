@@ -35,10 +35,10 @@ Repeat this for each movie, and the sum for each player will be their current sc
 
 Movie Substitutions
 --
-Movies will occasionally be delayed outside of the window of the competition. The procedure for this will vary based on when this occurs.
+Occasionally, movies will be delayed outside of the window of the competition. The procedure for this will vary based on when this occurs.
 
 ### During Purchasing Phase
-If a movie is delayed before the first movie of the season, it will be replaced with another movie debuting during the season, to be selected by the Commissioner. All existing shares purchased for the delayed movie will be applied to its replacement. The replacement will be announced and participants should be reminded of their opportunity to submit another form if they wish.
+If a movie is delayed before the first movie of the season, it will be replaced with another movie debuting during the season, to be selected by the game's host. All existing shares purchased for the delayed movie will be applied to its replacement. The replacement will be announced and participants should be reminded of their opportunity to submit another form if they wish.
 
 ### During Accrual Phase
 If a movie is delayed within one month of the scheduled end of the season (disregarding all other delayed movies), it will remain in the season. Otherwise, it will be replaced with another movie, as above. Once a movie makes $1 of revenue, it will not be substituted for.

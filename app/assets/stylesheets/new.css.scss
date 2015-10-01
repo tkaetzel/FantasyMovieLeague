@@ -130,7 +130,9 @@ input {
 		margin-top:60px;
 	}
 	#nav {
-		position:static !important;
+		li.page_title {
+			display:none;
+		}
 	}
 	.music {
 		display:none;
