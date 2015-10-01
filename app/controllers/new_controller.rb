@@ -31,7 +31,7 @@ class NewController < ApplicationController
 
     t = Team.find(params[:team])
     t.players << p
-    
+
     params[:shares].each do |k, v|
       Share.create(player_id: p.id, movie_id: k, num_shares: v)
     end
