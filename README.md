@@ -13,7 +13,7 @@ A list of 20-30 movies with a wide theatrical release will be selected and will 
 Players will receive 100 fake dollars to buy shares of movies that are listed on the form, at $1 per share. The deadline to submit the form is whenever the first movie comes out. Only a player's most recent submission will be scored. After this deadline, the shares form may no longer be submitted and the accrual phase begins.
 
 #### Limited Release Movies
-Movies marked with "**Limited**" next to their release dates on the form are limited release movies, meaning they are released in select markets on the specified date, and then expand nationwide therafter, typically in the following week.
+Movies marked with "**Limited**" next to their release dates on the form are limited release movies. These are movies that are released in select markets on the specified date, and then expand nationwide therafter, typically in the following week.
 
 ### Accrual
 Once the movies on the list begin to debut, the players begin to accrue their score, based on how much they bid on the movies. Whatever percentage of the shares for a movie a player owns, the player gets that percentage of the movie's total domestic revenue. This happens for each movie where the player owns at least one share. This is a continuous process of money accrual, continuing until four weeks after the last movie is released. At this point, the player with the most money is the winner.
@@ -41,7 +41,7 @@ Occasionally, movies will be delayed outside of the window of the competition. T
 If a movie is delayed before the first movie of the season, it will be replaced with another movie debuting during the season, to be selected by the game's host. All existing shares purchased for the delayed movie will be applied to its replacement. The replacement will be announced and participants should be reminded of their opportunity to submit another form if they wish.
 
 ### During Accrual Phase
-If a movie is delayed within one month of the scheduled end of the season (disregarding all other delayed movies), it will remain in the season. Otherwise, it will be replaced with another movie, as above. Once a movie makes $1 of revenue, it will not be substituted for.
+If a movie is delayed within one month of the scheduled end of the season (disregarding all other delayed movies), it will remain in the season at its new date. Otherwise, it will be replaced with another movie, as above. Once a movie makes $1 of revenue, it will not be substituted for. If there is no movie suitable for substitution, the subsituted movie will be removed. A movie currently on the roster will be randomly selected, and all shares will be applied to this movie.
 
 [Brian Brushwood]:http://www.twitter.com/shwood
 [Justin Robert Young]:http://www.twitter.com/justinryoung
