@@ -5,12 +5,15 @@ This is a Ruby on Rails app based on [Brian Brushwood] and [Justin Robert Young]
 
 Gameplay
 --
-The game will run during the summer and winter movie seasons. Summer typically runs from April to August, and winter runs from November to the end of December. There are two phases, a purchasing phase and an accrual phase.
+The game will run during the summer and winter movie seasons. Summer typically runs from April/May to August, and winter runs from November to the end of December. There are two phases, a purchasing phase and an accrual phase.
 
 ### Purchasing
-A list of 20-30 movies will be selected and will be placed into a form. The list of movies should total about 20-30, and all should have at least a wide release. This form will list the movies linked to their [IMDB] page, the synopsis from IMDB, at last two actors/actresses, and a textbox for how many shares the player would like to put on the movie.
+A list of 20-30 movies with a wide theatrical release will be selected and will be placed into a form. This form will list the movies linked to their [IMDB] page, the synopsis from IMDB, at least two actors/actresses, and a textbox for how many shares the player would like to put on the movie.
 
-Players will receive 100 fake dollars to buy shares of movies that are listed on the form, at $1 per share. The total number shares purchased by the player must not exceed 100. The deadline to submit the form is whenever the first movie comes out. Only a player's most recent submission will be scored. After this deadline, the shares form may no longer be submitted and the accrual phase begins.
+Players will receive 100 fake dollars to buy shares of movies that are listed on the form, at $1 per share. The deadline to submit the form is whenever the first movie comes out. Only a player's most recent submission will be scored. After this deadline, the shares form may no longer be submitted and the accrual phase begins.
+
+#### Limited Release Movies
+Movies marked with "**Limited**" next to their release dates on the form are limited release movies, meaning they are released in select markets on the specified date, and then expand nationwide therafter, typically in the following week.
 
 ### Accrual
 Once the movies on the list begin to debut, the players begin to accrue their score, based on how much they bid on the movies. Whatever percentage of the shares for a movie a player owns, the player gets that percentage of the movie's total domestic revenue. This happens for each movie where the player owns at least one share. This is a continuous process of money accrual, continuing until four weeks after the last movie is released. At this point, the player with the most money is the winner.
@@ -29,6 +32,16 @@ Let's say *Rocky VI* is coming out this summer, and it winds up making $180,000,
 |**TOTAL**      |**20**         |**$180,000,000**|
 
 Repeat this for each movie, and the sum for each player will be their current score.
+
+Movie Substitutions
+--
+Movies will occasionally be delayed outside of the window of the competition. The procedure for this will vary based on when this occurs.
+
+### During Purchasing Phase
+If a movie is delayed before the first movie of the season, it will be replaced with another movie debuting during the season, to be selected by the Commissioner. All existing shares purchased for the delayed movie will be applied to its replacement. The replacement will be announced and participants should be reminded of their opportunity to submit another form if they wish.
+
+### During Accrual Phase
+If a movie is delayed within one month of the scheduled end of the season (disregarding all other delayed movies), it will remain in the season. Otherwise, it will be replaced with another movie, as above. Once a movie makes $1 of revenue, it will not be substituted for.
 
 [Brian Brushwood]:http://www.twitter.com/shwood
 [Justin Robert Young]:http://www.twitter.com/justinryoung
