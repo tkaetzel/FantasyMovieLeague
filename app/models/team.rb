@@ -43,14 +43,14 @@ class Team < ActiveRecord::Base
         end
 
         if best_movies.include?(m.id) && p['bonus1'] == m.id
-          earning += 10_000_000
+          earning += season.bonus_amount
           css_class = 'darkgreen'
         elsif p['bonus1'] == m.id
           css_class = 'green'
         end
 
         if worst_movies.include?(m.id) && p['bonus2'] == m.id
-          earning += 10_000_000
+          earning += season.bonus_amount
           css_class = 'darkred'
         elsif p['bonus2'] == m.id
           css_class = 'red'
@@ -88,11 +88,11 @@ class Team < ActiveRecord::Base
       end
 
       if best_movies.include? p[:bonus1]
-        this_player['revenue'] += 10_000_000
+        this_player['revenue'] += season.bonus_amount
         this_player['player']['long_name'] += '&sup1;'
       end
       if worst_movies.include? p[:bonus2]
-        this_player['revenue'] += 10_000_000
+        this_player['revenue'] += season.bonus_amount
         this_player['player']['long_name'] += '&sup2;'
       end
 
@@ -151,8 +151,8 @@ class Team < ActiveRecord::Base
           share = s.nil? ? 0 : s.num_shares.to_f / total_shares * gross
 
           if m == ms.first
-            share += 10_000_000 if best_movies.include? p[:bonus1]
-            share += 10_000_000 if worst_movies.include? p[:bonus2]
+            share += season.bonus_amount if best_movies.include? p[:bonus1]
+            share += season.bonus_amount if worst_movies.include? p[:bonus2]
           end
 
           name[p.long_name] ||= {}
