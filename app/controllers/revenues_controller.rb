@@ -64,8 +64,10 @@ class RevenuesController < ApplicationController
     redis.flushall
 
     # and load each team page to reset the orders
-    Net::HTTP.get(URI('http://movie.nickroge.rs/api/rankings/friends'))
-    Net::HTTP.get(URI('http://movie.nickroge.rs/api/rankings/work'))
+    teams = season.teams.pluck(:slug)
+    teams.each do |t|
+      Net::HTTP.get(URI('http://movie.nickroge.rs/api/rankings/' + t))
+    end
 
     output = <<OUTPUT
 #{queries}
