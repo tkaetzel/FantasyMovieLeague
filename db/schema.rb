@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150913204827) do
+ActiveRecord::Schema.define(version: 20151217034045) do
 
   create_table "earnings", force: :cascade do |t|
     t.integer  "movie_id"
@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 20150913204827) do
     t.integer  "rotten_tomatoes_rating"
     t.integer  "season_id",                          default: 0,     null: false
     t.boolean  "limited",                            default: false, null: false
+    t.integer  "percent_limit"
   end
 
   create_table "players", force: :cascade do |t|

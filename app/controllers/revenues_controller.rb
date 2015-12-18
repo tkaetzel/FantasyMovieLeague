@@ -36,6 +36,9 @@ class RevenuesController < ApplicationController
           next if movie.empty?
 
           gross = row.xpath('td[5]')[0].content.gsub(/\$|,/, '').to_i
+          if !movie.first.percent_limit.nil?
+            gross = (gross * movie.first.percent_limit/100.0).to_i
+          end
           movie.first.earnings += [Earning.new(gross: gross)]
           queries += format("%s: %d\r\n", name, gross)
         rescue
