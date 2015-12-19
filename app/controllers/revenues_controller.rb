@@ -34,13 +34,15 @@ class RevenuesController < ApplicationController
           name = row.xpath('td[3]')[0].content
           movie = movies.select { |m| m.name == name || m.mapped_name == name }
           next if movie.empty?
-
-          gross = row.xpath('td[5]')[0].content.gsub(/\$|,/, '').to_i
-          if !movie.first.percent_limit.nil?
-            gross = (gross * movie.first.percent_limit/100.0).to_i
+          
+          movie.each do |m|
+            gross = row.xpath('td[5]')[0].content.gsub(/\$|,/, '').to_i
+            if !m.percent_limit.nil?
+              gross = (gross * m.percent_limit/100.0).to_i
+            end
+            m.earnings += [Earning.new(gross: gross)]
+            queries += format("%s: %d\r\n", name, gross)
           end
-          movie.first.earnings += [Earning.new(gross: gross)]
-          queries += format("%s: %d\r\n", name, gross)
         rescue
           next
         end
