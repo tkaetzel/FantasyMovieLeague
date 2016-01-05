@@ -132,7 +132,7 @@ class Team < ActiveRecord::Base
     best_movies, worst_movies = season.get_best_and_worst_movies
 
     _start_date = season.start_date
-    _end_date = DateTime.now.utc < season.end_date ? DateTime.now.utc : season.end_date
+    _end_date = DateTime.now.utc < season.season_end_date ? DateTime.now.utc : season.season_end_date
     name = {}
     date = {}
     rankings = {}
