@@ -1,7 +1,7 @@
-Movie Contest
+Fantasy Movie League
 =========
 
-This is a Ruby on Rails app based on [Brian Brushwood] and [Justin Robert Young]'s Movie Draft, originally conceived on the [TWiT.tv] Network. While their format is run like a auction draft, this is more of a movie "stock market".
+This is a Ruby on Rails app based on [Brian Brushwood] and [Justin Robert Young]'s Movie Draft, originally conceived on the [TWiT.tv] Network. While their format is run like a auction draft, this is more of a movie "stock market". And yes, I know Fantasy Movie League abbreviates to FML, I don't care.
 
 Gameplay
 --

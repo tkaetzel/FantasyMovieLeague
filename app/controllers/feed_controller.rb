@@ -8,7 +8,7 @@ class FeedController < ApplicationController
       maker.channel.author = 'Nick Rogers'
       maker.channel.updated = players.first.created_at.to_s
       maker.channel.about = 'http://movie.nickroge.rs/'
-      maker.channel.title = 'Movie Contest'
+      maker.channel.title = 'Fantasy Movie League'
 
       players.each do |p|
         maker.items.new_item do |item|
