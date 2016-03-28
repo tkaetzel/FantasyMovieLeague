@@ -4,6 +4,30 @@ class AddMoviesForSummer2016 < ActiveRecord::Migration
       dir.up do
         season = Season.where(name:'Summer 2016').first
         
+        Movie.create(name:'Keanu',
+          plot:'Friends hatch a plot to retrieve a stolen kitten by posing as drug dealers for a street gang.',
+          actors:'Will Forte, Keegan-Michael Key, Jordan Peele',
+          release_date:'2016-4-29',
+          director:'Peter Atencio',
+          imdb:'http://www.imdb.com/title/tt4139124',
+          rotten_tomatoes_id:'771419654',
+          season_id: season.id)
+        Movie.create(name:'Mother\'s Day',
+          plot:'Intersecting stories with different moms collide on Mother\'s Day.',
+          actors:'Britt Robertson, Jennifer Aniston, Jason Sudeikis',
+          release_date:'2016-4-29',
+          director:'Garry Marshall',
+          imdb:'http://www.imdb.com/title/tt4824302',
+          rotten_tomatoes_id:'771422158',
+          season_id: season.id)
+        Movie.create(name:'Ratchet & Clank',
+          plot:'The story of two unlikely heroes as they struggle to stop a vile alien named Chairman Drek from destroying every planet in the Solana Galaxy.',
+          actors:'James Arnold Taylor, David Kaye',
+          release_date:'2016-4-29',
+          director:'Kevin Munroe, Jericca Cleland',
+          imdb:'http://www.imdb.com/title/tt2865120',
+          rotten_tomatoes_id:'771382335',
+          season_id: season.id)
         Movie.create(name:'Captain America: Civil War',
           plot:'Political interference in the Avengers\' activities causes a rift between former allies Captain America and Iron Man.',
           actors:'Robert Downey Jr., Chris Evans, Scarlett Johansson',
@@ -11,14 +35,6 @@ class AddMoviesForSummer2016 < ActiveRecord::Migration
           director:'Anthony and Joe Russo',
           imdb:'http://www.imdb.com/title/tt3498820',
           rotten_tomatoes_id:'771377017',
-          season_id: season.id)
-        Movie.create(name:'Kidnap',
-          plot:'A mother stops at nothing to recover her kidnapped son.',
-          actors:'Halle Berry, Christopher Berry, Dana Gourrier',
-          release_date:'2016-5-13',
-          director:'Luis Prieto',
-          imdb:'http://www.imdb.com/title/tt1458169',
-          rotten_tomatoes_id:'771390116',
           season_id: season.id)
         Movie.create(name:'Money Monster',
           plot:'An irate investor takes a bombastic financial TV show host hostage live on the air after losing everything due to his bad advice.',
@@ -198,7 +214,7 @@ class AddMoviesForSummer2016 < ActiveRecord::Migration
           rotten_tomatoes_id:'771372077',
           season_id: season.id)
         Movie.create(name:'Star Trek Beyond',
-          plot:'',
+          plot:'The USS Enterprise crew has been attacked by a powerful wave of unknown aliens, leaving the crew stranded on a hostile planet.',
           actors:'Chris Pine, Zoe Saldana, Simon Pegg',
           release_date:'2016-7-22',
           director:'Justin Lin',
@@ -206,28 +222,12 @@ class AddMoviesForSummer2016 < ActiveRecord::Migration
           rotten_tomatoes_id:'771361911',
           season_id: season.id)
         Movie.create(name:'Jason Bourne',
-          plot:'',
+          plot:'Jason Bourne, previously thought to be dead, resurfaces.',
           actors:'Matt Damon, Julia Stiles, Tommy Lee Jones',
           release_date:'2016-7-29',
           director:'Paul Greengrass',
           imdb:'http://www.imdb.com/title/tt4196776',
           rotten_tomatoes_id:'771398975',
-          season_id: season.id)
-        Movie.create(name:'The Space Between Us',
-          plot:'A young man raised by scientists on Mars returns to Earth to find his father.',
-          actors:'Britt Robertson, Gary Oldman, Carla Gugino',
-          release_date:'2016-7-29',
-          director:'Peter Chelsom',
-          imdb:'http://www.imdb.com/title/tt3922818',
-          rotten_tomatoes_id:'771434794',
-          season_id: season.id)
-        Movie.create(name:'The Founder',
-          plot:'The story of McDonald\'s founder Ray Kroc.',
-          actors:'Michael Keaton, Linda Cardellini, Patrick Wilson',
-          release_date:'2016-8-5',
-          director:'John Lee Hancock',
-          imdb:'http://www.imdb.com/title/tt4276820',
-          rotten_tomatoes_id:'771414950',
           season_id: season.id)
         Movie.create(name:'Suicide Squad',
           plot:'A secret government agency recruits imprisoned supervillains to execute dangerous black ops missions in exchange for clemency.',

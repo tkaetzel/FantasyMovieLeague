@@ -1,3 +1,5 @@
+require 'open-uri'
+
 class NewController < ApplicationController
   def index
     @seasons = Season.get_seasons(params[:season])
@@ -42,5 +44,31 @@ class NewController < ApplicationController
     redis.flushall
 
     redirect_to action: 'index'
+  end
+  
+  def get_posters
+    season = Season.get_selected_season(params[:season])
+    uri = URI('https://imdb.p.mashape.com/movie')
+    season.movies.each do |movie|
+      m = movie.imdb.gsub('http://www.imdb.com/title/', '')
+      Net::HTTP.start(uri.host, uri.port, :use_ssl => true) do |http|
+        request = Net::HTTP::Post.new uri
+        request['Content-Type'] = 'application/x-www-form-urlencoded'
+        request['Accept'] = 'application/json'
+        request['X-Mashape-Key'] = SECRETS['imdb-api-key']
+        request.set_form_data('searchTerm' => m)
+        
+        response = http.request(request)
+        jsonStr = response.body
+        json = JSON.parse(jsonStr)
+        posterUri = json['result']['poster']
+        
+        download = open(posterUri)
+        IO.copy_stream(download, format('%s/app/assets/images/posters/%s.jpg', Rails.root, m))
+      end
+      
+      sleep 1
+    end
+    redirect_to controller: 'main', action: 'index'
   end
 end
