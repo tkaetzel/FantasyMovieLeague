@@ -52,16 +52,21 @@ class RevenuesController < ApplicationController
     # now get the rotten tomatoes data
     rt = movies.where(format("release_date <= date('%s','3 days')", DateTime.now.strftime('%F')))
     rt.each do |m|
-      next if m.rotten_tomatoes_id.nil?
-      uri = URI(format('http://api.rottentomatoes.com/api/public/v1.0/movies/%d.json?apikey=%s', m.rotten_tomatoes_id, SECRETS['rotten-tomatoes-api-key']))
-      data = JSON.parse(Net::HTTP.get(uri))
-      rating = Integer(data['ratings']['critics_score'])
+      next if m.rotten_tomatoes_url.nil?
+      uri = URI(m.rotten_tomatoes_url)
+      html = Net::HTTP.get(uri)
+      doc = Nokogiri::HTML(html)
+      
+      node = doc.css("div.critic-score .meter-value")[0]
+      next if node.nil?
+
+      rating = Integer(node.text.chomp('%'))
       if rating > 0
         m.rotten_tomatoes_rating = rating
         queries += format("%s: %d%%\r\n", m.name, rating)
         m.save
       end
-      sleep 0.5
+      sleep 0.2
     end
 
     # flush the cache
