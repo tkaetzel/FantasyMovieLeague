@@ -31,16 +31,12 @@
 			<div class="movie_name">Bonus 1: +<%= number_to_currency(@season.bonus_amount, precision:0) %></div>
 			<div class="movie_plot">What will be the <strong>highest</strong> rated movie on <%= link_to "Rotten Tomatoes", "http://www.rottentomatoes.com", {:target => "_blank"} %>?</div><br/>
 			<%= select_tag(:bonus1, options_for_select(@movies.map {|m| [m.name,m.id]}, :disabled => "183"), tabindex:@movies.count+2 ) %>
-			<br/>
-			<p><strong>Note</strong>: Because <em>Arrival</em> debuted this summer during the Toronto Film Festival, it will not be selectable for either bonus.</p>
 		</div>
 		<div class="movie bonus">
 			<div class="shares_container"></div>
 			<div class="movie_name">Bonus 2: +<%= number_to_currency(@season.bonus_amount, precision:0) %></div>
 			<div class="movie_plot">What will be the <strong>lowest</strong> rated movie on <%= link_to "Rotten Tomatoes", "http://www.rottentomatoes.com", {:target => "_blank"} %>?</div><br/>
 			<%= select_tag(:bonus2, options_for_select(@movies.map {|m| [m.name,m.id]}, :disabled => "183"), tabindex:@movies.count+3 ) %>
-			<br/>
-			<p><strong>Note</strong>: Because <em>Arrival</em> debuted this summer during the Toronto Film Festival, it will not be selectable for either bonus.</p>
 		</div>
 	</div>
 	<div id="submit_container">
