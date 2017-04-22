@@ -29,15 +29,6 @@ class Season < ActiveRecord::Base
     end_date + 4.weeks
   end
 
-  def start_deadline_text
-    days = ((start_date - DateTime.now.utc)/86400).floor
-    if days <= 1
-      'Deadline TONIGHT before midnight!'
-    else
-      format('%d days until deadline', days)
-    end
-  end
-  
   def get_team(team_slug)
     team = teams.where(slug: team_slug)
     fail 'Team not found' if team.empty?

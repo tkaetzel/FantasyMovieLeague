@@ -25,3 +25,6 @@ end
 gem 'nokogiri'
 gem 'redis'
 gem 'rubocop', require: false
+source 'https://rails-assets.org' do
+	gem 'rails-assets-jquery.countdown'
+end
