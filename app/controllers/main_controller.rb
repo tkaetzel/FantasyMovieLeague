@@ -25,7 +25,11 @@ class MainController < ApplicationController
     end
 
     if @seasons[:selected_season].start_date > DateTime.now && params[:skip].nil?
-      redirect_to controller: 'new'
+      slug = nil
+      if !params[:team].nil?
+        slug = @seasons[:selected_season].get_team(params[:team]).slug
+      end
+      redirect_to controller: 'new', team: slug
       return false
     end
 
