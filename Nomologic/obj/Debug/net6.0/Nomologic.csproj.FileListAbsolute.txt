@@ -1,0 +1,15 @@
+/home/tim/Development/Nomologic/bin/Debug/net6.0/Nomologic
+/home/tim/Development/Nomologic/bin/Debug/net6.0/Nomologic.deps.json
+/home/tim/Development/Nomologic/bin/Debug/net6.0/Nomologic.runtimeconfig.json
+/home/tim/Development/Nomologic/bin/Debug/net6.0/Nomologic.dll
+/home/tim/Development/Nomologic/bin/Debug/net6.0/ref/Nomologic.dll
+/home/tim/Development/Nomologic/bin/Debug/net6.0/Nomologic.pdb
+/home/tim/Development/Nomologic/obj/Debug/net6.0/Nomologic.csproj.AssemblyReference.cache
+/home/tim/Development/Nomologic/obj/Debug/net6.0/Nomologic.GeneratedMSBuildEditorConfig.editorconfig
+/home/tim/Development/Nomologic/obj/Debug/net6.0/Nomologic.AssemblyInfoInputs.cache
+/home/tim/Development/Nomologic/obj/Debug/net6.0/Nomologic.AssemblyInfo.cs
+/home/tim/Development/Nomologic/obj/Debug/net6.0/Nomologic.csproj.CoreCompileInputs.cache
+/home/tim/Development/Nomologic/obj/Debug/net6.0/Nomologic.dll
+/home/tim/Development/Nomologic/obj/Debug/net6.0/ref/Nomologic.dll
+/home/tim/Development/Nomologic/obj/Debug/net6.0/Nomologic.pdb
+/home/tim/Development/Nomologic/obj/Debug/net6.0/Nomologic.genruntimeconfig.cache
